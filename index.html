@@ -2,172 +2,217 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-```
 <!-- SEO -->
-<title>Atharva Darshanwar | Founder & CEO of StadiumConnect India</title>
-<meta name="description" content="Atharva Darshanwar is the Founder and CEO of StadiumConnect India. Aditya Kharwade is the Co-Founder and Marketing Director of StadiumConnect India.">
-<meta name="keywords" content="Atharva Darshanwar, StadiumConnect, Founder StadiumConnect, CEO StadiumConnect India, Aditya Kharwade Co Founder">
+
+<title>StadiumConnect India | Event Infrastructure Platform</title>
+<meta name="description" content="StadiumConnect India is a premium event infrastructure platform founded by Atharva Darshanwar (Founder & CEO) and Aditya Kharwade (Co-Founder & Marketing Director).">
+<meta name="keywords" content="StadiumConnect, Atharva Darshanwar, Aditya Kharwade, Event Infrastructure India">
 <meta name="author" content="Atharva Darshanwar">
 
-<!-- Fonts & Animation -->
+<!-- Fonts + Animations -->
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
 
-    body {
-        color: #fff;
-        text-align: center;
-        background: linear-gradient(-45deg, #000, #050505, #0a0a0a, #000);
-        background-size: 400% 400%;
-        animation: gradientBG 10s ease infinite;
-    }
+body {
+    color:#fff;
+    text-align:center;
+    background: linear-gradient(-45deg,#000,#050505,#0a0a0a,#000);
+    background-size:400% 400%;
+    animation:gradientBG 10s ease infinite;
+}
 
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
+@keyframes gradientBG {
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
 
-    nav {
-        display: flex;
-        justify-content: space-between;
-        padding: 20px 40px;
-        position: sticky;
-        top: 0;
-        background: #000;
-        border-bottom: 1px solid #111;
-    }
+/* NAVBAR */
+nav {
+    display:flex;
+    justify-content:space-between;
+    padding:20px 40px;
+    position:sticky;
+    top:0;
+    background:rgba(0,0,0,0.8);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid #111;
+}
 
-    nav a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 15px;
-        font-size: 0.9rem;
-    }
+nav a {
+    color:#fff;
+    text-decoration:none;
+    margin:0 12px;
+    transition:0.3s;
+}
+nav a:hover { color:#007bff; }
 
-    h1 { font-size: 3rem; margin-bottom: 20px; }
-    .tagline { color: #007bff; margin-bottom: 30px; }
-    .about-text { color: #aaa; max-width: 800px; margin: auto; line-height: 1.7; }
+/* HERO */
+section { padding:100px 20px; }
 
-    .leadership { display: flex; justify-content: center; gap: 40px; margin: 60px 0; flex-wrap: wrap; }
-    .leader { border-left: 3px solid #fff; padding-left: 15px; text-align: left; }
+h1 {
+    font-size:3.5rem;
+    font-weight:800;
+    margin-bottom:20px;
+}
 
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        padding: 40px;
-    }
+.tagline {
+    color:#007bff;
+    letter-spacing:2px;
+    margin-bottom:20px;
+}
 
-    .box {
-        border: 1px solid #222;
-        padding: 30px;
-        transition: 0.3s;
-    }
+.about-text {
+    color:#aaa;
+    max-width:800px;
+    margin:auto;
+    line-height:1.8;
+}
 
-    .box:hover {
-        border-color: #007bff;
-        transform: translateY(-5px);
-    }
+/* LEADERSHIP */
+.leadership {
+    display:flex;
+    justify-content:center;
+    gap:50px;
+    margin:60px 0;
+    flex-wrap:wrap;
+}
 
-    .ops-title {
-        font-size: 0.8rem;
-        letter-spacing: 4px;
-        color: #555;
-        margin: 60px 0 20px;
-    }
+.leader {
+    border-left:3px solid #fff;
+    padding-left:15px;
+    text-align:left;
+}
 
-    .ops-team {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        flex-wrap: wrap;
-        margin-bottom: 60px;
-    }
+/* CARDS */
+.services-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:40px;
+}
 
-    .member {
-        font-size: 1.2rem;
-    }
+.box {
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.1);
+    padding:30px;
+    border-radius:15px;
+    transition:0.3s;
+    backdrop-filter:blur(10px);
+}
 
-    .member span {
-        display: block;
-        color: #007bff;
-        font-size: 0.8rem;
-        margin-top: 5px;
-    }
+.box:hover {
+    transform:translateY(-10px) scale(1.02);
+    border-color:#007bff;
+    box-shadow:0 0 20px rgba(0,123,255,0.3);
+}
 
-    .why {
-        padding: 60px 20px;
-    }
+/* TEAM */
+.ops-title {
+    margin:60px 0 20px;
+    letter-spacing:3px;
+    color:#555;
+}
 
-    .why-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-    }
+.ops-team {
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    flex-wrap:wrap;
+}
 
-    .why-box {
-        border: 1px solid #222;
-        padding: 20px;
-    }
+.member {
+    background:rgba(255,255,255,0.03);
+    padding:20px;
+    border-radius:10px;
+    border:1px solid #222;
+}
 
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        max-width: 400px;
-        margin: 40px auto;
-    }
+.member span {
+    color:#007bff;
+    font-size:0.8rem;
+}
 
-    input, textarea, select {
-        padding: 12px;
-        background: #111;
-        border: none;
-        color: #fff;
-    }
+/* WHY */
+.why-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
 
-    button {
-        padding: 15px;
-        background: #007bff;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-    }
+.why-box {
+    background:rgba(255,255,255,0.03);
+    padding:20px;
+    border-radius:10px;
+}
 
-    .cta {
-        display: inline-block;
-        margin-top: 30px;
-        padding: 15px 40px;
-        border: 2px solid #fff;
-        text-decoration: none;
-        color: #fff;
-        transition: 0.3s;
-    }
+/* FORM */
+form {
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+    max-width:400px;
+    margin:40px auto;
+}
 
-    .cta:hover {
-        background: #007bff;
-        box-shadow: 0 0 20px #007bff;
-    }
+input, textarea, select {
+    padding:12px;
+    background:#111;
+    border:none;
+    color:#fff;
+    border-radius:8px;
+}
 
-    footer {
-        padding: 40px;
-        font-size: 0.8rem;
-        color: #444;
-    }
+button {
+    padding:15px;
+    background:#007bff;
+    border:none;
+    color:#fff;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+button:hover {
+    box-shadow:0 0 15px #007bff;
+}
+
+/* CTA */
+.cta {
+    display:inline-block;
+    margin-top:30px;
+    padding:15px 40px;
+    border:2px solid #fff;
+    text-decoration:none;
+    color:#fff;
+    border-radius:30px;
+    transition:0.3s;
+}
+
+.cta:hover {
+    background:#007bff;
+    border-color:#007bff;
+}
+
+/* FOOTER */
+footer {
+    padding:40px;
+    color:#444;
+}
 </style>
-```
 
 </head>
 
 <body>
 
 <nav>
-    <div>STADIUMCONNECT</div>
+    <div><b>STADIUMCONNECT</b></div>
     <div>
         <a href="#">Home</a>
         <a href="#">Services</a>
@@ -176,63 +221,53 @@
 </nav>
 
 <section>
-    <p class="tagline">Premium Event Ecosystem</p>
+    <p class="tagline">PREMIUM EVENT ECOSYSTEM</p>
     <h1 data-aos="fade-up">STADIUMCONNECT INDIA</h1>
-    <p class="about-text" data-aos="fade-up">
-        India's most powerful infrastructure for large-scale events.
-    </p>
 
 ```
+<p class="about-text">
+    India's most powerful infrastructure for large-scale events — connecting stadiums, vendors, decorators and execution teams.
+</p>
+
 <div class="leadership">
-    <div class="leader" data-aos="fade-up">
+    <div class="leader">
         <h2>Atharva Darshanwar</h2>
         <p>Founder & CEO of StadiumConnect India</p>
     </div>
-    <div class="leader" data-aos="fade-up">
+    <div class="leader">
         <h2>Aditya Kharwade</h2>
         <p>Co-Founder & Marketing Director</p>
     </div>
 </div>
 
-<!-- SEO BOOST SECTION -->
-<div style="margin-top:40px;">
-    <h2>About Founder</h2>
-    <p class="about-text">
-        Atharva Darshanwar is the Founder and CEO of StadiumConnect India, building a nationwide event infrastructure platform connecting stadiums, vendors, and decorators. Aditya Kharwade is the Co-Founder and Marketing Director of StadiumConnect India.
-    </p>
-</div>
-
-<div class="services-grid">
-    <div class="box" data-aos="fade-up">
-        <h3>Venue Infrastructure</h3>
-        <p>Stadium booking and management across India.</p>
-    </div>
-    <div class="box" data-aos="fade-up">
-        <h3>Elite Decorators</h3>
-        <p>Premium decorators network.</p>
-    </div>
-    <div class="box" data-aos="fade-up">
-        <h3>Vendor Ecosystem</h3>
-        <p>Verified vendors for event needs.</p>
-    </div>
-</div>
-
-<h2 class="ops-title">Operational Leadership</h2>
-<div class="ops-team">
-    <div class="member">
-        YASH GORE
-        <span>Field Operations Head</span>
-    </div>
-    <div class="member">
-        OMSAI KAITIKWAR
-        <span>Partnerships & Growth</span>
-    </div>
+<div class="about-text">
+    Atharva Darshanwar is the Founder and CEO of StadiumConnect India. Aditya Kharwade is the Co-Founder and Marketing Director, building India's event infrastructure network.
 </div>
 ```
 
 </section>
 
-<section class="why">
+<section>
+    <h2>Our Services</h2>
+
+```
+<div class="services-grid">
+    <div class="box"><h3>Venue Infrastructure</h3></div>
+    <div class="box"><h3>Elite Decorators</h3></div>
+    <div class="box"><h3>Vendor Ecosystem</h3></div>
+</div>
+
+<h3 class="ops-title">Operational Leadership</h3>
+
+<div class="ops-team">
+    <div class="member">YASH GORE <br><span>Field Operations Head</span></div>
+    <div class="member">OMSAI KAITIKWAR <br><span>Partnerships & Growth</span></div>
+</div>
+```
+
+</section>
+
+<section>
     <h2>Why Choose Us</h2>
     <div class="why-grid">
         <div class="why-box">Nationwide Network</div>
@@ -249,7 +284,7 @@
 <form action="https://formspree.io/f/mlgpvjob" method="POST">
     <input type="text" name="name" placeholder="Your Name" required>
     <input type="email" name="email" placeholder="Your Email" required>
-    <input type="text" name="phone" placeholder="Your Phone Number" required>
+    <input type="text" name="phone" placeholder="Phone Number" required>
 
     <select name="service" required>
         <option value="">Select Service</option>
@@ -260,7 +295,6 @@
     </select>
 
     <input type="text" name="city" placeholder="Event City" required>
-
     <textarea name="message" placeholder="Describe your event" required></textarea>
 
     <button type="submit">Submit</button>
@@ -281,4 +315,3 @@
 
 </body>
 </html>
-
