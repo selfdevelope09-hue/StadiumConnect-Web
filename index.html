@@ -7,203 +7,133 @@
 
 <!-- SEO -->
 
-<title>StadiumConnect India | Event Infrastructure Platform</title>
-<meta name="description" content="StadiumConnect India is a premium event infrastructure platform founded by Atharva Darshanwar (Founder & CEO) and Aditya Kharwade (Co-Founder & Marketing Director).">
-<meta name="keywords" content="StadiumConnect, Atharva Darshanwar, Aditya Kharwade, Event Infrastructure India">
+<title>CONNECT | StadiumConnect India - Event Infrastructure Platform</title>
+<meta name="description" content="CONNECT is a parent company building powerful infrastructure businesses. StadiumConnect India, founded by Atharva Darshanwar and Aditya Kharwade, is revolutionizing large-scale event execution across India.">
+<meta name="keywords" content="CONNECT India, StadiumConnect, Atharva Darshanwar, Aditya Kharwade, Event Infrastructure India">
 <meta name="author" content="Atharva Darshanwar">
 
-<!-- Fonts + Animations -->
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
 
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
-body {
+body{
+    background:#000;
     color:#fff;
-    text-align:center;
-    background: linear-gradient(-45deg,#000,#050505,#0a0a0a,#000);
-    background-size:400% 400%;
-    animation:gradientBG 10s ease infinite;
-}
-
-@keyframes gradientBG {
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+    line-height:1.7;
 }
 
 /* NAVBAR */
-nav {
+nav{
     display:flex;
     justify-content:space-between;
     padding:20px 40px;
-    position:sticky;
-    top:0;
-    background:rgba(0,0,0,0.8);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid #111;
+    position:fixed;
+    width:100%;
+    background:rgba(0,0,0,0.9);
+    z-index:1000;
 }
 
-nav a {
+nav a{
     color:#fff;
+    margin-left:20px;
     text-decoration:none;
-    margin:0 12px;
-    transition:0.3s;
 }
-nav a:hover { color:#007bff; }
+
+/* SECTIONS */
+section{
+    padding:120px 40px;
+    max-width:1200px;
+    margin:auto;
+}
 
 /* HERO */
-section { padding:100px 20px; }
-
-h1 {
-    font-size:3.5rem;
-    font-weight:800;
-    margin-bottom:20px;
-}
-
-.tagline {
-    color:#007bff;
-    letter-spacing:2px;
-    margin-bottom:20px;
-}
-
-.about-text {
-    color:#aaa;
-    max-width:800px;
-    margin:auto;
-    line-height:1.8;
-}
-
-/* LEADERSHIP */
-.leadership {
+.hero{
+    height:100vh;
     display:flex;
+    flex-direction:column;
     justify-content:center;
-    gap:50px;
-    margin:60px 0;
-    flex-wrap:wrap;
+    text-align:center;
 }
 
-.leader {
-    border-left:3px solid #fff;
-    padding-left:15px;
-    text-align:left;
+.connect{
+    font-size:4rem;
+    font-weight:900;
+    letter-spacing:4px;
 }
 
-/* CARDS */
-.services-grid {
+h1{
+    font-size:3rem;
+    margin-top:10px;
+}
+
+.tagline{
+    color:#007bff;
+    margin-top:20px;
+}
+
+.about-text{
+    max-width:800px;
+    margin:20px auto;
+    color:#aaa;
+}
+
+/* GRID */
+.grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    padding:40px;
+    gap:30px;
 }
 
-.box {
-    background:rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.1);
+.card{
     padding:30px;
-    border-radius:15px;
+    border:1px solid #222;
+    background:#050505;
     transition:0.3s;
-    backdrop-filter:blur(10px);
 }
 
-.box:hover {
-    transform:translateY(-10px) scale(1.02);
+.card:hover{
+    transform:translateY(-10px);
     border-color:#007bff;
-    box-shadow:0 0 20px rgba(0,123,255,0.3);
 }
 
 /* TEAM */
-.ops-title {
-    margin:60px 0 20px;
-    letter-spacing:3px;
-    color:#555;
-}
-
-.ops-team {
+.team{
     display:flex;
-    justify-content:center;
     gap:40px;
     flex-wrap:wrap;
 }
 
-.member {
-    background:rgba(255,255,255,0.03);
-    padding:20px;
-    border-radius:10px;
-    border:1px solid #222;
-}
-
-.member span {
+.member span{
     color:#007bff;
-    font-size:0.8rem;
-}
-
-/* WHY */
-.why-grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-    gap:20px;
-}
-
-.why-box {
-    background:rgba(255,255,255,0.03);
-    padding:20px;
-    border-radius:10px;
 }
 
 /* FORM */
-form {
+form{
     display:flex;
     flex-direction:column;
     gap:15px;
-    max-width:400px;
-    margin:40px auto;
+    max-width:500px;
 }
 
-input, textarea, select {
+input,textarea,select{
     padding:12px;
     background:#111;
     border:none;
     color:#fff;
-    border-radius:8px;
 }
 
-button {
+button{
     padding:15px;
     background:#007bff;
     border:none;
     color:#fff;
-    cursor:pointer;
-    border-radius:8px;
 }
 
-button:hover {
-    box-shadow:0 0 15px #007bff;
-}
-
-/* CTA */
-.cta {
-    display:inline-block;
-    margin-top:30px;
-    padding:15px 40px;
-    border:2px solid #fff;
-    text-decoration:none;
-    color:#fff;
-    border-radius:30px;
-    transition:0.3s;
-}
-
-.cta:hover {
-    background:#007bff;
-    border-color:#007bff;
-}
-
-/* FOOTER */
-footer {
+footer{
+    text-align:center;
     padding:40px;
-    color:#444;
+    color:#555;
 }
 </style>
 
@@ -212,106 +142,121 @@ footer {
 <body>
 
 <nav>
-    <div><b>STADIUMCONNECT</b></div>
-    <div>
-        <a href="#">Home</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
-    </div>
+<div><b>CONNECT</b></div>
+<div>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#team">Team</a>
+<a href="#contact">Contact</a>
+</div>
 </nav>
 
-<section>
-    <p class="tagline">PREMIUM EVENT ECOSYSTEM</p>
-    <h1 data-aos="fade-up">STADIUMCONNECT INDIA</h1>
+<!-- HERO -->
 
-```
+<section class="hero">
+<div class="connect">CONNECT</div>
+<h1>STADIUMCONNECT INDIA</h1>
+<p class="tagline">Building India's Largest Event Infrastructure Network</p>
 <p class="about-text">
-    India's most powerful infrastructure for large-scale events — connecting stadiums, vendors, decorators and execution teams.
+StadiumConnect, a subsidiary of CONNECT, is focused on building a powerful ecosystem of stadiums, vendors, decorators, and event execution partners across India.
+</p>
+</section>
+
+<!-- ABOUT -->
+
+<section id="about">
+<h2>About CONNECT</h2>
+<p class="about-text">
+CONNECT is a parent company focused on building high-impact infrastructure and service-based businesses across multiple industries. Its vision is to create scalable ecosystems that redefine industries.
 </p>
 
-<div class="leadership">
-    <div class="leader">
-        <h2>Atharva Darshanwar</h2>
-        <p>Founder & CEO of StadiumConnect India</p>
-    </div>
-    <div class="leader">
-        <h2>Aditya Kharwade</h2>
-        <p>Co-Founder & Marketing Director</p>
-    </div>
-</div>
-
-<div class="about-text">
-    Atharva Darshanwar is the Founder and CEO of StadiumConnect India. Aditya Kharwade is the Co-Founder and Marketing Director, building India's event infrastructure network.
-</div>
-```
-
+<h2 style="margin-top:40px;">About StadiumConnect</h2>
+<p class="about-text">
+StadiumConnect India is an event infrastructure platform founded by Atharva Darshanwar and Aditya Kharwade. It connects venues, vendors, decorators, and event planners into one seamless network.
+</p>
 </section>
 
-<section>
-    <h2>Our Services</h2>
+<!-- SERVICES -->
 
-```
-<div class="services-grid">
-    <div class="box"><h3>Venue Infrastructure</h3></div>
-    <div class="box"><h3>Elite Decorators</h3></div>
-    <div class="box"><h3>Vendor Ecosystem</h3></div>
+<section id="services">
+<h2>Our Services</h2>
+
+<div class="grid">
+<div class="card">Stadium Booking</div>
+<div class="card">Decorators</div>
+<div class="card">Vendors</div>
+<div class="card">Photographers</div>
+<div class="card">Wedding Venues</div>
 </div>
-
-<h3 class="ops-title">Operational Leadership</h3>
-
-<div class="ops-team">
-    <div class="member">YASH GORE <br><span>Field Operations Head</span></div>
-    <div class="member">OMSAI KAITIKWAR <br><span>Partnerships & Growth</span></div>
-</div>
-```
-
 </section>
 
+<!-- VISION -->
+
 <section>
-    <h2>Why Choose Us</h2>
-    <div class="why-grid">
-        <div class="why-box">Nationwide Network</div>
-        <div class="why-box">Verified Vendors</div>
-        <div class="why-box">Premium Execution</div>
-        <div class="why-box">Fast Booking</div>
-    </div>
+<h2>Our Vision</h2>
+<p class="about-text">
+To become India's most powerful event infrastructure ecosystem by connecting every major stakeholder in the event industry into one unified platform.
+</p>
 </section>
 
-<section>
-    <h2>Contact Us</h2>
+<!-- TEAM -->
 
-```
+<section id="team">
+<h2>Leadership</h2>
+
+<div class="team">
+<div class="member">
+<h3>Atharva Darshanwar</h3>
+<span>Founder & CEO</span>
+</div>
+
+<div class="member">
+<h3>Aditya Kharwade</h3>
+<span>Co-Founder & Marketing Director</span>
+</div>
+
+<div class="member">
+<h3>Yash Gore</h3>
+<span>Field Operations Head</span>
+</div>
+
+<div class="member">
+<h3>Omsai Kaitikwar</h3>
+<span>Partnerships & Growth</span>
+</div>
+</div>
+</section>
+
+<!-- CONTACT -->
+
+<section id="contact">
+<h2>Start Your Event With Us</h2>
+
 <form action="https://formspree.io/f/mlgpvjob" method="POST">
-    <input type="text" name="name" placeholder="Your Name" required>
-    <input type="email" name="email" placeholder="Your Email" required>
-    <input type="text" name="phone" placeholder="Phone Number" required>
+<input type="text" name="name" placeholder="Your Name" required>
+<input type="email" name="email" placeholder="Your Email" required>
+<input type="text" name="phone" placeholder="Phone Number" required>
 
-    <select name="service" required>
-        <option value="">Select Service</option>
-        <option>Stadium Booking</option>
-        <option>Decorators</option>
-        <option>Vendors</option>
-        <option>Full Event Setup</option>
-    </select>
+<select name="service" required>
+<option value="">Select Service</option>
+<option>Stadium Booking</option>
+<option>Decorators</option>
+<option>Vendors</option>
+<option>Photographers</option>
+<option>Wedding Venues</option>
+</select>
 
-    <input type="text" name="city" placeholder="Event City" required>
-    <textarea name="message" placeholder="Describe your event" required></textarea>
+<textarea name="message" placeholder="Describe your requirement"></textarea>
 
-    <button type="submit">Submit</button>
+<button type="submit">Submit</button>
+
 </form>
-
-<a href="mailto:atharvadarshanwar09@gmail.com" class="cta">Connect as a Partner</a>
-```
-
 </section>
 
 <footer>
-    © 2026 STADIUMCONNECT INDIA
+© 2026 CONNECT | STADIUMCONNECT INDIA
 </footer>
-
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-<script>AOS.init();</script>
 
 </body>
 </html>
+
