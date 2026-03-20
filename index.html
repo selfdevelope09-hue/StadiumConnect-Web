@@ -1,265 +1,495 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StadiumConnect India | Event Infrastructure</title>
 
-```
-<!-- AOS Animation -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-<style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-        color: #fff;
-        text-align: center;
-        background: linear-gradient(-45deg, #000, #050505, #0a0a0a, #000);
-        background-size: 400% 400%;
-        animation: gradientBG 10s ease infinite;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            text-align: center;
+            background: linear-gradient(-45deg, #000000, #050505, #0a0a0a, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-    /* Navbar */
-    nav {
-        display: flex;
-        justify-content: space-between;
-        padding: 20px 40px;
-        position: sticky;
-        top: 0;
-        background: #000;
-        border-bottom: 1px solid #111;
-    }
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0,123,255,0.10), transparent 55%);
+            z-index: -1;
+            pointer-events: none;
+        }
 
-    nav a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 15px;
-        font-size: 0.9rem;
-    }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-    h1 { font-size: 3rem; margin-bottom: 20px; }
-    .tagline { color: #007bff; margin-bottom: 30px; }
-    .about-text { color: #aaa; max-width: 800px; margin: auto; line-height: 1.7; }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            z-index: 1000;
+        }
 
-    /* Leadership */
-    .leadership { display: flex; justify-content: center; gap: 40px; margin: 60px 0; flex-wrap: wrap; }
-    .leader { border-left: 3px solid #fff; padding-left: 15px; text-align: left; }
+        .nav-brand {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
 
-    /* Services */
-    .services-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        padding: 40px;
-    }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 22px;
+            font-size: 0.92rem;
+            transition: 0.3s;
+        }
 
-    .box {
-        border: 1px solid #222;
-        padding: 30px;
-        transition: 0.3s;
-    }
+        nav a:hover {
+            color: #007bff;
+        }
 
-    .box:hover {
-        border-color: #007bff;
-        transform: translateY(-5px);
-    }
+        section {
+            padding: 100px 20px;
+        }
 
-    /* Ops Team */
-    .ops-title {
-        font-size: 0.8rem;
-        letter-spacing: 4px;
-        color: #555;
-        margin: 60px 0 20px;
-    }
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-    .ops-team {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        flex-wrap: wrap;
-        margin-bottom: 60px;
-    }
+        .tagline {
+            color: #007bff;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
 
-    .member {
-        font-size: 1.2rem;
-    }
+        h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
 
-    .member span {
-        display: block;
-        color: #007bff;
-        font-size: 0.8rem;
-        margin-top: 5px;
-    }
+        .about-text {
+            color: #b8b8b8;
+            max-width: 850px;
+            margin: 0 auto;
+            line-height: 1.9;
+            font-size: 1.08rem;
+        }
 
-    /* Why Us */
-    .why {
-        padding: 60px 20px;
-    }
+        .leadership {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 70px 0 20px;
+            flex-wrap: wrap;
+        }
 
-    .why-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-    }
+        .leader {
+            border-left: 3px solid #fff;
+            padding-left: 18px;
+            text-align: left;
+            min-width: 260px;
+        }
 
-    .why-box {
-        border: 1px solid #222;
-        padding: 20px;
-    }
+        .leader h2 {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
 
-    /* Contact */
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        max-width: 400px;
-        margin: 40px auto;
-    }
+        .leader p {
+            color: #007bff;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
 
-    input, textarea {
-        padding: 12px;
-        background: #111;
-        border: none;
-        color: #fff;
-    }
+        .section-title {
+            font-size: 2.2rem;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
 
-    button {
-        padding: 15px;
-        background: #007bff;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-    }
+        .section-subtitle {
+            color: #a6a6a6;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
 
-    /* CTA */
-    .cta {
-        display: inline-block;
-        margin-top: 30px;
-        padding: 15px 40px;
-        border: 2px solid #fff;
-        text-decoration: none;
-        color: #fff;
-        transition: 0.3s;
-    }
+        .services-grid,
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            max-width: 1150px;
+            margin: 0 auto;
+        }
 
-    .cta:hover {
-        background: #007bff;
-        box-shadow: 0 0 20px #007bff;
-    }
+        .box,
+        .why-box {
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.10);
+            padding: 32px 24px;
+            border-radius: 18px;
+            transition: 0.35s ease;
+        }
 
-    footer {
-        padding: 40px;
-        font-size: 0.8rem;
-        color: #444;
-    }
-</style>
-```
+        .box:hover,
+        .why-box:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(0,123,255,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+        }
 
+        .box h3,
+        .why-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 14px;
+            color: #fff;
+        }
+
+        .box p,
+        .why-box p {
+            color: #b0b0b0;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .ops-title {
+            font-size: 0.82rem;
+            letter-spacing: 5px;
+            color: #6f6f6f;
+            margin: 70px 0 24px;
+            text-transform: uppercase;
+        }
+
+        .ops-team {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .member {
+            min-width: 260px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .member:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0,123,255,0.45);
+        }
+
+        .member span {
+            display: block;
+            color: #007bff;
+            font-size: 0.82rem;
+            margin-top: 8px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 520px;
+            margin: 40px auto 0;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: 15px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.12);
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        select option {
+            background: #111;
+            color: #fff;
+        }
+
+        button {
+            padding: 15px;
+            background: #007bff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.96rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(0,123,255,0.35);
+        }
+
+        .cta {
+            display: inline-block;
+            margin-top: 28px;
+            padding: 16px 42px;
+            border: 2px solid #fff;
+            text-decoration: none;
+            color: #fff;
+            transition: 0.3s;
+            border-radius: 40px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .cta:hover {
+            background: #007bff;
+            border-color: #007bff;
+            box-shadow: 0 0 20px rgba(0,123,255,0.35);
+        }
+
+        footer {
+            padding: 40px 20px 50px;
+            font-size: 0.82rem;
+            color: #555;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 16px 18px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            nav a {
+                margin: 0 10px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .about-text {
+                font-size: 0.98rem;
+            }
+
+            section {
+                padding: 80px 16px;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<nav>
-    <div>STADIUMCONNECT</div>
-    <div>
-        <a href="#">Home</a>
-        <a href="#">Services</a>
-        <a href="#">Contact</a>
-    </div>
-</nav>
+    <nav>
+        <div class="nav-brand">STADIUMCONNECT</div>
+        <div>
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
 
-<section>
-    <p class="tagline">Premium Event Ecosystem</p>
-    <h1 data-aos="fade-up">STADIUMCONNECT INDIA</h1>
-    <p class="about-text" data-aos="fade-up">
-        India's most powerful infrastructure for large-scale events.
-    </p>
+    <section class="hero" id="home">
+        <p class="tagline" data-aos="fade-up">Premium Event Ecosystem</p>
 
-```
-<div class="leadership">
-    <div class="leader" data-aos="fade-up">
-        <h2>Atharva Darshanwar</h2>
-        <p>Founder & CEO</p>
-    </div>
-    <div class="leader" data-aos="fade-up">
-        <h2>Aditya Kharwade</h2>
-        <p>Co-Founder</p>
-    </div>
-</div>
+        <h1 data-aos="fade-up" data-aos-delay="100">
+            WE BUILD INDIA’S LARGEST<br>
+            EVENT INFRASTRUCTURE NETWORK
+        </h1>
 
-<div class="services-grid">
-    <div class="box" data-aos="fade-up">
-        <h3>Venue Infrastructure</h3>
-        <p>Stadium booking system across India.</p>
-    </div>
-    <div class="box" data-aos="fade-up">
-        <h3>Elite Decorators</h3>
-        <p>Premium event decorators network.</p>
-    </div>
-    <div class="box" data-aos="fade-up">
-        <h3>Vendor Ecosystem</h3>
-        <p>Verified vendors for all event needs.</p>
-    </div>
-</div>
+        <p class="about-text" data-aos="fade-up" data-aos-delay="200">
+            From stadiums to vendors, decorators, and execution support — StadiumConnect is building a seamless ecosystem for large-scale events across India with premium coordination, trusted networks, and strong operational execution.
+        </p>
 
-<h2 class="ops-title" data-aos="fade-up">Operational Leadership</h2>
-<div class="ops-team">
-    <div class="member" data-aos="fade-up">
-        YASH GORE
-        <span>Field Operations Head</span>
-    </div>
-    <div class="member" data-aos="fade-up">
-        OMSAI KAITIKWAR
-        <span>Partnerships & Growth</span>
-    </div>
-</div>
-```
+        <div class="leadership">
+            <div class="leader" data-aos="fade-up" data-aos-delay="300">
+                <h2>Atharva Darshanwar</h2>
+                <p>Founder & CEO</p>
+            </div>
+            <div class="leader" data-aos="fade-up" data-aos-delay="400">
+                <h2>Aditya Kharwade</h2>
+                <p>Co-Founder</p>
+            </div>
+        </div>
+    </section>
 
-</section>
+    <section id="services">
+        <h2 class="section-title" data-aos="fade-up">Our Core Services</h2>
+        <p class="section-subtitle" data-aos="fade-up">
+            We help clients execute large-scale events with dependable infrastructure, verified partners, and premium support.
+        </p>
 
-<section class="why">
-    <h2 data-aos="fade-up">Why Choose Us</h2>
-    <div class="why-grid">
-        <div class="why-box" data-aos="fade-up">Nationwide Network</div>
-        <div class="why-box" data-aos="fade-up">Verified Vendors</div>
-        <div class="why-box" data-aos="fade-up">Premium Execution</div>
-        <div class="why-box" data-aos="fade-up">Fast Booking</div>
-    </div>
-</section>
+        <div class="services-grid">
+            <div class="box" data-aos="fade-up">
+                <h3>Venue Infrastructure</h3>
+                <p>Strategic stadium and ground booking solutions for corporate, entertainment, and private events across India.</p>
+            </div>
 
-<section>
-    <h2 data-aos="fade-up">Contact Us</h2>
-    <form>
-        <input type="text" placeholder="Your Name">
-        <input type="email" placeholder="Your Email">
-        <textarea placeholder="Your Requirement"></textarea>
-        <button type="submit">Submit</button>
-    </form>
+            <div class="box" data-aos="fade-up" data-aos-delay="100">
+                <h3>Elite Decorators</h3>
+                <p>Access to premium decorators who specialize in grand setups, visual transformation, and high-end event presentation.</p>
+            </div>
 
-```
-<a href="mailto:atharvadarshanwar09@gmail.com" class="cta">Connect as a Partner</a>
-```
+            <div class="box" data-aos="fade-up" data-aos-delay="200">
+                <h3>Vendor Ecosystem</h3>
+                <p>Verified vendors for sound, lighting, logistics, catering, and execution support to simplify event delivery.</p>
+            </div>
+        </div>
 
-</section>
+        <h2 class="ops-title" data-aos="fade-up">Operational Leadership</h2>
 
-<footer>
-    © 2026 STADIUMCONNECT INDIA
-</footer>
+        <div class="ops-team">
+            <div class="member" data-aos="fade-up">
+                YASH GORE
+                <span>Field Operations Head</span>
+            </div>
 
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+            <div class="member" data-aos="fade-up" data-aos-delay="100">
+                OMSAI KAITIKWAR
+                <span>Partnerships & Growth</span>
+            </div>
+        </div>
+    </section>
 
-<script>
-    AOS.init();
-</script>
+    <section>
+        <h2 class="section-title" data-aos="fade-up">Why Choose Us</h2>
+        <p class="section-subtitle" data-aos="fade-up">
+            StadiumConnect is built to make large-scale event execution faster, cleaner, and more reliable.
+        </p>
+
+        <div class="why-grid">
+            <div class="why-box" data-aos="fade-up">
+                <h3>Nationwide Network</h3>
+                <p>Access venues, vendors, and decorators across multiple cities through one connected platform.</p>
+            </div>
+
+            <div class="why-box" data-aos="fade-up" data-aos-delay="100">
+                <h3>Verified Partners</h3>
+                <p>We focus on trusted and professional partners to reduce risk and improve execution quality.</p>
+            </div>
+
+            <div class="why-box" data-aos="fade-up" data-aos-delay="200">
+                <h3>Premium Execution</h3>
+                <p>Our model is designed for organized planning, smooth coordination, and high-standard event delivery.</p>
+            </div>
+
+            <div class="why-box" data-aos="fade-up" data-aos-delay="300">
+                <h3>Fast Booking Flow</h3>
+                <p>We simplify the process of finding, planning, and moving forward with the right event requirements quickly.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <h2 class="section-title" data-aos="fade-up">Start Your Event With Us</h2>
+        <p class="section-subtitle" data-aos="fade-up">
+            Fill in your event details and our team will connect with you for the next steps.
+        </p>
+
+        <form action="https://formspree.io/f/mlgpvjob" method="POST" data-aos="fade-up">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <input type="text" name="phone" placeholder="Your Phone Number" required>
+
+            <select name="service" required>
+                <option value="">Select Service</option>
+                <option>Stadium Booking</option>
+                <option>Decorators</option>
+                <option>Vendors</option>
+                <option>Full Event Setup</option>
+            </select>
+
+            <input type="text" name="city" placeholder="Event City" required>
+
+            <textarea name="message" placeholder="Describe your event (date, size, budget)" required></textarea>
+
+            <button type="submit">Submit Inquiry</button>
+        </form>
+
+        <a href="mailto:atharvadarshanwar09@gmail.com" class="cta" data-aos="fade-up">Connect as a Partner</a>
+    </section>
+
+    <footer>
+        © 2026 STADIUMCONNECT INDIA. ALL RIGHTS RESERVED.
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 900,
+            once: true
+        });
+    </script>
 
 </body>
 </html>
-
