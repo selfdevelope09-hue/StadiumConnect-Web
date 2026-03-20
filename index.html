@@ -1,103 +1,273 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StadiumConnect | Premium Event Infrastructure</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: #000; color: #fff; text-align: center; }
-        
-        /* Header Section */
-        header { padding: 50px 20px; border-bottom: 1px solid #222; }
-        /* Logo direct link integration */
-        .logo { max-width: 450px; width: 100%; height: auto; margin-bottom: 20px; filter: brightness(1.1); }
+    <title>StadiumConnect India | Event Infrastructure</title>
 
-        /* Main Vision */
-        .main-content { padding: 80px 20px; max-width: 900px; margin: auto; }
-        h1 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 30px; text-transform: uppercase; }
-        .description { font-size: 1.3rem; color: #ccc; line-height: 1.6; margin-bottom: 50px; font-weight: 300; }
-        .blue-text { color: #007bff; font-weight: 700; }
+```
+<!-- AOS Animation -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-        /* Leadership Section (Atharva & Aditya) */
-        .founders-section { display: flex; flex-wrap: wrap; justify-content: center; gap: 50px; margin-bottom: 80px; }
-        .founder-card { border-left: 3px solid #007bff; padding-left: 20px; text-align: left; }
-        .name { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; }
-        .role { color: #007bff; font-size: 0.9rem; font-weight: 700; letter-spacing: 2px; }
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-        /* Business Verticals */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto 80px; padding: 0 20px; }
-        .card { border: 1px solid #222; padding: 30px; transition: 0.3s; background: #050505; }
-        .card:hover { border-color: #fff; }
-        .card h3 { font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-        .card p { color: #666; font-size: 0.85rem; }
+    body {
+        color: #fff;
+        text-align: center;
+        background: linear-gradient(-45deg, #000, #050505, #0a0a0a, #000);
+        background-size: 400% 400%;
+        animation: gradientBG 10s ease infinite;
+    }
 
-        /* Team Section */
-        .team-title { font-size: 0.8rem; letter-spacing: 5px; color: #444; margin-bottom: 30px; text-transform: uppercase; }
-        .team-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 100px; }
-        .member { font-size: 1.1rem; font-weight: 700; }
-        .member span { display: block; color: #007bff; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; }
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
-        /* CTA */
-        .btn { border: 2px solid #fff; color: #fff; padding: 20px 40px; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; transition: 0.3s; }
-        .btn:hover { background: #fff; color: #000; }
+    /* Navbar */
+    nav {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 40px;
+        position: sticky;
+        top: 0;
+        background: #000;
+        border-bottom: 1px solid #111;
+    }
 
-        footer { padding: 60px; color: #333; font-size: 0.7rem; letter-spacing: 2px; border-top: 1px solid #111; }
-    </style>
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 0.9rem;
+    }
+
+    /* Header */
+    header { padding: 60px 20px; }
+    .logo { max-width: 350px; }
+
+    h1 { font-size: 3rem; margin-bottom: 20px; }
+    .tagline { color: #007bff; margin-bottom: 30px; }
+    .about-text { color: #aaa; max-width: 800px; margin: auto; line-height: 1.7; }
+
+    /* Leadership */
+    .leadership { display: flex; justify-content: center; gap: 40px; margin: 60px 0; flex-wrap: wrap; }
+    .leader { border-left: 3px solid #fff; padding-left: 15px; text-align: left; }
+
+    /* Services */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 40px;
+    }
+
+    .box {
+        border: 1px solid #222;
+        padding: 30px;
+        transition: 0.3s;
+    }
+
+    .box:hover {
+        border-color: #007bff;
+        transform: translateY(-5px);
+    }
+
+    /* Ops Team */
+    .ops-title {
+        font-size: 0.8rem;
+        letter-spacing: 4px;
+        color: #555;
+        margin: 60px 0 20px;
+    }
+
+    .ops-team {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+        margin-bottom: 60px;
+    }
+
+    .member {
+        font-size: 1.2rem;
+    }
+
+    .member span {
+        display: block;
+        color: #007bff;
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+
+    /* Why Us */
+    .why {
+        padding: 60px 20px;
+    }
+
+    .why-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .why-box {
+        border: 1px solid #222;
+        padding: 20px;
+    }
+
+    /* Contact */
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 400px;
+        margin: 40px auto;
+    }
+
+    input, textarea {
+        padding: 12px;
+        background: #111;
+        border: none;
+        color: #fff;
+    }
+
+    button {
+        padding: 15px;
+        background: #007bff;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    /* CTA */
+    .cta {
+        display: inline-block;
+        margin-top: 30px;
+        padding: 15px 40px;
+        border: 2px solid #fff;
+        text-decoration: none;
+        color: #fff;
+        transition: 0.3s;
+    }
+
+    .cta:hover {
+        background: #007bff;
+        box-shadow: 0 0 20px #007bff;
+    }
+
+    footer {
+        padding: 40px;
+        font-size: 0.8rem;
+        color: #444;
+    }
+</style>
+```
+
 </head>
+
 <body>
 
-    <header>
-        <img src="https://i.ibb.co/C5fR4mFq/Gemini-Generated-Image-86r1ba86r1ba86r1.png" alt="StadiumConnect Logo" class="logo">
-    </header>
+<nav>
+    <div>STADIUMCONNECT</div>
+    <div>
+        <a href="#">Home</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+    </div>
+</nav>
 
-    <section class="main-content">
-        <h1>Event Infrastructure <span class="blue-text">Redefined</span>.</h1>
-        <p class="description">
-            StadiumConnect is India’s ultimate network for large-scale event logistics. We connect you with 
-            <span class="blue-text">Premium Venues</span>, <span class="blue-text">Top-tier Decorators</span>, 
-            and <span class="blue-text">Verified Vendors</span> to execute grand events across the nation.
-        </p>
+<header>
+    <img src="https://i.ibb.co/C5fR4mFq/Gemini-Generated-Image-86r1ba86r1ba86r1.png" class="logo">
+</header>
 
-        <div class="founders-section">
-            <div class="founder-card">
-                <div class="name">Atharva Darshanwar</div>
-                <div class="role">FOUNDER & CEO</div>
-            </div>
-            <div class="founder-card">
-                <div class="name">Aditya Kharwade</div>
-                <div class="role">CO-FOUNDER & MARKETING DIRECTOR</div>
-            </div>
-        </div>
+<section>
+    <p class="tagline">Premium Event Ecosystem</p>
+    <h1 data-aos="fade-up">STADIUMCONNECT INDIA</h1>
+    <p class="about-text" data-aos="fade-up">
+        India's most powerful infrastructure for large-scale events.
+    </p>
 
-        <div class="grid">
-            <div class="card">
-                <h3>Venue Booking</h3>
-                <p>Access to stadiums and massive grounds for grand events.</p>
-            </div>
-            <div class="card">
-                <h3>Decor & Setup</h3>
-                <p>Professional decorators for high-end event infrastructure.</p>
-            </div>
-            <div class="card">
-                <h3>Vendor Network</h3>
-                <p>A verified chain of suppliers for catering, lighting, and sound.</p>
-            </div>
-        </div>
+```
+<div class="leadership">
+    <div class="leader" data-aos="fade-up">
+        <h2>Atharva Darshanwar</h2>
+        <p>Founder & CEO</p>
+    </div>
+    <div class="leader" data-aos="fade-up">
+        <h2>Aditya Kharwade</h2>
+        <p>Co-Founder</p>
+    </div>
+</div>
 
-        <h2 class="team-title">Operations Board</h2>
-        <div class="team-list">
-            <div class="member">YASH GORE <span>Field Operations Head</span></div>
-            <div class="member">OMSAI KAITIKWAR <span>Partnerships & Growth</span></div>
-        </div>
+<div class="services-grid">
+    <div class="box" data-aos="fade-up">
+        <h3>Venue Infrastructure</h3>
+        <p>Stadium booking system across India.</p>
+    </div>
+    <div class="box" data-aos="fade-up">
+        <h3>Elite Decorators</h3>
+        <p>Premium event decorators network.</p>
+    </div>
+    <div class="box" data-aos="fade-up">
+        <h3>Vendor Ecosystem</h3>
+        <p>Verified vendors for all event needs.</p>
+    </div>
+</div>
 
-        <a href="mailto:atharvadarshanwar09@gmail.com" class="btn">Partner With Us</a>
-    </section>
+<!-- Operational Team -->
+<h2 class="ops-title" data-aos="fade-up">Operational Leadership</h2>
+<div class="ops-team">
+    <div class="member" data-aos="fade-up">
+        YASH GORE
+        <span>Field Operations Head</span>
+    </div>
+    <div class="member" data-aos="fade-up">
+        OMSAI KAITIKWAR
+        <span>Partnerships & Growth</span>
+    </div>
+</div>
+```
 
-    <footer>
-        &copy; 2026 STADIUMCONNECT INDIA. SCALING ACROSS THE NATION.
-    </footer>
+</section>
+
+<section class="why">
+    <h2 data-aos="fade-up">Why Choose Us</h2>
+    <div class="why-grid">
+        <div class="why-box" data-aos="fade-up">Nationwide Network</div>
+        <div class="why-box" data-aos="fade-up">Verified Vendors</div>
+        <div class="why-box" data-aos="fade-up">Premium Execution</div>
+        <div class="why-box" data-aos="fade-up">Fast Booking</div>
+    </div>
+</section>
+
+<section>
+    <h2 data-aos="fade-up">Contact Us</h2>
+    <form>
+        <input type="text" placeholder="Your Name">
+        <input type="email" placeholder="Your Email">
+        <textarea placeholder="Your Requirement"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+
+```
+<a href="mailto:atharvadarshanwar09@gmail.com" class="cta">Connect as a Partner</a>
+```
+
+</section>
+
+<footer>
+    © 2026 STADIUMCONNECT INDIA
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+    AOS.init();
+</script>
 
 </body>
 </html>
