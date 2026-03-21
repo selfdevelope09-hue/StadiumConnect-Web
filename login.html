@@ -9,14 +9,89 @@
         body {
             background: #000000;
         }
+        .auth-container {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 450px;
+            margin: 3rem auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .logo h1 {
+            color: #001a4d;
+            font-size: 1.8rem;
+        }
+        .logo p {
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+        .auth-btn {
+            width: 100%;
+            background: #001a4d;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .auth-btn:hover {
+            background: #000033;
+        }
+        .auth-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+        .auth-link a {
+            color: #001a4d;
+            text-decoration: none;
+        }
+        .message {
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
     </style>
 </head>
 <body>
 
 <div class="auth-container">
-    <div class="logo" style="text-align: center; margin-bottom: 1rem;">
-        <h1 style="color: #001a4d;">🏟️ STADIUMCONNECT</h1>
-        <p style="color: #666;">Welcome back!</p>
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Welcome back!</p>
     </div>
     
     <div id="message" class="message"></div>
@@ -52,7 +127,6 @@
             return;
         }
         
-        // Get users from localStorage
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         const user = users.find(u => u.email === email && u.password === password);
         
@@ -61,7 +135,6 @@
             return;
         }
         
-        // Save current user
         localStorage.setItem('currentUser', JSON.stringify({
             id: user.id,
             name: user.name,
