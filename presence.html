@@ -1,40 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Presence | StadiumConnect</title>
+
+<style>
+body{
+    background:#000;
+    color:#fff;
+    font-family: 'Segoe UI', sans-serif;
+    margin:0;
+    text-align:center;
+}
+
+/* Heading */
+h1{
+    margin:50px 0 10px;
+    font-size:2.8rem;
+    letter-spacing:1px;
+}
+
+.subtitle{
+    color:#777;
+    margin-bottom:50px;
+}
+
+/* Grid */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    padding:30px;
+}
+
+/* Cards */
+.card{
+    background:#050505;
+    border:1px solid #111;
+    padding:40px 20px;
+    border-radius:15px;
+    transition:0.4s;
+    cursor:pointer;
+    position:relative;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    border-color:#0a1f44;
+    box-shadow:0 0 25px rgba(10,31,68,0.6);
+}
+
+/* City Name */
+.city{
+    font-size:1.6rem;
+    color:#0a1f44;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+/* Check icon */
+.check{
+    font-size:1.2rem;
+    color:#fff;
+}
+
+/* Vendor Section */
+#vendorList{
+    margin-top:60px;
+    padding:20px;
+}
+
+.vendor{
+    background:#0a0a0a;
+    border:1px solid #111;
+    margin:10px auto;
+    padding:15px;
+    border-radius:10px;
+    max-width:400px;
+    color:#fff;
+    transition:0.3s;
+}
+
+.vendor:hover{
+    border-color:#0a1f44;
+}
+
+/* Divider */
+.line{
+    width:60px;
+    height:2px;
+    background:#0a1f44;
+    margin:20px auto;
+}
+</style>
+
+</head>
+
+<body>
+
+<h1>Our Presence</h1>
+<div class="line"></div>
+<p class="subtitle">Building a premium event network across cities</p>
+
 <div class="grid">
 
 <div class="card" onclick="showVendors('pandharkawada')">
 <div class="city">Pandharkawada</div>
-<p>Active Vendors Available</p>
-<div class="status">Click to View</div>
+<div class="check">✔</div>
 </div>
 
 <div class="card" onclick="showVendors('adilabad')">
 <div class="city">Adilabad</div>
-<p>Active Vendors Available</p>
-<div class="status">Click to View</div>
+<div class="check">✔</div>
 </div>
 
 <div class="card" onclick="showVendors('nagpur')">
 <div class="city">Nagpur</div>
-<p>Active Vendors Available</p>
-<div class="status">Click to View</div>
+<div class="check">✔</div>
 </div>
 
 <div class="card" onclick="showVendors('yavatmal')">
 <div class="city">Yavatmal</div>
-<p>Active Vendors Available</p>
-<div class="status">Click to View</div>
+<div class="check">✔</div>
 </div>
 
 <div class="card" onclick="showVendors('bhandara')">
 <div class="city">Bhandara</div>
-<p>Active Vendors Available</p>
-<div class="status">Click to View</div>
+<div class="check">✔</div>
 </div>
 
 </div>
 
 <!-- Vendor List -->
 
-<div id="vendorList" style="margin-top:50px;"></div>
+<div id="vendorList"></div>
 
 <script>
 function showVendors(city){
@@ -50,10 +151,14 @@ let data = {
 let html = "<h2 style='margin-bottom:20px;'>Vendors in " + city.toUpperCase() + "</h2>";
 
 data[city].forEach(v => {
-    html += "<div style='background:#111; margin:10px; padding:15px; border-radius:10px;'>" + v + "</div>";
+    html += "<div class='vendor'>" + v + "</div>";
 });
 
 document.getElementById("vendorList").innerHTML = html;
 
 }
 </script>
+
+</body>
+</html>
+
