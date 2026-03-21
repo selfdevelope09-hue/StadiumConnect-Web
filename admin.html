@@ -52,6 +52,7 @@
             margin-bottom: 2rem;
             border-bottom: 2px solid #ddd;
             padding-bottom: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
@@ -77,7 +78,7 @@
         /* Cards */
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -100,8 +101,8 @@
             color: #000;
         }
 
-        /* Selector Section */
-        .selector-section, .add-vendor-section {
+        /* Section Styles */
+        .selector-section, .add-vendor-section, .settings-section {
             background: white;
             border-radius: 1rem;
             padding: 1.5rem;
@@ -109,7 +110,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .selector-section h2, .add-vendor-section h2 {
+        .selector-section h2, .add-vendor-section h2, .settings-section h2 {
             color: #001a4d;
             margin-bottom: 1rem;
         }
@@ -178,6 +179,55 @@
             resize: vertical;
         }
 
+        /* City & Category Management */
+        .city-list, .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+
+        .city-tag, .category-tag {
+            background: #f0f0f0;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .city-tag button, .category-tag button {
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .add-city, .add-category {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .add-city input, .add-category input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+        }
+
+        .add-city button, .add-category button {
+            background: #001a4d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
         .photos-upload {
             margin: 1.5rem 0;
             padding: 1rem;
@@ -221,7 +271,7 @@
             cursor: pointer;
         }
 
-        .upload-btn {
+        .upload-btn, .add-cat-btn {
             background: #001a4d;
             color: white;
             border: none;
@@ -309,6 +359,7 @@
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('edit')">✏️ Edit Vendor</button>
         <button class="tab-btn" onclick="switchTab('add')">➕ Add New Vendor</button>
+        <button class="tab-btn" onclick="switchTab('settings')">⚙️ Cities & Categories</button>
     </div>
 
     <!-- Dashboard -->
@@ -319,11 +370,11 @@
         </div>
         <div class="card">
             <h3>Total Cities</h3>
-            <div class="number">6</div>
+            <div class="number" id="totalCities">0</div>
         </div>
         <div class="card">
             <h3>Categories</h3>
-            <div class="number">4</div>
+            <div class="number" id="totalCategories">0</div>
         </div>
     </div>
 
@@ -331,22 +382,8 @@
     <div id="editSection" class="selector-section">
         <h2>📋 Select Vendor to Edit</h2>
         <div class="filters">
-            <select id="categoryFilter">
-                <option value="all">All Categories</option>
-                <option value="decorator">Decorators</option>
-                <option value="caterer">Caterers</option>
-                <option value="photographer">Photographers</option>
-                <option value="bandbaja">Band Baja</option>
-            </select>
-            <select id="cityFilter">
-                <option value="all">All Cities</option>
-                <option value="nagpur">Nagpur</option>
-                <option value="pandharkawada">Pandharkawada</option>
-                <option value="yavatmal">Yavatmal</option>
-                <option value="adilabad">Adilabad</option>
-                <option value="nanded">Nanded</option>
-                <option value="kinwat">Kinwat</option>
-            </select>
+            <select id="categoryFilter"></select>
+            <select id="cityFilter"></select>
             <input type="text" id="searchVendor" placeholder="Search vendor name...">
         </div>
         <div id="vendorList" class="vendor-list"></div>
@@ -418,29 +455,17 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Vendor Name *</label>
-                    <input type="text" id="newVendorName" placeholder="e.g., Royal Decorators">
+                    <input type="text" id="newVendorName" placeholder="e.g., Mumbai Decorators">
                 </div>
                 <div class="form-group">
                     <label>Category *</label>
-                    <select id="newVendorCategory">
-                        <option value="decorator">Decorator</option>
-                        <option value="caterer">Caterer</option>
-                        <option value="photographer">Photographer</option>
-                        <option value="bandbaja">Band Baja</option>
-                    </select>
+                    <select id="newVendorCategory"></select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>City *</label>
-                    <select id="newVendorCity">
-                        <option value="nagpur">Nagpur</option>
-                        <option value="pandharkawada">Pandharkawada</option>
-                        <option value="yavatmal">Yavatmal</option>
-                        <option value="adilabad">Adilabad</option>
-                        <option value="nanded">Nanded</option>
-                        <option value="kinwat">Kinwat</option>
-                    </select>
+                    <select id="newVendorCity"></select>
                 </div>
                 <div class="form-group">
                     <label>Experience</label>
@@ -450,7 +475,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Location (Area)</label>
-                    <input type="text" id="newVendorLocation" placeholder="e.g., Civil Lines, City Name">
+                    <input type="text" id="newVendorLocation" placeholder="e.g., Andheri, Mumbai">
                 </div>
                 <div class="form-group">
                     <label>Price Range</label>
@@ -469,150 +494,248 @@
             </div>
             <div class="form-group">
                 <label>Description</label>
-                <textarea id="newVendorDescription" placeholder="Describe vendor's services, specialties, etc..."></textarea>
-            </div>
-
-            <div class="photos-upload">
-                <label>📷 Work Photos (Upload after adding vendor)</label>
-                <p style="font-size: 0.8rem; color: #666;">First add vendor, then upload photos from Edit section</p>
+                <textarea id="newVendorDescription" placeholder="Describe vendor's services..."></textarea>
             </div>
 
             <button class="add-btn" onclick="addNewVendor()">➕ Add Vendor</button>
         </div>
     </div>
+
+    <!-- ========= SETTINGS SECTION - CITIES & CATEGORIES ========= -->
+    <div id="settingsSection" class="settings-section" style="display: none;">
+        <h2>⚙️ Manage Cities & Categories</h2>
+        
+        <!-- Categories Management -->
+        <div style="margin-bottom: 2rem;">
+            <h3>📁 Categories</h3>
+            <div id="categoryList" class="category-list"></div>
+            <div class="add-category">
+                <input type="text" id="newCategoryName" placeholder="New category name (e.g., Cake, Mehndi, Lighting)">
+                <button onclick="addNewCategory()">+ Add Category</button>
+            </div>
+        </div>
+
+        <!-- Cities Management -->
+        <div>
+            <h3>📍 Cities</h3>
+            <div id="cityList" class="city-list"></div>
+            <div class="add-city">
+                <input type="text" id="newCityName" placeholder="New city name (e.g., Mumbai, Pune, Delhi)">
+                <button onclick="addNewCity()">+ Add City</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Complete Vendor Database
-    let vendorsData = {
-        decorator: {
-            nagpur: [
-                { id: "dec_nag_1", name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", rating: "4.8", description: "We are the leading decorators in Nagpur specializing in royal weddings.", photos: [] },
-                { id: "dec_nag_2", name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.6", description: "Fusion Event Decor brings creativity and innovation.", photos: [] }
-            ],
-            pandharkawada: [
-                { id: "dec_pan_1", name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", rating: "4.5", description: "Local favorite for traditional decor.", photos: [] }
-            ],
-            yavatmal: [
-                { id: "dec_yav_1", name: "Yavatmal Event Makers", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.7", description: "Premier event decorators in Yavatmal.", photos: [] }
-            ],
-            adilabad: [
-                { id: "dec_adi_1", name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", rating: "4.6", description: "We bring royal elegance to every event.", photos: [] }
-            ],
-            nanded: [
-                { id: "dec_nan_1", name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", rating: "4.7", description: "Creating unforgettable memories.", photos: [] }
-            ],
-            kinwat: [
-                { id: "dec_kin_1", name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.3", description: "Affordable and beautiful decor services.", photos: [] }
-            ]
-        },
-        caterer: {
-            nagpur: [
-                { id: "cat_nag_1", name: "Orange City Caterers", experience: "15 years", location: "Dharampeth, Nagpur", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Orange City Caterers is Nagpur's premier catering service.", photos: [] },
-                { id: "cat_nag_2", name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", rating: "4.6", description: "Bringing authentic taste of Vidarbha.", photos: [] }
-            ],
-            pandharkawada: [
-                { id: "cat_pan_1", name: "Kawada Kitchen", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹150 - ₹500 per plate", phone: "9423281086", rating: "4.5", description: "Local favorite for authentic Marathi cuisine.", photos: [] }
-            ],
-            yavatmal: [
-                { id: "cat_yav_1", name: "Yavatmal Garden Caterers", experience: "12 years", location: "Civil Lines, Yavatmal", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.7", description: "Yavatmal's most trusted caterers.", photos: [] }
-            ],
-            adilabad: [
-                { id: "cat_adi_1", name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Authentic Hyderabadi cuisine.", photos: [] }
-            ],
-            nanded: [
-                { id: "cat_nan_1", name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.6", description: "Premium catering service.", photos: [] }
-            ],
-            kinwat: [
-                { id: "cat_kin_1", name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", rating: "4.3", description: "Affordable and tasty catering.", photos: [] }
-            ]
-        },
-        photographer: {
-            nagpur: [
-                { id: "pho_nag_1", name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", rating: "4.8", description: "Shutter Stories captures your precious moments.", photos: [] }
-            ],
-            pandharkawada: [
-                { id: "pho_pan_1", name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Capturing beautiful memories.", photos: [] }
-            ],
-            yavatmal: [
-                { id: "pho_yav_1", name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", rating: "4.6", description: "Creative photography services.", photos: [] }
-            ],
-            adilabad: [
-                { id: "pho_adi_1", name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Professional photographers.", photos: [] }
-            ],
-            nanded: [
-                { id: "pho_nan_1", name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.7", description: "Premium photography services.", photos: [] }
-            ],
-            kinwat: [
-                { id: "pho_kin_1", name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", rating: "4.2", description: "Affordable photography services.", photos: [] }
-            ]
-        },
-        bandbaja: {
-            nagpur: [
-                { id: "ban_nag_1", name: "DJ Dhruv Entertainment", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹1,00,000", phone: "9423281086", rating: "4.9", description: "Nagpur's premier DJ and band service.", photos: [] }
-            ],
-            pandharkawada: [
-                { id: "ban_pan_1", name: "Kawada Band", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹40,000", phone: "9423281086", rating: "4.5", description: "Traditional and modern band services.", photos: [] }
-            ],
-            yavatmal: [
-                { id: "ban_yav_1", name: "Yavatmal Beats", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹60,000", phone: "9423281086", rating: "4.7", description: "Professional DJ and band services.", photos: [] }
-            ],
-            adilabad: [
-                { id: "ban_adi_1", name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Traditional dhol tasha services.", photos: [] }
-            ],
-            nanded: [
-                { id: "ban_nan_1", name: "Nanded Band Baja", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.6", description: "Complete entertainment solutions.", photos: [] }
-            ],
-            kinwat: [
-                { id: "ban_kin_1", name: "Kinwat Dhol Tasha", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹25,000", phone: "9423281086", rating: "4.3", description: "Affordable band services.", photos: [] }
-            ]
-        }
+    // Default Data
+    let categories = ["decorator", "caterer", "photographer", "bandbaja"];
+    let categoryDisplayNames = {
+        decorator: "Decorators",
+        caterer: "Caterers", 
+        photographer: "Photographers",
+        bandbaja: "Band Baja"
+    };
+    
+    let cities = ["nagpur", "pandharkawada", "yavatmal", "adilabad", "nanded", "kinwat"];
+    let cityDisplayNames = {
+        nagpur: "Nagpur", pandharkawada: "Pandharkawada", yavatmal: "Yavatmal",
+        adilabad: "Adilabad", nanded: "Nanded", kinwat: "Kinwat"
     };
 
-    let currentVendor = null;
-    let currentCategory = null;
-    let currentCity = null;
+    let vendorsData = {};
 
-    // Load saved photos
-    function loadSavedPhotos() {
-        const saved = localStorage.getItem('vendorPhotos');
-        if (saved) {
-            const photos = JSON.parse(saved);
-            for (let cat in vendorsData) {
-                for (let city in vendorsData[cat]) {
-                    vendorsData[cat][city] = vendorsData[cat][city].map(v => {
-                        v.photos = photos[v.id] || [];
-                        return v;
-                    });
-                }
-            }
+    // Load saved data
+    function loadData() {
+        const savedCategories = localStorage.getItem('categories');
+        if (savedCategories) {
+            categories = JSON.parse(savedCategories);
+            categoryDisplayNames = localStorage.getItem('categoryDisplayNames') ? JSON.parse(localStorage.getItem('categoryDisplayNames')) : categoryDisplayNames;
+        }
+        
+        const savedCities = localStorage.getItem('cities');
+        if (savedCities) {
+            cities = JSON.parse(savedCities);
+            cityDisplayNames = localStorage.getItem('cityDisplayNames') ? JSON.parse(localStorage.getItem('cityDisplayNames')) : cityDisplayNames;
+        }
+        
+        const savedVendors = localStorage.getItem('vendorsDataBackup');
+        if (savedVendors) {
+            vendorsData = JSON.parse(savedVendors);
+        } else {
+            // Initialize vendorsData with empty structure
+            categories.forEach(cat => {
+                vendorsData[cat] = {};
+                cities.forEach(city => {
+                    vendorsData[cat][city] = [];
+                });
+            });
         }
     }
 
-    // Save all photos
-    function saveAllPhotos() {
+    // Save all data
+    function saveAllData() {
+        localStorage.setItem('categories', JSON.stringify(categories));
+        localStorage.setItem('categoryDisplayNames', JSON.stringify(categoryDisplayNames));
+        localStorage.setItem('cities', JSON.stringify(cities));
+        localStorage.setItem('cityDisplayNames', JSON.stringify(cityDisplayNames));
+        localStorage.setItem('vendorsDataBackup', JSON.stringify(vendorsData));
+        
+        // Save photos separately
         const allPhotos = {};
         for (let cat in vendorsData) {
             for (let city in vendorsData[cat]) {
                 vendorsData[cat][city].forEach(v => {
-                    allPhotos[v.id] = v.photos;
+                    allPhotos[v.id] = v.photos || [];
                 });
             }
         }
         localStorage.setItem('vendorPhotos', JSON.stringify(allPhotos));
-        localStorage.setItem('vendorsDataBackup', JSON.stringify(vendorsData));
+        
+        updateStats();
     }
 
-    // Generate new vendor ID
+    function updateStats() {
+        let totalVendors = 0;
+        for (let cat in vendorsData) {
+            for (let city in vendorsData[cat]) {
+                totalVendors += vendorsData[cat][city].length;
+            }
+        }
+        document.getElementById('totalVendors').innerText = totalVendors;
+        document.getElementById('totalCities').innerText = cities.length;
+        document.getElementById('totalCategories').innerText = categories.length;
+    }
+
+    function updateFilters() {
+        const categoryFilter = document.getElementById('categoryFilter');
+        const cityFilter = document.getElementById('cityFilter');
+        const newVendorCategory = document.getElementById('newVendorCategory');
+        const newVendorCity = document.getElementById('newVendorCity');
+        
+        categoryFilter.innerHTML = '<option value="all">All Categories</option>' + 
+            categories.map(cat => `<option value="${cat}">${categoryDisplayNames[cat] || cat}</option>`).join('');
+        
+        cityFilter.innerHTML = '<option value="all">All Cities</option>' + 
+            cities.map(city => `<option value="${city}">${cityDisplayNames[city] || city}</option>`).join('');
+        
+        newVendorCategory.innerHTML = categories.map(cat => `<option value="${cat}">${categoryDisplayNames[cat] || cat}</option>`).join('');
+        newVendorCity.innerHTML = cities.map(city => `<option value="${city}">${cityDisplayNames[city] || city}</option>`).join('');
+    }
+
+    function renderCityList() {
+        const container = document.getElementById('cityList');
+        container.innerHTML = cities.map(city => `
+            <div class="city-tag">
+                ${cityDisplayNames[city] || city}
+                <button onclick="deleteCity('${city}')">×</button>
+            </div>
+        `).join('');
+    }
+
+    function renderCategoryList() {
+        const container = document.getElementById('categoryList');
+        container.innerHTML = categories.map(cat => `
+            <div class="category-tag">
+                ${categoryDisplayNames[cat] || cat}
+                <button onclick="deleteCategory('${cat}')">×</button>
+            </div>
+        `).join('');
+    }
+
+    function addNewCity() {
+        const newCity = document.getElementById('newCityName').value.trim().toLowerCase();
+        if (!newCity) {
+            showMessage('Please enter city name', 'error');
+            return;
+        }
+        if (cities.includes(newCity)) {
+            showMessage('City already exists', 'error');
+            return;
+        }
+        cities.push(newCity);
+        cityDisplayNames[newCity] = newCity.charAt(0).toUpperCase() + newCity.slice(1);
+        
+        // Add empty structure for all categories
+        categories.forEach(cat => {
+            if (!vendorsData[cat]) vendorsData[cat] = {};
+            vendorsData[cat][newCity] = [];
+        });
+        
+        saveAllData();
+        updateFilters();
+        renderCityList();
+        showMessage(`✅ City "${newCity}" added!`, 'success');
+        document.getElementById('newCityName').value = '';
+    }
+
+    function deleteCity(city) {
+        if (confirm(`Delete ${cityDisplayNames[city]}? All vendors in this city will be deleted.`)) {
+            cities = cities.filter(c => c !== city);
+            delete cityDisplayNames[city];
+            
+            categories.forEach(cat => {
+                if (vendorsData[cat]) {
+                    delete vendorsData[cat][city];
+                }
+            });
+            
+            saveAllData();
+            updateFilters();
+            renderCityList();
+            renderVendorList();
+            showMessage(`✅ City deleted!`, 'success');
+        }
+    }
+
+    function addNewCategory() {
+        const newCategory = document.getElementById('newCategoryName').value.trim().toLowerCase();
+        if (!newCategory) {
+            showMessage('Please enter category name', 'error');
+            return;
+        }
+        if (categories.includes(newCategory)) {
+            showMessage('Category already exists', 'error');
+            return;
+        }
+        categories.push(newCategory);
+        categoryDisplayNames[newCategory] = newCategory.charAt(0).toUpperCase() + newCategory.slice(1);
+        
+        // Add empty structure for all cities
+        vendorsData[newCategory] = {};
+        cities.forEach(city => {
+            vendorsData[newCategory][city] = [];
+        });
+        
+        saveAllData();
+        updateFilters();
+        renderCategoryList();
+        showMessage(`✅ Category "${newCategory}" added!`, 'success');
+        document.getElementById('newCategoryName').value = '';
+    }
+
+    function deleteCategory(category) {
+        if (confirm(`Delete ${categoryDisplayNames[category]}? All vendors in this category will be deleted.`)) {
+            categories = categories.filter(c => c !== category);
+            delete categoryDisplayNames[category];
+            delete vendorsData[category];
+            
+            saveAllData();
+            updateFilters();
+            renderCategoryList();
+            renderVendorList();
+            showMessage(`✅ Category deleted!`, 'success');
+        }
+    }
+
     function generateVendorId(category, city) {
         const prefix = category.substring(0, 3);
         const cityPrefix = city.substring(0, 3);
-        const existingVendors = vendorsData[category][city];
+        const existingVendors = vendorsData[category]?.[city] || [];
         const count = existingVendors.length + 1;
-        return `${prefix}_${cityPrefix}_${count}`;
+        return `${prefix}_${cityPrefix}_${count}_${Date.now()}`;
     }
 
-    // Add new vendor
     function addNewVendor() {
         const category = document.getElementById('newVendorCategory').value;
         const city = document.getElementById('newVendorCity').value;
@@ -623,11 +746,14 @@
             return;
         }
         
+        if (!vendorsData[category]) vendorsData[category] = {};
+        if (!vendorsData[category][city]) vendorsData[category][city] = [];
+        
         const newVendor = {
             id: generateVendorId(category, city),
             name: name,
             experience: document.getElementById('newVendorExperience').value || "New vendor",
-            location: document.getElementById('newVendorLocation').value || "City Center",
+            location: document.getElementById('newVendorLocation').value || cityDisplayNames[city],
             priceRange: document.getElementById('newVendorPrice').value || "Contact for price",
             phone: document.getElementById('newVendorPhone').value || "9423281086",
             rating: document.getElementById('newVendorRating').value || "4.0",
@@ -635,16 +761,9 @@
             photos: []
         };
         
-        // Add to vendorsData
-        if (!vendorsData[category][city]) {
-            vendorsData[category][city] = [];
-        }
         vendorsData[category][city].push(newVendor);
+        saveAllData();
         
-        // Save to localStorage
-        saveAllPhotos();
-        
-        // Clear form
         document.getElementById('newVendorName').value = '';
         document.getElementById('newVendorExperience').value = '';
         document.getElementById('newVendorLocation').value = '';
@@ -653,29 +772,14 @@
         document.getElementById('newVendorRating').value = '';
         document.getElementById('newVendorDescription').value = '';
         
-        updateTotalVendors();
+        updateStats();
         renderVendorList();
-        
-        showMessage(`✅ Vendor "${name}" added successfully!`, 'success');
-        
-        // Switch to edit tab to see new vendor
-        setTimeout(() => {
-            switchTab('edit');
-            document.getElementById('categoryFilter').value = category;
-            document.getElementById('cityFilter').value = city;
-            renderVendorList();
-        }, 1000);
+        showMessage(`✅ Vendor "${name}" added in ${cityDisplayNames[city]}!`, 'success');
     }
 
-    function updateTotalVendors() {
-        let total = 0;
-        for (let cat in vendorsData) {
-            for (let city in vendorsData[cat]) {
-                total += vendorsData[cat][city].length;
-            }
-        }
-        document.getElementById('totalVendors').innerText = total;
-    }
+    let currentVendor = null;
+    let currentCategory = null;
+    let currentCity = null;
 
     function renderVendorList() {
         const category = document.getElementById('categoryFilter').value;
@@ -687,11 +791,13 @@
             if (category !== 'all' && cat !== category) continue;
             for (let c in vendorsData[cat]) {
                 if (city !== 'all' && c !== city) continue;
-                vendorsData[cat][c].forEach(v => {
-                    if (search === '' || v.name.toLowerCase().includes(search)) {
-                        vendors.push({ ...v, category: cat, city: c });
-                    }
-                });
+                if (vendorsData[cat][c]) {
+                    vendorsData[cat][c].forEach(v => {
+                        if (search === '' || v.name.toLowerCase().includes(search)) {
+                            vendors.push({ ...v, category: cat, city: c });
+                        }
+                    });
+                }
             }
         }
 
@@ -704,7 +810,7 @@
         container.innerHTML = vendors.map(v => `
             <div class="vendor-item" onclick="selectVendor('${v.category}', '${v.city}', '${v.id}')">
                 <strong>${v.name}</strong><br>
-                <small>${v.category} | ${v.city} | ${v.location}</small>
+                <small>${categoryDisplayNames[v.category] || v.category} | ${cityDisplayNames[v.city] || v.city} | ${v.location}</small>
             </div>
         `).join('');
     }
@@ -723,7 +829,7 @@
             document.getElementById('vendorPrice').value = currentVendor.priceRange;
             document.getElementById('vendorPhone').value = currentVendor.phone;
             document.getElementById('vendorRating').value = currentVendor.rating;
-            document.getElementById('vendorCategory').value = category;
+            document.getElementById('vendorCategory').value = categoryDisplayNames[category] || category;
             document.getElementById('vendorDescription').value = currentVendor.description;
             renderPhotos();
         }
@@ -763,7 +869,7 @@
                     currentVendor.photos = currentVendor.photos || [];
                     currentVendor.photos.push(ev.target.result);
                     renderPhotos();
-                    saveAllPhotos();
+                    saveAllData();
                     showMessage('Photo added successfully!', 'success');
                 };
                 reader.readAsDataURL(file);
@@ -776,7 +882,7 @@
         if (currentVendor && currentVendor.photos) {
             currentVendor.photos.splice(index, 1);
             renderPhotos();
-            saveAllPhotos();
+            saveAllData();
             showMessage('Photo deleted!', 'success');
         }
     }
@@ -792,7 +898,7 @@
         currentVendor.rating = document.getElementById('vendorRating').value;
         currentVendor.description = document.getElementById('vendorDescription').value;
 
-        saveAllPhotos();
+        saveAllData();
         showMessage('Vendor data saved successfully!', 'success');
         renderVendorList();
     }
@@ -807,19 +913,28 @@
     }
 
     function switchTab(tab) {
+        document.getElementById('editSection').style.display = 'none';
+        document.getElementById('addSection').style.display = 'none';
+        document.getElementById('settingsSection').style.display = 'none';
+        
+        document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+            btn.classList.remove('active');
+        });
+        
         if (tab === 'edit') {
             document.getElementById('editSection').style.display = 'block';
-            document.getElementById('addSection').style.display = 'none';
             document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            document.querySelectorAll('.tab-btn')[1].classList.remove('active');
             renderVendorList();
-        } else {
-            document.getElementById('editSection').style.display = 'none';
+        } else if (tab === 'add') {
             document.getElementById('addSection').style.display = 'block';
-            document.querySelectorAll('.tab-btn')[0].classList.remove('active');
             document.querySelectorAll('.tab-btn')[1].classList.add('active');
-            document.getElementById('editForm').style.display = 'none';
+        } else {
+            document.getElementById('settingsSection').style.display = 'block';
+            document.querySelectorAll('.tab-btn')[2].classList.add('active');
+            renderCityList();
+            renderCategoryList();
         }
+        document.getElementById('editForm').style.display = 'none';
     }
 
     // Event listeners
@@ -828,8 +943,11 @@
     document.getElementById('searchVendor').addEventListener('input', renderVendorList);
 
     // Initialize
-    loadSavedPhotos();
-    updateTotalVendors();
+    loadData();
+    updateFilters();
+    renderCityList();
+    renderCategoryList();
+    updateStats();
     renderVendorList();
 </script>
 
