@@ -16,7 +16,6 @@
             font-family: 'Poppins', 'Segoe UI', sans-serif;
         }
 
-        /* Header */
         .admin-header {
             background: #000000;
             padding: 1rem 2rem;
@@ -46,6 +45,35 @@
             padding: 0 1.5rem;
         }
 
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #001a4d;
+            color: white;
+        }
+
+        .tab-btn:not(.active):hover {
+            background: #e0e0e0;
+        }
+
         /* Cards */
         .dashboard {
             display: grid;
@@ -64,7 +92,6 @@
         .card h3 {
             color: #001a4d;
             margin-bottom: 1rem;
-            font-size: 1.2rem;
         }
 
         .card .number {
@@ -73,8 +100,8 @@
             color: #000;
         }
 
-        /* Vendor Selector */
-        .selector-section {
+        /* Selector Section */
+        .selector-section, .add-vendor-section {
             background: white;
             border-radius: 1rem;
             padding: 1.5rem;
@@ -82,7 +109,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .selector-section h2 {
+        .selector-section h2, .add-vendor-section h2 {
             color: #001a4d;
             margin-bottom: 1rem;
         }
@@ -103,7 +130,7 @@
         }
 
         /* Form */
-        .edit-form {
+        .edit-form, .add-form {
             background: white;
             border-radius: 1rem;
             padding: 1.5rem;
@@ -112,11 +139,18 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        .edit-form h3 {
+        .edit-form h3, .add-form h3 {
             color: #001a4d;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #001a4d;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
         }
 
         .form-group {
@@ -130,7 +164,7 @@
             color: #333;
         }
 
-        .form-group input, .form-group textarea {
+        .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -144,7 +178,6 @@
             resize: vertical;
         }
 
-        /* Photos Section */
         .photos-upload {
             margin: 1.5rem 0;
             padding: 1rem;
@@ -198,7 +231,7 @@
             margin-top: 0.5rem;
         }
 
-        .save-btn {
+        .save-btn, .add-btn {
             background: #28a745;
             color: white;
             border: none;
@@ -209,7 +242,7 @@
             margin-top: 1rem;
         }
 
-        .save-btn:hover {
+        .save-btn:hover, .add-btn:hover {
             background: #218838;
         }
 
@@ -234,7 +267,7 @@
 
         .vendor-list {
             margin-top: 1rem;
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
@@ -272,6 +305,12 @@
 </div>
 
 <div class="container">
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('edit')">✏️ Edit Vendor</button>
+        <button class="tab-btn" onclick="switchTab('add')">➕ Add New Vendor</button>
+    </div>
+
     <!-- Dashboard -->
     <div class="dashboard">
         <div class="card">
@@ -288,8 +327,8 @@
         </div>
     </div>
 
-    <!-- Vendor Selector -->
-    <div class="selector-section">
+    <!-- ========= EDIT VENDOR SECTION ========= -->
+    <div id="editSection" class="selector-section">
         <h2>📋 Select Vendor to Edit</h2>
         <div class="filters">
             <select id="categoryFilter">
@@ -316,80 +355,161 @@
     <!-- Edit Form -->
     <div id="editForm" class="edit-form">
         <h3>✏️ Edit Vendor Details</h3>
-        <div class="form-group">
-            <label>Vendor ID</label>
-            <input type="text" id="vendorId" readonly>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Vendor ID</label>
+                <input type="text" id="vendorId" readonly>
+            </div>
+            <div class="form-group">
+                <label>Vendor Name</label>
+                <input type="text" id="vendorName">
+            </div>
         </div>
-        <div class="form-group">
-            <label>Vendor Name</label>
-            <input type="text" id="vendorName">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Experience</label>
+                <input type="text" id="vendorExperience">
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" id="vendorLocation">
+            </div>
         </div>
-        <div class="form-group">
-            <label>Experience</label>
-            <input type="text" id="vendorExperience">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Price Range</label>
+                <input type="text" id="vendorPrice">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="vendorPhone">
+            </div>
         </div>
-        <div class="form-group">
-            <label>Location</label>
-            <input type="text" id="vendorLocation">
-        </div>
-        <div class="form-group">
-            <label>Price Range</label>
-            <input type="text" id="vendorPrice">
-        </div>
-        <div class="form-group">
-            <label>Phone Number</label>
-            <input type="text" id="vendorPhone">
-        </div>
-        <div class="form-group">
-            <label>Rating (1-5)</label>
-            <input type="text" id="vendorRating">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Rating (1-5)</label>
+                <input type="text" id="vendorRating">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <input type="text" id="vendorCategory" readonly>
+            </div>
         </div>
         <div class="form-group">
             <label>Description</label>
             <textarea id="vendorDescription"></textarea>
         </div>
 
-        <!-- Photos Upload -->
         <div class="photos-upload">
             <label>📷 Work Photos</label>
             <div id="photosGrid" class="photos-grid"></div>
             <button class="upload-btn" onclick="uploadPhoto()">+ Add New Photo</button>
-            <p style="font-size: 0.7rem; color: #666; margin-top: 0.5rem;">Click on photo to delete</p>
         </div>
 
         <button class="save-btn" onclick="saveVendorData()">💾 Save Changes</button>
         <div id="message" class="message"></div>
     </div>
+
+    <!-- ========= ADD NEW VENDOR SECTION ========= -->
+    <div id="addSection" class="add-vendor-section" style="display: none;">
+        <h2>➕ Add New Vendor</h2>
+        <div class="add-form" style="display: block;">
+            <h3>📝 Fill Vendor Details</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Vendor Name *</label>
+                    <input type="text" id="newVendorName" placeholder="e.g., Royal Decorators">
+                </div>
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="newVendorCategory">
+                        <option value="decorator">Decorator</option>
+                        <option value="caterer">Caterer</option>
+                        <option value="photographer">Photographer</option>
+                        <option value="bandbaja">Band Baja</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>City *</label>
+                    <select id="newVendorCity">
+                        <option value="nagpur">Nagpur</option>
+                        <option value="pandharkawada">Pandharkawada</option>
+                        <option value="yavatmal">Yavatmal</option>
+                        <option value="adilabad">Adilabad</option>
+                        <option value="nanded">Nanded</option>
+                        <option value="kinwat">Kinwat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Experience</label>
+                    <input type="text" id="newVendorExperience" placeholder="e.g., 10 years">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Location (Area)</label>
+                    <input type="text" id="newVendorLocation" placeholder="e.g., Civil Lines, City Name">
+                </div>
+                <div class="form-group">
+                    <label>Price Range</label>
+                    <input type="text" id="newVendorPrice" placeholder="e.g., ₹20,000 - ₹1,00,000">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="newVendorPhone" placeholder="e.g., 9423281086">
+                </div>
+                <div class="form-group">
+                    <label>Rating (1-5)</label>
+                    <input type="text" id="newVendorRating" placeholder="e.g., 4.5">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="newVendorDescription" placeholder="Describe vendor's services, specialties, etc..."></textarea>
+            </div>
+
+            <div class="photos-upload">
+                <label>📷 Work Photos (Upload after adding vendor)</label>
+                <p style="font-size: 0.8rem; color: #666;">First add vendor, then upload photos from Edit section</p>
+            </div>
+
+            <button class="add-btn" onclick="addNewVendor()">➕ Add Vendor</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // Complete Vendor Database (matching directory.html)
+    // Complete Vendor Database
     let vendorsData = {
         decorator: {
             nagpur: [
-                { id: "dec_nag_1", name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", rating: "4.8", description: "We are the leading decorators in Nagpur specializing in royal weddings, corporate events, and grand celebrations.", photos: [] },
-                { id: "dec_nag_2", name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.6", description: "Fusion Event Decor brings creativity and innovation to every event.", photos: [] }
+                { id: "dec_nag_1", name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", rating: "4.8", description: "We are the leading decorators in Nagpur specializing in royal weddings.", photos: [] },
+                { id: "dec_nag_2", name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.6", description: "Fusion Event Decor brings creativity and innovation.", photos: [] }
             ],
             pandharkawada: [
-                { id: "dec_pan_1", name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", rating: "4.5", description: "Local favorite for traditional decor in Pandharkawada.", photos: [] }
+                { id: "dec_pan_1", name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", rating: "4.5", description: "Local favorite for traditional decor.", photos: [] }
             ],
             yavatmal: [
                 { id: "dec_yav_1", name: "Yavatmal Event Makers", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.7", description: "Premier event decorators in Yavatmal.", photos: [] }
             ],
             adilabad: [
-                { id: "dec_adi_1", name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", rating: "4.6", description: "We bring royal elegance to every event in Adilabad.", photos: [] }
+                { id: "dec_adi_1", name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", rating: "4.6", description: "We bring royal elegance to every event.", photos: [] }
             ],
             nanded: [
-                { id: "dec_nan_1", name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", rating: "4.7", description: "Creating unforgettable memories with our premium decor services.", photos: [] }
+                { id: "dec_nan_1", name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", rating: "4.7", description: "Creating unforgettable memories.", photos: [] }
             ],
             kinwat: [
-                { id: "dec_kin_1", name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.3", description: "Affordable and beautiful decor services in Kinwat.", photos: [] }
+                { id: "dec_kin_1", name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.3", description: "Affordable and beautiful decor services.", photos: [] }
             ]
         },
         caterer: {
             nagpur: [
                 { id: "cat_nag_1", name: "Orange City Caterers", experience: "15 years", location: "Dharampeth, Nagpur", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Orange City Caterers is Nagpur's premier catering service.", photos: [] },
-                { id: "cat_nag_2", name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", rating: "4.6", description: "Bringing the authentic taste of Vidarbha to your events.", photos: [] }
+                { id: "cat_nag_2", name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", rating: "4.6", description: "Bringing authentic taste of Vidarbha.", photos: [] }
             ],
             pandharkawada: [
                 { id: "cat_pan_1", name: "Kawada Kitchen", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹150 - ₹500 per plate", phone: "9423281086", rating: "4.5", description: "Local favorite for authentic Marathi cuisine.", photos: [] }
@@ -398,33 +518,33 @@
                 { id: "cat_yav_1", name: "Yavatmal Garden Caterers", experience: "12 years", location: "Civil Lines, Yavatmal", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.7", description: "Yavatmal's most trusted caterers.", photos: [] }
             ],
             adilabad: [
-                { id: "cat_adi_1", name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Authentic Hyderabadi and Telangana cuisine specialists.", photos: [] }
+                { id: "cat_adi_1", name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Authentic Hyderabadi cuisine.", photos: [] }
             ],
             nanded: [
-                { id: "cat_nan_1", name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.6", description: "Premium catering service in Nanded.", photos: [] }
+                { id: "cat_nan_1", name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.6", description: "Premium catering service.", photos: [] }
             ],
             kinwat: [
-                { id: "cat_kin_1", name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", rating: "4.3", description: "Affordable and tasty catering for small events.", photos: [] }
+                { id: "cat_kin_1", name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", rating: "4.3", description: "Affordable and tasty catering.", photos: [] }
             ]
         },
         photographer: {
             nagpur: [
-                { id: "pho_nag_1", name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", rating: "4.8", description: "Shutter Stories captures your precious moments with creativity.", photos: [] }
+                { id: "pho_nag_1", name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", rating: "4.8", description: "Shutter Stories captures your precious moments.", photos: [] }
             ],
             pandharkawada: [
-                { id: "pho_pan_1", name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Capturing beautiful memories in Pandharkawada.", photos: [] }
+                { id: "pho_pan_1", name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Capturing beautiful memories.", photos: [] }
             ],
             yavatmal: [
-                { id: "pho_yav_1", name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", rating: "4.6", description: "Creative photography services in Yavatmal.", photos: [] }
+                { id: "pho_yav_1", name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", rating: "4.6", description: "Creative photography services.", photos: [] }
             ],
             adilabad: [
-                { id: "pho_adi_1", name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Professional photographers in Adilabad.", photos: [] }
+                { id: "pho_adi_1", name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Professional photographers.", photos: [] }
             ],
             nanded: [
-                { id: "pho_nan_1", name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.7", description: "Premium photography services in Nanded.", photos: [] }
+                { id: "pho_nan_1", name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.7", description: "Premium photography services.", photos: [] }
             ],
             kinwat: [
-                { id: "pho_kin_1", name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", rating: "4.2", description: "Affordable photography services in Kinwat.", photos: [] }
+                { id: "pho_kin_1", name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", rating: "4.2", description: "Affordable photography services.", photos: [] }
             ]
         },
         bandbaja: {
@@ -438,7 +558,7 @@
                 { id: "ban_yav_1", name: "Yavatmal Beats", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹60,000", phone: "9423281086", rating: "4.7", description: "Professional DJ and band services.", photos: [] }
             ],
             adilabad: [
-                { id: "ban_adi_1", name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Traditional dhol tasha and band services.", photos: [] }
+                { id: "ban_adi_1", name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Traditional dhol tasha services.", photos: [] }
             ],
             nanded: [
                 { id: "ban_nan_1", name: "Nanded Band Baja", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.6", description: "Complete entertainment solutions.", photos: [] }
@@ -453,28 +573,23 @@
     let currentCategory = null;
     let currentCity = null;
 
-    // Load saved photos from localStorage
+    // Load saved photos
     function loadSavedPhotos() {
         const saved = localStorage.getItem('vendorPhotos');
         if (saved) {
             const photos = JSON.parse(saved);
-            for (let vendorId in photos) {
-                // Find and update vendor
-                for (let cat in vendorsData) {
-                    for (let city in vendorsData[cat]) {
-                        vendorsData[cat][city] = vendorsData[cat][city].map(v => {
-                            if (v.id === vendorId) {
-                                v.photos = photos[vendorId] || [];
-                            }
-                            return v;
-                        });
-                    }
+            for (let cat in vendorsData) {
+                for (let city in vendorsData[cat]) {
+                    vendorsData[cat][city] = vendorsData[cat][city].map(v => {
+                        v.photos = photos[v.id] || [];
+                        return v;
+                    });
                 }
             }
         }
     }
 
-    // Save all photos to localStorage
+    // Save all photos
     function saveAllPhotos() {
         const allPhotos = {};
         for (let cat in vendorsData) {
@@ -485,9 +600,73 @@
             }
         }
         localStorage.setItem('vendorPhotos', JSON.stringify(allPhotos));
+        localStorage.setItem('vendorsDataBackup', JSON.stringify(vendorsData));
     }
 
-    // Update total vendors count
+    // Generate new vendor ID
+    function generateVendorId(category, city) {
+        const prefix = category.substring(0, 3);
+        const cityPrefix = city.substring(0, 3);
+        const existingVendors = vendorsData[category][city];
+        const count = existingVendors.length + 1;
+        return `${prefix}_${cityPrefix}_${count}`;
+    }
+
+    // Add new vendor
+    function addNewVendor() {
+        const category = document.getElementById('newVendorCategory').value;
+        const city = document.getElementById('newVendorCity').value;
+        const name = document.getElementById('newVendorName').value.trim();
+        
+        if (!name) {
+            showMessage('Please enter vendor name', 'error');
+            return;
+        }
+        
+        const newVendor = {
+            id: generateVendorId(category, city),
+            name: name,
+            experience: document.getElementById('newVendorExperience').value || "New vendor",
+            location: document.getElementById('newVendorLocation').value || "City Center",
+            priceRange: document.getElementById('newVendorPrice').value || "Contact for price",
+            phone: document.getElementById('newVendorPhone').value || "9423281086",
+            rating: document.getElementById('newVendorRating').value || "4.0",
+            description: document.getElementById('newVendorDescription').value || "Professional vendor with quality services.",
+            photos: []
+        };
+        
+        // Add to vendorsData
+        if (!vendorsData[category][city]) {
+            vendorsData[category][city] = [];
+        }
+        vendorsData[category][city].push(newVendor);
+        
+        // Save to localStorage
+        saveAllPhotos();
+        
+        // Clear form
+        document.getElementById('newVendorName').value = '';
+        document.getElementById('newVendorExperience').value = '';
+        document.getElementById('newVendorLocation').value = '';
+        document.getElementById('newVendorPrice').value = '';
+        document.getElementById('newVendorPhone').value = '';
+        document.getElementById('newVendorRating').value = '';
+        document.getElementById('newVendorDescription').value = '';
+        
+        updateTotalVendors();
+        renderVendorList();
+        
+        showMessage(`✅ Vendor "${name}" added successfully!`, 'success');
+        
+        // Switch to edit tab to see new vendor
+        setTimeout(() => {
+            switchTab('edit');
+            document.getElementById('categoryFilter').value = category;
+            document.getElementById('cityFilter').value = city;
+            renderVendorList();
+        }, 1000);
+    }
+
     function updateTotalVendors() {
         let total = 0;
         for (let cat in vendorsData) {
@@ -498,7 +677,6 @@
         document.getElementById('totalVendors').innerText = total;
     }
 
-    // Render vendor list
     function renderVendorList() {
         const category = document.getElementById('categoryFilter').value;
         const city = document.getElementById('cityFilter').value;
@@ -531,7 +709,6 @@
         `).join('');
     }
 
-    // Select vendor to edit
     function selectVendor(category, city, id) {
         currentCategory = category;
         currentCity = city;
@@ -546,13 +723,12 @@
             document.getElementById('vendorPrice').value = currentVendor.priceRange;
             document.getElementById('vendorPhone').value = currentVendor.phone;
             document.getElementById('vendorRating').value = currentVendor.rating;
+            document.getElementById('vendorCategory').value = category;
             document.getElementById('vendorDescription').value = currentVendor.description;
-            
             renderPhotos();
         }
     }
 
-    // Render photos
     function renderPhotos() {
         const grid = document.getElementById('photosGrid');
         if (!currentVendor) return;
@@ -571,8 +747,11 @@
         `).join('');
     }
 
-    // Upload photo
     function uploadPhoto() {
+        if (!currentVendor) {
+            showMessage('Please select a vendor first', 'error');
+            return;
+        }
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'image/*';
@@ -593,7 +772,6 @@
         input.click();
     }
 
-    // Delete photo
     function deletePhoto(index) {
         if (currentVendor && currentVendor.photos) {
             currentVendor.photos.splice(index, 1);
@@ -603,7 +781,6 @@
         }
     }
 
-    // Save vendor data
     function saveVendorData() {
         if (!currentVendor) return;
 
@@ -617,9 +794,7 @@
 
         saveAllPhotos();
         showMessage('Vendor data saved successfully!', 'success');
-        
-        // Update directory.html data
-        localStorage.setItem('vendorsDataBackup', JSON.stringify(vendorsData));
+        renderVendorList();
     }
 
     function showMessage(msg, type) {
@@ -631,10 +806,20 @@
         }, 3000);
     }
 
-    // Export data to directory.html
-    function syncToDirectory() {
-        localStorage.setItem('vendorsDataSync', JSON.stringify(vendorsData));
-        showMessage('Data synced! Refresh directory.html to see changes.', 'success');
+    function switchTab(tab) {
+        if (tab === 'edit') {
+            document.getElementById('editSection').style.display = 'block';
+            document.getElementById('addSection').style.display = 'none';
+            document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+            renderVendorList();
+        } else {
+            document.getElementById('editSection').style.display = 'none';
+            document.getElementById('addSection').style.display = 'block';
+            document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+            document.querySelectorAll('.tab-btn')[1].classList.add('active');
+            document.getElementById('editForm').style.display = 'none';
+        }
     }
 
     // Event listeners
