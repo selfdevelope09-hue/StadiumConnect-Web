@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StadiumConnect | Vendor Profile</title>
     <style>
         * {
@@ -13,11 +13,10 @@
 
         body {
             background: #FFFFFF;
-            font-family: 'Poppins', 'Segoe UI', 'Inter', sans-serif;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
             min-height: 100vh;
         }
 
-        /* Header */
         .profile-header {
             background: #000000;
             padding: 1.5rem 2rem;
@@ -31,7 +30,6 @@
         .logo h1 {
             color: #FFFFFF;
             font-size: 1.5rem;
-            letter-spacing: 2px;
         }
 
         .logo p {
@@ -46,8 +44,6 @@
             padding: 0.6rem 1.2rem;
             border-radius: 2rem;
             text-decoration: none;
-            font-size: 0.9rem;
-            transition: all 0.3s;
         }
 
         .back-home:hover {
@@ -55,14 +51,12 @@
             color: #000000;
         }
 
-        /* Main Content */
         .profile-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        /* Vendor Card */
         .vendor-profile-card {
             background: #ffffff;
             border: 1px solid #e8e8e8;
@@ -138,7 +132,6 @@
             line-height: 1.6;
         }
 
-        /* Photos Section */
         .photos-section {
             margin-top: 2rem;
         }
@@ -154,20 +147,40 @@
             gap: 1rem;
         }
 
-        .photo-placeholder {
-            background: #f0f0f0;
-            height: 150px;
+        .photo-card {
+            background: #f8f9fa;
             border-radius: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 0.8rem;
-            border: 1px solid #e0e0e0;
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
+            transition: transform 0.3s;
         }
 
-        /* Call Button */
+        .photo-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .photo-card .caption {
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .no-photos {
+            background: #f8f9fa;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            color: #999;
+        }
+
         .call-section {
             margin-top: 2rem;
             text-align: center;
@@ -212,6 +225,12 @@
                 width: 100%;
                 margin-bottom: 0.5rem;
             }
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .photo-card img {
+                height: 120px;
+            }
         }
     </style>
 </head>
@@ -226,10 +245,20 @@
 </div>
 
 <div class="profile-container" id="profileContainer">
-    <!-- Content will be loaded dynamically -->
+    <div class="error-message">Loading vendor profile...</div>
 </div>
 
 <script>
+    // Photos load karne ka function
+    function loadVendorPhotos(vendorId) {
+        const saved = localStorage.getItem('vendorPhotos');
+        if (saved) {
+            const allPhotos = JSON.parse(saved);
+            return allPhotos[vendorId] || [];
+        }
+        return [];
+    }
+
     function loadVendorProfile() {
         const vendorData = localStorage.getItem('selectedVendor');
         
@@ -246,13 +275,38 @@
         
         const vendor = JSON.parse(vendorData);
         
-        // Category icons
+        // Admin panel se upload ki hui photos load kar
+        const vendorPhotos = loadVendorPhotos(vendor.id);
+        
         const categoryIcons = {
             Decorator: "🎨",
             Caterer: "🍽️",
             Photographer: "📸",
             "Band Baja": "🎵"
         };
+        
+        // Photos dikhane ka code
+        let photosHTML = '';
+        if (vendorPhotos && vendorPhotos.length > 0) {
+            photosHTML = `
+                <div class="photos-grid">
+                    ${vendorPhotos.map((photo, index) => `
+                        <div class="photo-card">
+                            <img src="${photo}" alt="Work photo ${index + 1}">
+                            <div class="caption">Work Sample ${index + 1}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            photosHTML = `
+                <div class="no-photos">
+                    📸 No photos uploaded yet
+                    <br>
+                    <small>Go to Admin Panel → Select Vendor → Add Photos</small>
+                </div>
+            `;
+        }
         
         const profileHTML = `
             <div class="vendor-profile-card">
@@ -285,30 +339,12 @@
                     
                     <div class="description-section">
                         <h3>📖 About ${vendor.name}</h3>
-                        <p>${vendor.description || "Professional vendor with years of experience in the industry. Known for quality service and customer satisfaction."}</p>
+                        <p>${vendor.description || "Professional vendor with years of experience in the industry."}</p>
                     </div>
                     
                     <div class="photos-section">
                         <h3>📷 Work Portfolio</h3>
-                        <div class="photos-grid">
-                            <div class="photo-placeholder">
-                                📸 Photo 1
-                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
-                            </div>
-                            <div class="photo-placeholder">
-                                📸 Photo 2
-                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
-                            </div>
-                            <div class="photo-placeholder">
-                                📸 Photo 3
-                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
-                            </div>
-                            <div class="photo-placeholder">
-                                📸 Photo 4
-                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
-                            </div>
-                        </div>
-                        <p style="font-size: 0.7rem; color: #888; margin-top: 0.8rem; text-align: center;">*Work photos will be uploaded soon</p>
+                        ${photosHTML}
                     </div>
                     
                     <div class="call-section">
