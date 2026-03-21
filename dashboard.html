@@ -4,29 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | StadiumConnect</title>
-    
-    <!-- ✅ PWA CODES ADDED -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#001a4d">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="StadiumConnect">
-    
     <style>
-        /* Your existing CSS */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f5f5; }
+        .header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { color: white; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; }
+        .user-info { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 1rem; cursor: pointer; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .auth-buttons a { padding: 0.5rem 1.2rem; border-radius: 2rem; background: #001a4d; color: white; text-decoration: none; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-number { font-size: 2rem; font-weight: 700; color: #001a4d; }
+        .bookings-list { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .booking-item { border-bottom: 1px solid #eee; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .status-badge { padding: 0.3rem 0.8rem; border-radius: 1rem; font-size: 0.8rem; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .btn-primary { background: #001a4d; color: white; padding: 0.8rem 2rem; border-radius: 2rem; text-decoration: none; display: inline-block; margin-top: 1rem; }
+        .empty-state { text-align: center; padding: 2rem; color: #999; }
+        @media (max-width: 768px) { .header { flex-direction: column; text-align: center; } }
     </style>
 </head>
 <body>
-    <!-- Your existing HTML content -->
 
-    <!-- ✅ SERVICE WORKER ADDED -->
-    <script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-            .then(reg => console.log('Service Worker registered'))
-            .catch(err => console.log('Service Worker failed', err));
+<div class="header">
+    <h1>🏟️ STADIUMCONNECT</h1>
+    <div class="nav-links" id="navLinks"></div>
+</div>
+
+<div class="container">
+    <h2 style="color: #001a4d; margin-bottom: 1rem;">Welcome, <span id="userName"></span>!</h2>
+    
+    <div class="stats">
+        <div class="stat-card"><h3>Total Bookings</h3><div class="stat-number" id="totalBookings">0</div></div>
+        <div class="stat-card"><h3>Pending</h3><div class="stat-number" id="pendingBookings">0</div></div>
+        <div class="stat-card"><h3>Confirmed</h3><div class="stat-number" id="confirmedBookings">0</div></div>
+    </div>
+    
+    <div class="bookings-list">
+        <h3>📋 My Bookings</h3>
+        <div id="bookingsList"></div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="directory.html" class="btn-primary">Browse Vendors →</a>
+    </div>
+</div>
+
+<script>
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
     }
-    </script>
+    
+    function logout() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    }
+    
+    function updateNavBar() {
+        const user = getCurrentUser();
+        const navLinks = document.getElementById('navLinks');
+        
+        if (user) {
+            navLinks.innerHTML = `
+                <a href="directory.html">Vendors</a>
+                <a href="dashboard.html">Dashboard</a>
+                <div class="user-info">
+                    <span>👤 ${user.name}</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            `;
+        } else {
+            navLinks.innerHTML = `
+                <a href="directory.html">Vendors</a>
+                <div class="auth-buttons">
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </div>
+            `;
+        }
+    }
+    
+    function loadDashboard() {
+        const user = getCurrentUser();
+        if (!user) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        document.getElementById('userName').innerText = user.name;
+        
+        const allBookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
+        const userBookings = allBookings.filter(b => b.userId === user.id);
+        
+        document.getElementById('totalBookings').innerText = userBookings.length;
+        document.getElementById('pendingBookings').innerText = userBookings.filter(b => b.status === 'pending').length;
+        document.getElementById('confirmedBookings').innerText = userBookings.filter(b => b.status === 'confirmed').length;
+        
+        const bookingsList = document.getElementById('bookingsList');
+        
+        if (userBookings.length === 0) {
+            bookingsList.innerHTML = '<div class="empty-state">📭 No bookings yet. <a href="directory.html" style="color:#001a4d;">Browse vendors</a> to get started!</div>';
+            return;
+        }
+        
+        bookingsList.innerHTML = userBookings.map(b => `
+            <div class="booking-item">
+                <div>
+                    <strong>${b.vendorName || b.stadiumName || 'Vendor'}</strong><br>
+                    <small>📅 ${b.eventDate || 'Date TBD'} | ${b.eventType || 'Event'}</small><br>
+                    <small>👥 Guests: ${b.guestCount || 'Not specified'}</small>
+                </div>
+                <div>
+                    <span class="status-badge status-${b.status}">${b.status.toUpperCase()}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    updateNavBar();
+    loadDashboard();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+}
+</script>
+
 </body>
 </html>
-
