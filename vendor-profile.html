@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>StadiumConnect | Vendor Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #FFFFFF;
+            font-family: 'Poppins', 'Segoe UI', 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .profile-header {
+            background: #000000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+        }
+
+        .back-home {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .back-home:hover {
+            background: #FFFFFF;
+            color: #000000;
+        }
+
+        /* Main Content */
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Vendor Card */
+        .vendor-profile-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .vendor-banner {
+            background: linear-gradient(135deg, #001a4d, #000033);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .vendor-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .vendor-banner h1 {
+            color: #FFFFFF;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .vendor-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+        }
+
+        .vendor-details {
+            padding: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 1rem;
+        }
+
+        .detail-label {
+            width: 120px;
+            font-weight: 600;
+            color: #001a4d;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .description-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 1rem;
+        }
+
+        .description-section h3 {
+            color: #001a4d;
+            margin-bottom: 0.8rem;
+        }
+
+        .description-section p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Photos Section */
+        .photos-section {
+            margin-top: 2rem;
+        }
+
+        .photos-section h3 {
+            color: #001a4d;
+            margin-bottom: 1rem;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .photo-placeholder {
+            background: #f0f0f0;
+            height: 150px;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.8rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        /* Call Button */
+        .call-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .call-btn {
+            background: linear-gradient(135deg, #001a4d, #000033);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .call-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(0, 26, 77, 0.3);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 1rem;
+            }
+            .detail-row {
+                flex-direction: column;
+            }
+            .detail-label {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-header">
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Vendor Profile</p>
+    </div>
+    <a href="directory.html" class="back-home">← Back to Directory</a>
+</div>
+
+<div class="profile-container" id="profileContainer">
+    <!-- Content will be loaded dynamically -->
+</div>
+
+<script>
+    function loadVendorProfile() {
+        const vendorData = localStorage.getItem('selectedVendor');
+        
+        if (!vendorData) {
+            document.getElementById('profileContainer').innerHTML = `
+                <div class="error-message">
+                    <h2>No vendor selected</h2>
+                    <p>Please go back and select a vendor to view their profile.</p>
+                    <a href="directory.html" style="display: inline-block; margin-top: 1rem; color: #001a4d;">← Back to Directory</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const vendor = JSON.parse(vendorData);
+        
+        // Category icons
+        const categoryIcons = {
+            Decorator: "🎨",
+            Caterer: "🍽️",
+            Photographer: "📸",
+            "Band Baja": "🎵"
+        };
+        
+        const profileHTML = `
+            <div class="vendor-profile-card">
+                <div class="vendor-banner">
+                    <div class="vendor-icon">${categoryIcons[vendor.categoryName] || "🏆"}</div>
+                    <h1>${vendor.name}</h1>
+                    <div class="vendor-badge">${vendor.categoryName} • ⭐ ${vendor.rating}</div>
+                </div>
+                
+                <div class="vendor-details">
+                    <div class="detail-row">
+                        <div class="detail-label">📅 Experience</div>
+                        <div class="detail-value">${vendor.experience}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">📍 Location</div>
+                        <div class="detail-value">${vendor.location}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">💰 Price Range</div>
+                        <div class="detail-value">${vendor.priceRange}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">📞 Contact</div>
+                        <div class="detail-value">${vendor.phone}</div>
+                    </div>
+                    
+                    <div class="description-section">
+                        <h3>📖 About ${vendor.name}</h3>
+                        <p>${vendor.description || "Professional vendor with years of experience in the industry. Known for quality service and customer satisfaction."}</p>
+                    </div>
+                    
+                    <div class="photos-section">
+                        <h3>📷 Work Portfolio</h3>
+                        <div class="photos-grid">
+                            <div class="photo-placeholder">
+                                📸 Photo 1
+                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
+                            </div>
+                            <div class="photo-placeholder">
+                                📸 Photo 2
+                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
+                            </div>
+                            <div class="photo-placeholder">
+                                📸 Photo 3
+                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
+                            </div>
+                            <div class="photo-placeholder">
+                                📸 Photo 4
+                                <span style="font-size: 0.7rem; margin-top: 0.5rem;">(Coming Soon)</span>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.7rem; color: #888; margin-top: 0.8rem; text-align: center;">*Work photos will be uploaded soon</p>
+                    </div>
+                    
+                    <div class="call-section">
+                        <button class="call-btn" onclick="makeCall('${vendor.phone}')">
+                            📞 Call Agent Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('profileContainer').innerHTML = profileHTML;
+    }
+    
+    function makeCall(phoneNumber) {
+        window.location.href = `tel:${phoneNumber}`;
+    }
+    
+    loadVendorProfile();
+</script>
+
+</body>
+</html>
