@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | StadiumConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #000000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <div class="logo" style="text-align: center; margin-bottom: 1rem;">
+        <h1 style="color: #001a4d;">🏟️ STADIUMCONNECT</h1>
+        <p style="color: #666;">Create your account</p>
+    </div>
+    
+    <div id="message" class="message"></div>
+    
+    <form id="registerForm">
+        <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="fullName" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="phone" required placeholder="Enter your phone number">
+        </div>
+        
+        <div class="form-group">
+            <label>City</label>
+            <select id="city">
+                <option value="Nagpur">Nagpur</option>
+                <option value="Pandharkawada">Pandharkawada</option>
+                <option value="Yavatmal">Yavatmal</option>
+                <option value="Adilabad">Adilabad</option>
+                <option value="Nanded">Nanded</option>
+                <option value="Kinwat">Kinwat</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Pune">Pune</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Password *</label>
+            <input type="password" id="password" required placeholder="Create a password (min 6 characters)">
+        </div>
+        
+        <div class="form-group">
+            <label>Confirm Password *</label>
+            <input type="password" id="confirmPassword" required placeholder="Confirm your password">
+        </div>
+        
+        <button type="submit" class="auth-btn">Create Account →</button>
+    </form>
+    
+    <div class="auth-link">
+        Already have an account? <a href="login.html">Login here</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const city = document.getElementById('city').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // Validation
+        if (!name || !email || !phone || !password) {
+            showMessage('Please fill all fields', 'error');
+            return;
+        }
+        
+        if (password.length < 6) {
+            showMessage('Password must be at least 6 characters', 'error');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            showMessage('Passwords do not match', 'error');
+            return;
+        }
+        
+        // Check if user already exists
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        if (users.find(u => u.email === email)) {
+            showMessage('Email already registered. Please login.', 'error');
+            return;
+        }
+        
+        // Create new user
+        const newUser = {
+            id: Date.now(),
+            name: name,
+            email: email,
+            phone: phone,
+            city: city,
+            password: password,
+            createdAt: new Date().toISOString()
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Auto login after registration
+        localStorage.setItem('currentUser', JSON.stringify({
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
+            phone: newUser.phone,
+            city: newUser.city
+        }));
+        
+        showMessage('Registration successful! Redirecting...', 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+    });
+    
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('message');
+        msgDiv.className = `message ${type}`;
+        msgDiv.innerText = msg;
+        setTimeout(() => {
+            msgDiv.className = 'message';
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
