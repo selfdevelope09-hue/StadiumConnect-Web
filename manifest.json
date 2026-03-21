@@ -9,92 +9,26 @@
   "orientation": "portrait",
   "scope": "/",
   "lang": "en",
-  "categories": ["events", "booking", "shopping", "business"],
+  "categories": ["events", "booking", "business"],
   "icons": [
     {
-      "src": "icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshot-1.png",
-      "sizes": "1080x1920",
-      "type": "image/png"
+      "src": "https://selfdevelope09-hue.github.io/StadiumConnect-Web/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
     }
   ],
   "shortcuts": [
     {
       "name": "Browse Vendors",
-      "short_name": "Vendors",
-      "description": "Find and book vendors",
-      "url": "/directory.html",
-      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96" }]
+      "url": "/directory.html"
     },
     {
       "name": "My Dashboard",
-      "short_name": "Dashboard",
-      "description": "View your bookings",
-      "url": "/dashboard.html",
-      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96" }]
+      "url": "/dashboard.html"
     },
     {
       "name": "Stadium Booking",
-      "short_name": "Stadium",
-      "description": "Book stadiums for events",
-      "url": "/stadium-booking.html",
-      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96" }]
-    },
-    {
-      "name": "Event Planner",
-      "short_name": "Planner",
-      "description": "Plan your event",
-      "url": "/event-planner.html",
-      "icons": [{ "src": "icon-96x96.png", "sizes": "96x96" }]
+      "url": "/stadium-booking.html"
     }
   ]
 }
