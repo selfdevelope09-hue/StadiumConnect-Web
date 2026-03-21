@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Vendors | StadiumConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .compare-container { display: flex; gap: 2rem; overflow-x: auto; padding: 2rem; }
+        .compare-card { min-width: 300px; background: white; border-radius: 1rem; padding: 1.5rem; border: 1px solid #eee; }
+        .compare-header { text-align: center; border-bottom: 2px solid #001a4d; padding-bottom: 1rem; }
+        .compare-feature { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #eee; }
+        .add-vendor { background: #001a4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin: 1rem; }
+        .vendor-selector { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    </style>
+</head>
+<body>
+    <header class="main-header"><div class="logo"><h1>🏟️ STADIUMCONNECT</h1></div><div class="nav-links" id="navLinks"></div></header>
+    <div class="container">
+        <h1>⚖️ Compare Vendors</h1>
+        <div class="vendor-selector" id="vendorSelector"></div>
+        <div id="compareContainer" class="compare-container"></div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        let selectedVendors = [];
+        function loadVendorsForCompare() {
+            const vendors = JSON.parse(localStorage.getItem('vendorsDataBackup') || '{}');
+            let allVendors = [];
+            for(let cat in vendors) for(let city in vendors[cat]) vendors[cat][city].forEach(v => allVendors.push({...v, category: cat}));
+            const selector = document.getElementById('vendorSelector');
+            selector.innerHTML = `<select id="vendorSelect"><option value="">Select vendor to compare</option>${allVendors.map(v => `<option value="${v.id}">${v.name} (${v.category})</option>`).join('')}</select>
+            <button onclick="addToCompare()">+ Add to Compare</button>`;
+        }
+        function addToCompare() { const id = document.getElementById('vendorSelect').value; if(!id)return; if(selectedVendors.length>=4){alert('Can compare max 4 vendors');return;} loadVendorData(id); }
+        function loadVendorData(id) { const vendors = JSON.parse(localStorage.getItem('vendorsDataBackup') || '{}'); for(let cat in vendors) for(let city in vendors[cat]) { let v = vendors[cat][city].find(v=>v.id==id); if(v){ selectedVendors.push(v); renderCompare(); break; } } }
+        function renderCompare() { const container = document.getElementById('compareContainer'); container.innerHTML = selectedVendors.map(v => `<div class="compare-card"><div class="compare-header"><h3>${v.name}</h3><div>⭐ ${v.rating}</div></div><div class="compare-feature"><span>Experience</span><span>${v.experience}</span></div><div class="compare-feature"><span>Location</span><span>${v.location}</span></div><div class="compare-feature"><span>Price</span><span>${v.priceRange}</span></div><div class="compare-feature"><span>Category</span><span>${v.category}</span></div><button onclick="bookVendor('${v.id}')">Book Now</button><button onclick="removeFromCompare('${v.id}')">Remove</button></div>`).join(''); }
+        function removeFromCompare(id) { selectedVendors = selectedVendors.filter(v=>v.id!=id); renderCompare(); }
+        function bookVendor(id) { alert('Booking feature coming soon!'); }
+        loadVendorsForCompare();
+    </script>
+</body>
+</html>
