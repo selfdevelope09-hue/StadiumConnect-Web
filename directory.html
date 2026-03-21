@@ -200,7 +200,7 @@
 
         .vendors-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1.5rem;
         }
 
@@ -210,35 +210,12 @@
             border-radius: 1rem;
             padding: 1.2rem;
             transition: all 0.3s ease;
-            cursor: pointer;
         }
 
         .vendor-card:hover {
             border-color: #001a4d;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             transform: translateY(-3px);
-        }
-
-        .vendor-card.active {
-            background: #001a4d;
-            border-color: #001a4d;
-        }
-
-        .vendor-card.active .vendor-name {
-            color: #FFFFFF;
-        }
-
-        .vendor-card.active .vendor-rating {
-            color: #ffd966;
-        }
-
-        .vendor-card.active .vendor-location {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .vendor-card.active .view-profile {
-            background: rgba(255, 255, 255, 0.2);
-            color: #FFFFFF;
         }
 
         .vendor-name {
@@ -268,12 +245,120 @@
             color: #001a4d;
             font-size: 0.85rem;
             font-weight: 500;
+            cursor: pointer;
+        }
+
+        .book-btn {
+            margin-top: 0.8rem;
+            padding: 0.6rem;
+            background: #001a4d;
+            text-align: center;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .book-btn:hover {
+            background: #000033;
+            transform: scale(1.02);
         }
 
         .no-results {
             text-align: center;
             padding: 3rem;
             color: #999;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            padding: 2rem;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #001a4d;
+        }
+
+        .modal-header h3 {
+            color: #001a4d;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .submit-booking {
+            width: 100%;
+            background: #001a4d;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
         }
 
         @media (max-width: 768px) {
@@ -303,7 +388,6 @@
             <h2>🏟️ STADIUMCONNECT</h2>
             <p>Royal Vendor Partners</p>
         </div>
-        <!-- Categories will be loaded dynamically -->
     </div>
 
     <!-- RIGHT SIDE -->
@@ -330,6 +414,45 @@
     </div>
 </div>
 
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📅 Book This Vendor</h3>
+            <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+        </div>
+        <form id="bookingForm">
+            <input type="hidden" id="bookingVendorId">
+            <input type="hidden" id="bookingVendorName">
+            <div class="form-group">
+                <label>Event Date *</label>
+                <input type="date" id="eventDate" required>
+            </div>
+            <div class="form-group">
+                <label>Event Type *</label>
+                <select id="eventType" required>
+                    <option value="">Select event type</option>
+                    <option value="Wedding">Wedding</option>
+                    <option value="Corporate Event">Corporate Event</option>
+                    <option value="Birthday Party">Birthday Party</option>
+                    <option value="Concert">Concert</option>
+                    <option value="Sports Event">Sports Event</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Expected Guests</label>
+                <input type="number" id="guestCount" placeholder="Number of guests">
+            </div>
+            <div class="form-group">
+                <label>Special Requests (Optional)</label>
+                <textarea id="specialRequests" rows="3" placeholder="Any special requirements..."></textarea>
+            </div>
+            <button type="submit" class="submit-booking">Confirm Booking →</button>
+        </form>
+    </div>
+</div>
+
 <script>
     // Load data from localStorage
     function loadData() {
@@ -350,13 +473,17 @@
         };
         vendorsData = savedVendors ? JSON.parse(savedVendors) : {};
         
-        // Initialize if empty
         categories.forEach(cat => {
             if (!vendorsData[cat]) vendorsData[cat] = {};
             cities.forEach(city => {
                 if (!vendorsData[cat][city]) vendorsData[cat][city] = [];
             });
         });
+    }
+
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
     }
 
     function renderCategories() {
@@ -422,23 +549,18 @@
         }
         
         vendorsGrid.innerHTML = vendors.map((vendor, index) => `
-            <div class="vendor-card" data-vendor-id="${vendor.id}" onclick="openVendorProfile('${currentCategory}', '${city}', ${index}, this)">
+            <div class="vendor-card">
                 <div class="vendor-name">${vendor.name}</div>
                 <div class="vendor-rating">⭐ ${vendor.rating} ★ ${vendor.experience}</div>
                 <div class="vendor-location">📍 ${vendor.location}</div>
                 <div class="vendor-location">💰 ${vendor.priceRange}</div>
-                <div class="view-profile">🔍 View Full Profile →</div>
+                <div class="view-profile" onclick="openVendorProfile('${currentCategory}', '${city}', ${index})">🔍 View Full Profile →</div>
+                <div class="book-btn" onclick="openBookingModal('${vendor.id}', '${vendor.name}')">📅 Book Now</div>
             </div>
         `).join('');
     }
 
-    function openVendorProfile(category, city, index, element) {
-        if (activeVendorCard) {
-            activeVendorCard.classList.remove('active');
-        }
-        element.classList.add('active');
-        activeVendorCard = element;
-        
+    function openVendorProfile(category, city, index) {
         const vendor = vendorsData[category][city][index];
         
         localStorage.setItem('selectedVendor', JSON.stringify({
@@ -458,11 +580,34 @@
         window.location.href = 'vendor-profile.html';
     }
 
+    function openBookingModal(vendorId, vendorName) {
+        const user = getCurrentUser();
+        if (!user) {
+            alert('Please login to book a vendor');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        document.getElementById('bookingVendorId').value = vendorId;
+        document.getElementById('bookingVendorName').value = vendorName;
+        document.getElementById('bookingModal').style.display = 'flex';
+    }
+
+    function closeBookingModal() {
+        document.getElementById('bookingModal').style.display = 'none';
+        document.getElementById('bookingForm').reset();
+    }
+
+    function saveBooking(bookingData) {
+        let bookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
+        bookings.push(bookingData);
+        localStorage.setItem('userBookings', JSON.stringify(bookings));
+    }
+
     function goBackToCities() {
         document.getElementById('citiesSection').style.display = 'block';
         document.getElementById('vendorsSection').style.display = 'none';
         renderCities();
-        activeVendorCard = null;
     }
 
     function changeCategory(category) {
@@ -490,9 +635,38 @@
     let vendorsData = {};
     let currentCategory = "";
     let selectedCity = null;
-    let activeVendorCard = null;
 
-    // Load data and initialize
+    // Booking form submit
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const user = getCurrentUser();
+        if (!user) {
+            alert('Please login first');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const booking = {
+            id: Date.now(),
+            userId: user.id,
+            userName: user.name,
+            vendorId: document.getElementById('bookingVendorId').value,
+            vendorName: document.getElementById('bookingVendorName').value,
+            eventDate: document.getElementById('eventDate').value,
+            eventType: document.getElementById('eventType').value,
+            guestCount: document.getElementById('guestCount').value,
+            specialRequests: document.getElementById('specialRequests').value,
+            status: 'pending',
+            bookedAt: new Date().toISOString()
+        };
+        
+        saveBooking(booking);
+        alert('✅ Booking request sent! Vendor will contact you soon.');
+        closeBookingModal();
+    });
+
+    // Initialize
     loadData();
     currentCategory = categories[0] || "decorator";
     renderCategories();
@@ -503,7 +677,15 @@
             renderCities();
         }
     });
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('bookingModal');
+        if (event.target === modal) {
+            closeBookingModal();
+        }
+    }
 </script>
 
 </body>
 </html>
+
