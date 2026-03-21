@@ -130,8 +130,7 @@
 </div>
 
 <script>
-    // Admin password - TU ISE CHANGE KAR SAKTA HAI
-    const ADMIN_PASSWORD = "Stadium@2024";  // 🔐 Yahan apna password daal de
+    const ADMIN_PASSWORD = "Stadium@2024";
 
     document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -139,26 +138,19 @@
         const password = document.getElementById('adminPassword').value;
         
         if (password === ADMIN_PASSWORD) {
-            // Password sahi hai - login session create karo
             localStorage.setItem('adminLoggedIn', 'true');
             localStorage.setItem('adminLoginTime', new Date().toISOString());
-            
-            // Redirect to admin dashboard
             window.location.href = 'admin-dashboard.html';
         } else {
-            showMessage('❌ Invalid admin password!', 'error');
+            const msgDiv = document.getElementById('message');
+            msgDiv.className = 'message error';
+            msgDiv.innerText = '❌ Invalid admin password!';
             document.getElementById('adminPassword').value = '';
+            setTimeout(() => {
+                msgDiv.className = 'message';
+            }, 3000);
         }
     });
-    
-    function showMessage(msg, type) {
-        const msgDiv = document.getElementById('message');
-        msgDiv.className = `message ${type}`;
-        msgDiv.innerText = msg;
-        setTimeout(() => {
-            msgDiv.className = 'message';
-        }, 3000);
-    }
 </script>
 
 </body>
