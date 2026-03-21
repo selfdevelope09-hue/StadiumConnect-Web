@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | StadiumConnect</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001a4d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; font-family: 'Poppins', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: white; border-radius: 1.5rem; padding: 2rem; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .logo { text-align: center; margin-bottom: 1.5rem; }
+        .logo h1 { color: #001a4d; font-size: 1.8rem; }
+        .logo p { color: #666; font-size: 0.8rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333; }
+        .form-group input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 0.5rem; font-size: 1rem; }
+        .btn { width: 100%; background: #001a4d; color: white; border: none; padding: 0.8rem; border-radius: 0.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
+        .btn:hover { background: #000033; }
+        .register-link { text-align: center; margin-top: 1.5rem; color: #666; }
+        .register-link a { color: #001a4d; text-decoration: none; font-weight: 500; }
+        .message { padding: 0.8rem; border-radius: 0.5rem; margin-bottom: 1rem; display: none; text-align: center; }
+        .message.error { background: #f8d7da; color: #721c24; display: block; }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Welcome back!</p>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <form id="loginForm">
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+            <label>Password *</label>
+            <input type="password" id="password" required placeholder="Enter your password">
+        </div>
+        <button type="submit" class="btn">Login →</button>
+    </form>
+
+    <div class="register-link">
+        Don't have an account? <a href="register.html">Register here</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        
+        if (!email || !password) {
+            showMessage('Please fill all fields', 'error');
+            return;
+        }
+        
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (!user) {
+            showMessage('Invalid email or password', 'error');
+            return;
+        }
+        
+        localStorage.setItem('currentUser', JSON.stringify({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            city: user.city
+        }));
+        
+        window.location.href = 'dashboard.html';
+    });
+    
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('message');
+        msgDiv.className = `message ${type}`;
+        msgDiv.innerText = msg;
+        setTimeout(() => {
+            msgDiv.className = 'message';
+        }, 3000);
+    }
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+}
+</script>
+
+</body>
+</html>
