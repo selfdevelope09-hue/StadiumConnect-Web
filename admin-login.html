@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | StadiumConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo h1 {
+            color: #001a4d;
+            font-size: 1.8rem;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #001a4d;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: #000033;
+        }
+
+        .message {
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+            text-align: center;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .back-link a {
+            color: #001a4d;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Admin Access Only</p>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <form id="adminLoginForm">
+        <div class="form-group">
+            <label>Admin Password *</label>
+            <input type="password" id="adminPassword" required placeholder="Enter admin password">
+        </div>
+        <button type="submit" class="login-btn">Login to Admin Panel →</button>
+    </form>
+
+    <div class="back-link">
+        <a href="index.html">← Back to Website</a>
+    </div>
+</div>
+
+<script>
+    // Admin password - TU ISE CHANGE KAR SAKTA HAI
+    const ADMIN_PASSWORD = "Stadium@2024";  // 🔐 Yahan apna password daal de
+
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const password = document.getElementById('adminPassword').value;
+        
+        if (password === ADMIN_PASSWORD) {
+            // Password sahi hai - login session create karo
+            localStorage.setItem('adminLoggedIn', 'true');
+            localStorage.setItem('adminLoginTime', new Date().toISOString());
+            
+            // Redirect to admin dashboard
+            window.location.href = 'admin-dashboard.html';
+        } else {
+            showMessage('❌ Invalid admin password!', 'error');
+            document.getElementById('adminPassword').value = '';
+        }
+    });
+    
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('message');
+        msgDiv.className = `message ${type}`;
+        msgDiv.innerText = msg;
+        setTimeout(() => {
+            msgDiv.className = 'message';
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
