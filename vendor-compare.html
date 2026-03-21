@@ -4,40 +4,312 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compare Vendors | StadiumConnect</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001a4d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    
     <style>
-        .compare-container { display: flex; gap: 2rem; overflow-x: auto; padding: 2rem; }
-        .compare-card { min-width: 300px; background: white; border-radius: 1rem; padding: 1.5rem; border: 1px solid #eee; }
-        .compare-header { text-align: center; border-bottom: 2px solid #001a4d; padding-bottom: 1rem; }
-        .compare-feature { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #eee; }
-        .add-vendor { background: #001a4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin: 1rem; }
-        .vendor-selector { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f5f5f5; }
+        .header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { color: white; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; }
+        .user-info { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 1rem; cursor: pointer; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .auth-buttons a { padding: 0.5rem 1.2rem; border-radius: 2rem; background: #001a4d; color: white; text-decoration: none; }
+        .container { max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem; }
+        h1 { color: #001a4d; margin-bottom: 0.5rem; }
+        .subtitle { color: #666; margin-bottom: 2rem; }
+        .selector-section { background: white; border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; }
+        .selector-section h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+        .vendor-selector { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+        .vendor-selector .form-group { flex: 1; min-width: 200px; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; color: #333; font-size: 0.8rem; }
+        .form-group select, .form-group input { width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 0.5rem; }
+        .add-btn { background: #28a745; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+        .compare-container { overflow-x: auto; }
+        .compare-table { width: 100%; border-collapse: collapse; background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .compare-table th, .compare-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; vertical-align: top; }
+        .compare-table th { background: #001a4d; color: white; font-weight: 600; }
+        .compare-table tr:last-child td { border-bottom: none; }
+        .vendor-header { text-align: center; }
+        .vendor-name { font-size: 1.1rem; font-weight: 700; color: #001a4d; margin-bottom: 0.3rem; }
+        .vendor-rating { color: #ffc107; }
+        .remove-btn { background: #dc3545; color: white; border: none; padding: 0.3rem 0.6rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.7rem; margin-top: 0.5rem; }
+        .book-btn { background: #28a745; color: white; border: none; padding: 0.4rem 0.8rem; border-radius: 0.3rem; cursor: pointer; font-size: 0.8rem; margin-top: 0.5rem; width: 100%; }
+        .empty-compare { text-align: center; padding: 3rem; color: #999; background: white; border-radius: 1rem; }
+        .feature-badge { background: #e8f5e9; color: #2e7d32; padding: 0.2rem 0.5rem; border-radius: 1rem; font-size: 0.7rem; display: inline-block; margin: 0.2rem; }
+        .score-high { color: #28a745; font-weight: 700; }
+        .score-mid { color: #ffc107; font-weight: 700; }
+        .score-low { color: #dc3545; font-weight: 700; }
+        .recommend-badge { background: #ffd966; color: #001a4d; padding: 0.2rem 0.5rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 600; }
+        @media (max-width: 768px) { .compare-table th, .compare-table td { padding: 0.5rem; font-size: 0.8rem; } .vendor-selector { flex-direction: column; } }
     </style>
 </head>
 <body>
-    <header class="main-header"><div class="logo"><h1>🏟️ STADIUMCONNECT</h1></div><div class="nav-links" id="navLinks"></div></header>
-    <div class="container">
-        <h1>⚖️ Compare Vendors</h1>
-        <div class="vendor-selector" id="vendorSelector"></div>
-        <div id="compareContainer" class="compare-container"></div>
+
+<div class="header">
+    <h1>🏟️ STADIUMCONNECT</h1>
+    <div class="nav-links" id="navLinks"></div>
+</div>
+
+<div class="container">
+    <h1>⚖️ Compare Vendors</h1>
+    <p class="subtitle">Compare multiple vendors side by side to make the best choice for your event</p>
+    
+    <div class="selector-section">
+        <h2>📋 Select Vendors to Compare (Max 4)</h2>
+        <div class="vendor-selector" id="vendorSelector">
+            <div class="form-group">
+                <label>Vendor 1</label>
+                <select id="vendor1Select"><option value="">Select vendor</option></select>
+            </div>
+            <div class="form-group">
+                <label>Vendor 2</label>
+                <select id="vendor2Select"><option value="">Select vendor</option></select>
+            </div>
+            <div class="form-group">
+                <label>Vendor 3</label>
+                <select id="vendor3Select"><option value="">Select vendor</option></select>
+            </div>
+            <div class="form-group">
+                <label>Vendor 4</label>
+                <select id="vendor4Select"><option value="">Select vendor</option></select>
+            </div>
+            <button class="add-btn" onclick="updateComparison()">Compare →</button>
+        </div>
     </div>
-    <script src="script.js"></script>
-    <script>
-        let selectedVendors = [];
-        function loadVendorsForCompare() {
-            const vendors = JSON.parse(localStorage.getItem('vendorsDataBackup') || '{}');
-            let allVendors = [];
-            for(let cat in vendors) for(let city in vendors[cat]) vendors[cat][city].forEach(v => allVendors.push({...v, category: cat}));
-            const selector = document.getElementById('vendorSelector');
-            selector.innerHTML = `<select id="vendorSelect"><option value="">Select vendor to compare</option>${allVendors.map(v => `<option value="${v.id}">${v.name} (${v.category})</option>`).join('')}</select>
-            <button onclick="addToCompare()">+ Add to Compare</button>`;
+    
+    <div id="compareResult"></div>
+</div>
+
+<script>
+    let allVendors = [];
+    let categories = [], categoryNames = {}, cities = [], cityNames = {};
+    let selectedVendors = [];
+    
+    function loadVendors() {
+        // Load categories and cities
+        const sc = localStorage.getItem('categories');
+        categories = sc ? JSON.parse(sc) : ["decorator", "caterer", "photographer", "bandbaja"];
+        const scn = localStorage.getItem('categoryDisplayNames');
+        categoryNames = scn ? JSON.parse(scn) : { decorator:"Decorators", caterer:"Caterers", photographer:"Photographers", bandbaja:"Band Baja" };
+        const sct = localStorage.getItem('cities');
+        cities = sct ? JSON.parse(sct) : ["nagpur", "pandharkawada", "yavatmal", "adilabad", "nanded", "kinwat"];
+        const sctn = localStorage.getItem('cityDisplayNames');
+        cityNames = sctn ? JSON.parse(sctn) : { nagpur:"Nagpur", pandharkawada:"Pandharkawada", yavatmal:"Yavatmal", adilabad:"Adilabad", nanded:"Nanded", kinwat:"Kinwat" };
+        
+        // Load vendors
+        const sv = localStorage.getItem('vendorsDataBackup');
+        let vendorsData = sv ? JSON.parse(sv) : {};
+        
+        allVendors = [];
+        for (let cat in vendorsData) {
+            for (let city in vendorsData[cat]) {
+                vendorsData[cat][city].forEach(v => {
+                    allVendors.push({
+                        ...v,
+                        category: cat,
+                        categoryName: categoryNames[cat] || cat,
+                        cityName: cityNames[city] || city,
+                        score: calculateScore(v)
+                    });
+                });
+            }
         }
-        function addToCompare() { const id = document.getElementById('vendorSelect').value; if(!id)return; if(selectedVendors.length>=4){alert('Can compare max 4 vendors');return;} loadVendorData(id); }
-        function loadVendorData(id) { const vendors = JSON.parse(localStorage.getItem('vendorsDataBackup') || '{}'); for(let cat in vendors) for(let city in vendors[cat]) { let v = vendors[cat][city].find(v=>v.id==id); if(v){ selectedVendors.push(v); renderCompare(); break; } } }
-        function renderCompare() { const container = document.getElementById('compareContainer'); container.innerHTML = selectedVendors.map(v => `<div class="compare-card"><div class="compare-header"><h3>${v.name}</h3><div>⭐ ${v.rating}</div></div><div class="compare-feature"><span>Experience</span><span>${v.experience}</span></div><div class="compare-feature"><span>Location</span><span>${v.location}</span></div><div class="compare-feature"><span>Price</span><span>${v.priceRange}</span></div><div class="compare-feature"><span>Category</span><span>${v.category}</span></div><button onclick="bookVendor('${v.id}')">Book Now</button><button onclick="removeFromCompare('${v.id}')">Remove</button></div>`).join(''); }
-        function removeFromCompare(id) { selectedVendors = selectedVendors.filter(v=>v.id!=id); renderCompare(); }
-        function bookVendor(id) { alert('Booking feature coming soon!'); }
-        loadVendorsForCompare();
-    </script>
+        
+        // Sort by rating
+        allVendors.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
+        populateSelectors();
+    }
+    
+    function calculateScore(vendor) {
+        let rating = parseFloat(vendor.rating) || 0;
+        let exp = parseInt(vendor.experience) || 0;
+        let score = (rating * 20) + (exp * 2);
+        return Math.min(100, Math.max(0, score));
+    }
+    
+    function populateSelectors() {
+        const selects = ['vendor1Select', 'vendor2Select', 'vendor3Select', 'vendor4Select'];
+        selects.forEach(id => {
+            const select = document.getElementById(id);
+            select.innerHTML = '<option value="">Select vendor</option>' + 
+                allVendors.map(v => `<option value="${v.id}">${v.name} (${v.categoryName} | ${v.cityName}) ⭐ ${v.rating}</option>`).join('');
+        });
+    }
+    
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+    }
+    
+    function updateNav() {
+        const user = getCurrentUser();
+        const nav = document.getElementById('navLinks');
+        if (user) {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="dashboard.html">Dashboard</a><a href="vendor-compare.html">Compare</a><a href="event-planner.html">Planner</a><div class="user-info"><span>👤 ${user.name}</span><button class="logout-btn" onclick="logout()">Logout</button></div>`;
+        } else {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="vendor-compare.html">Compare</a><a href="event-planner.html">Planner</a><div class="auth-buttons"><a href="login.html">Login</a><a href="register.html">Register</a></div>`;
+        }
+    }
+    
+    function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+    
+    function updateComparison() {
+        const vendorIds = [];
+        for (let i = 1; i <= 4; i++) {
+            const id = document.getElementById(`vendor${i}Select`).value;
+            if (id) vendorIds.push(id);
+        }
+        
+        selectedVendors = allVendors.filter(v => vendorIds.includes(v.id));
+        renderComparison();
+    }
+    
+    function renderComparison() {
+        const container = document.getElementById('compareResult');
+        
+        if (selectedVendors.length === 0) {
+            container.innerHTML = '<div class="empty-compare">👈 Select vendors from the dropdown above to start comparing</div>';
+            return;
+        }
+        
+        // Find best vendor
+        let bestVendor = selectedVendors.reduce((best, current) => {
+            return (current.score > best.score) ? current : best;
+        }, selectedVendors[0]);
+        
+        const features = [
+            { key: 'name', label: 'Vendor', type: 'text' },
+            { key: 'categoryName', label: 'Category', type: 'text' },
+            { key: 'cityName', label: 'City', type: 'text' },
+            { key: 'rating', label: 'Rating', type: 'rating' },
+            { key: 'experience', label: 'Experience', type: 'text' },
+            { key: 'location', label: 'Location', type: 'text' },
+            { key: 'priceRange', label: 'Price Range', type: 'text' },
+            { key: 'phone', label: 'Contact', type: 'phone' },
+            { key: 'score', label: 'Overall Score', type: 'score' }
+        ];
+        
+        const getScoreClass = (score) => {
+            if (score >= 80) return 'score-high';
+            if (score >= 60) return 'score-mid';
+            return 'score-low';
+        };
+        
+        const tableRows = features.map(feature => {
+            let cells = `<td style="font-weight:600; background:#f8f9fa;">${feature.label}</td>`;
+            selectedVendors.forEach(vendor => {
+                let value = vendor[feature.key] || '-';
+                if (feature.type === 'rating') {
+                    value = `⭐ ${vendor.rating}`;
+                } else if (feature.type === 'phone') {
+                    value = `<a href="tel:${vendor.phone}" style="color:#001a4d;">${vendor.phone}</a>`;
+                } else if (feature.type === 'score') {
+                    const score = vendor.score;
+                    value = `<span class="${getScoreClass(score)}">${Math.round(score)}/100</span>`;
+                    if (vendor.id === bestVendor.id && feature.key === 'score') {
+                        value += ` <span class="recommend-badge">⭐ Best Choice</span>`;
+                    }
+                }
+                cells += `<td>${value}</td>`;
+            });
+            return `<tr>${cells}</tr>`;
+        }).join('');
+        
+        // Add action row
+        let actionCells = `<td style="font-weight:600; background:#f8f9fa;">Action</td>`;
+        selectedVendors.forEach(vendor => {
+            actionCells += `<td><button class="book-btn" onclick="bookVendor('${vendor.id}', '${vendor.name}')">Book Now</button><button class="remove-btn" onclick="removeVendor('${vendor.id}')">Remove</button></td>`;
+        });
+        
+        const headerCells = `<th></th>` + selectedVendors.map(v => `
+            <th class="vendor-header">
+                <div class="vendor-name">${v.name}</div>
+                <div class="vendor-rating">⭐ ${v.rating}</div>
+                <div>${v.categoryName}</div>
+                <div>${v.cityName}</div>
+                ${v.id === bestVendor.id ? '<div><span class="recommend-badge">🏆 Recommended</span></div>' : ''}
+            </th>
+        `).join('');
+        
+        container.innerHTML = `
+            <div style="overflow-x: auto;">
+                <table class="compare-table">
+                    <thead><tr>${headerCells}</tr></thead>
+                    <tbody>
+                        ${tableRows}
+                        <tr>${actionCells}</tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top: 1rem; padding: 1rem; background: #e8f5e9; border-radius: 0.5rem; text-align: center;">
+                <strong>💡 Recommendation:</strong> Based on rating and experience, <strong>${bestVendor.name}</strong> is the best choice for your event!
+            </div>
+        `;
+    }
+    
+    function removeVendor(vendorId) {
+        for (let i = 1; i <= 4; i++) {
+            const select = document.getElementById(`vendor${i}Select`);
+            if (select.value === vendorId) {
+                select.value = '';
+                break;
+            }
+        }
+        updateComparison();
+    }
+    
+    function bookVendor(vendorId, vendorName) {
+        const user = getCurrentUser();
+        if (!user) {
+            alert('Please login to book vendors');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const date = prompt('Enter event date (YYYY-MM-DD):');
+        if (!date) return;
+        
+        const booking = {
+            id: Date.now(),
+            type: 'vendor',
+            userId: user.id,
+            userName: user.name,
+            userPhone: user.phone,
+            vendorId: vendorId,
+            vendorName: vendorName,
+            eventDate: date,
+            status: 'pending',
+            bookedAt: new Date().toISOString()
+        };
+        
+        let bookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
+        bookings.push(booking);
+        localStorage.setItem('userBookings', JSON.stringify(bookings));
+        
+        alert(`✅ Booking request sent to ${vendorName}! Vendor will contact you soon.`);
+    }
+    
+    // Initialize
+    loadVendors();
+    updateNav();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+}
+</script>
+
 </body>
 </html>
