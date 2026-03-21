@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>StadiumConnect | Vendor Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #FFFFFF;
+            font-family: 'Poppins', 'Segoe UI', 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+
+        .vendor-container {
+            display: flex;
+            min-height: 100vh;
+            flex-wrap: wrap;
+        }
+
+        /* LEFT SIDE - SOLID BLACK */
+        .vendor-sidebar {
+            width: 280px;
+            background: #000000;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-logo h2 {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .sidebar-logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+        }
+
+        .category-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .category-btn.active {
+            background: #001a4d;
+            color: #FFFFFF;
+            border-color: #FFFFFF;
+        }
+
+        .category-icon {
+            font-size: 1.5rem;
+        }
+
+        /* RIGHT SIDE */
+        .vendor-main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        /* Search Bar */
+        .search-section {
+            max-width: 500px;
+            margin-left: auto;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 3rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: #001a4d;
+            box-shadow: 0 0 0 3px rgba(0, 26, 77, 0.1);
+        }
+
+        .search-icon {
+            font-size: 1.2rem;
+            color: #888;
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-box input::placeholder {
+            color: #aaa;
+        }
+
+        /* City Grid */
+        .cities-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #001a4d;
+            padding-left: 1rem;
+        }
+
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .city-card {
+            background: #f8f9fa;
+            border: 1px solid #e8e8e8;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .city-card:hover {
+            transform: translateY(-5px);
+            border-color: #001a4d;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .city-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #001a4d;
+        }
+
+        .city-count {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.3rem;
+        }
+
+        /* Vendors List */
+        .vendors-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #000000;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #001a4d;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            color: #000000;
+        }
+
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vendor-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* NAVY BLUE ON CLICK - Active State */
+        .vendor-card.active {
+            background: #001a4d;
+            border-color: #001a4d;
+        }
+
+        .vendor-card.active .vendor-name {
+            color: #FFFFFF;
+        }
+
+        .vendor-card.active .vendor-rating {
+            color: #ffd966;
+        }
+
+        .vendor-card.active .vendor-location {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .vendor-card.active .view-profile {
+            background: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+        }
+
+        .vendor-card:hover {
+            border-color: #001a4d;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .vendor-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #001a4d;
+        }
+
+        .vendor-rating {
+            color: #ffb347;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+        }
+
+        .vendor-location {
+            color: #666;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0.5rem 0;
+        }
+
+        .view-profile {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #f5f5f5;
+            text-align: center;
+            border-radius: 0.5rem;
+            color: #001a4d;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .vendor-sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
+                padding: 1rem;
+            }
+            .vendor-main {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            .category-btn {
+                display: inline-flex;
+                width: auto;
+                margin: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="vendor-container">
+    <!-- LEFT SIDE - SOLID BLACK -->
+    <div class="vendor-sidebar">
+        <div class="sidebar-logo">
+            <h2>🏟️ STADIUMCONNECT</h2>
+            <p>Royal Vendor Partners</p>
+        </div>
+        
+        <button class="category-btn active" data-category="decorator">
+            <span class="category-icon">🎨</span>
+            <span>Decorators</span>
+        </button>
+        <button class="category-btn" data-category="caterer">
+            <span class="category-icon">🍽️</span>
+            <span>Caterers</span>
+        </button>
+        <button class="category-btn" data-category="photographer">
+            <span class="category-icon">📸</span>
+            <span>Photographers</span>
+        </button>
+        <button class="category-btn" data-category="bandbaja">
+            <span class="category-icon">🎵</span>
+            <span>Band Baja</span>
+        </button>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="vendor-main">
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search city... Nagpur, Yavatmal, Adilabad...">
+            </div>
+        </div>
+
+        <div id="citiesSection">
+            <div class="cities-title">📍 Select Your City</div>
+            <div class="cities-grid" id="citiesGrid"></div>
+        </div>
+
+        <div id="vendorsSection" style="display: none;">
+            <div class="vendors-title">
+                <button class="back-btn" onclick="goBackToCities()">← Back to Cities</button>
+                <span id="vendorsTitle"></span>
+            </div>
+            <div class="vendors-grid" id="vendorsGrid"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========= COMPLETE VENDOR DATABASE =========
+    const vendorsData = {
+        decorator: {
+            nagpur: [
+                { id: "dec_nag_1", name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", rating: "4.8", description: "We are the leading decorators in Nagpur specializing in royal weddings, corporate events, and grand celebrations. Our team creates magical moments with premium floral arrangements, traditional setups, and modern themes." },
+                { id: "dec_nag_2", name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.6", description: "Fusion Event Decor brings creativity and innovation to every event. From intimate gatherings to large-scale weddings, we transform venues into stunning spaces with our unique decor concepts." },
+                { id: "dec_nag_3", name: "Wedding Wizards", experience: "15 years", location: "Civil Lines, Nagpur", priceRange: "₹50,000 - ₹2,50,000", phone: "9423281086", rating: "4.9", description: "Wedding Wizards is Nagpur's most trusted name for wedding decorations. We offer complete wedding planning and decor services with attention to every detail." }
+            ],
+            pandharkawada: [
+                { id: "dec_pan_1", name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", rating: "4.5", description: "Local favorite for traditional decor in Pandharkawada. We specialize in Marathi wedding themes and affordable event decorations." }
+            ],
+            yavatmal: [
+                { id: "dec_yav_1", name: "Yavatmal Event Makers", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.7", description: "Premier event decorators in Yavatmal offering creative setups for weddings, receptions, and corporate events." }
+            ],
+            adilabad: [
+                { id: "dec_adi_1", name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", rating: "4.6", description: "We bring royal elegance to every event in Adilabad. Specializing in wedding decor, stage setup, and floral arrangements." }
+            ],
+            nanded: [
+                { id: "dec_nan_1", name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", rating: "4.7", description: "Creating unforgettable memories with our premium decor services. We handle weddings, receptions, and corporate events with perfection." }
+            ],
+            kinwat: [
+                { id: "dec_kin_1", name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.3", description: "Affordable and beautiful decor services in Kinwat. Perfect for small weddings and local events." }
+            ]
+        },
+        caterer: {
+            nagpur: [
+                { id: "cat_nag_1", name: "Orange City Caterers", experience: "15 years", location: "Dharampeth, Nagpur", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Orange City Caterers is Nagpur's premier catering service offering delicious multi-cuisine food for weddings, corporate events, and parties. We specialize in authentic Vidarbha and North Indian cuisine." },
+                { id: "cat_nag_2", name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", rating: "4.6", description: "Bringing the authentic taste of Vidarbha to your events. We offer traditional Saoji, Varhadi, and Maharashtrian cuisine." },
+                { id: "cat_nag_3", name: "Royal Bhojanalay", experience: "20 years", location: "Civil Lines, Nagpur", priceRange: "₹300 - ₹1200 per plate", phone: "9423281086", rating: "4.9", description: "Royal Bhojanalay has been serving royalty for two decades. We offer premium catering services with royal thali experiences." }
+            ],
+            pandharkawada: [
+                { id: "cat_pan_1", name: "Kawada Kitchen", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹150 - ₹500 per plate", phone: "9423281086", rating: "4.5", description: "Local favorite for authentic Marathi cuisine. Perfect for weddings and community events in Pandharkawada." }
+            ],
+            yavatmal: [
+                { id: "cat_yav_1", name: "Yavatmal Garden Caterers", experience: "12 years", location: "Civil Lines, Yavatmal", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.7", description: "Yavatmal's most trusted caterers offering delicious vegetarian and non-vegetarian options for all events." }
+            ],
+            adilabad: [
+                { id: "cat_adi_1", name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Authentic Hyderabadi and Telangana cuisine specialists. Famous for biryani and traditional dishes." }
+            ],
+            nanded: [
+                { id: "cat_nan_1", name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.6", description: "Premium catering service in Nanded offering Marathwada specialties and North Indian cuisine." }
+            ],
+            kinwat: [
+                { id: "cat_kin_1", name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", rating: "4.3", description: "Affordable and tasty catering for small events and gatherings in Kinwat." }
+            ]
+        },
+        photographer: {
+            nagpur: [
+                { id: "pho_nag_1", name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", rating: "4.8", description: "Shutter Stories captures your precious moments with creativity and perfection. Specializing in candid wedding photography, pre-wedding shoots, and event coverage." },
+                { id: "pho_nag_2", name: "Focus Events", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹12,000 - ₹60,000", phone: "9423281086", rating: "4.6", description: "Professional event photographers covering weddings, corporate events, and parties with cinematic style." }
+            ],
+            pandharkawada: [
+                { id: "pho_pan_1", name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Capturing beautiful memories in Pandharkawada. Specializing in wedding photography and family events." }
+            ],
+            yavatmal: [
+                { id: "pho_yav_1", name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", rating: "4.6", description: "Creative photography services in Yavatmal for weddings, events, and portraits." }
+            ],
+            adilabad: [
+                { id: "pho_adi_1", name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Professional photographers in Adilabad specializing in candid wedding photography." }
+            ],
+            nanded: [
+                { id: "pho_nan_1", name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.7", description: "Premium photography services in Nanded for weddings, events, and commercial shoots." }
+            ],
+            kinwat: [
+                { id: "pho_kin_1", name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", rating: "4.2", description: "Affordable photography services for small events and family functions in Kinwat." }
+            ]
+        },
+        bandbaja: {
+            nagpur: [
+                { id: "ban_nag_1", name: "DJ Dhruv Entertainment", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹1,00,000", phone: "9423281086", rating: "4.9", description: "Nagpur's premier DJ and band service for weddings and events. We provide professional sound systems, lighting, and entertainment." },
+                { id: "ban_nag_2", name: "Royal Beats", experience: "10 years", location: "Sadar, Nagpur", priceRange: "₹12,000 - ₹80,000", phone: "9423281086", rating: "4.7", description: "Royal Beats brings energy to your events with professional DJ services, dhol tasha, and live bands." }
+            ],
+            pandharkawada: [
+                { id: "ban_pan_1", name: "Kawada Band", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹40,000", phone: "9423281086", rating: "4.5", description: "Traditional and modern band services for weddings and processions in Pandharkawada." }
+            ],
+            yavatmal: [
+                { id: "ban_yav_1", name: "Yavatmal Beats", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹60,000", phone: "9423281086", rating: "4.7", description: "Professional DJ and band services for all events in Yavatmal." }
+            ],
+            adilabad: [
+                { id: "ban_adi_1", name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Traditional dhol tasha and band services for weddings and celebrations in Adilabad." }
+            ],
+            nanded: [
+                { id: "ban_nan_1", name: "Nanded Band Baja", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.6", description: "Complete entertainment solutions for weddings and events in Nanded." }
+            ],
+            kinwat: [
+                { id: "ban_kin_1", name: "Kinwat Dhol Tasha", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹25,000", phone: "9423281086", rating: "4.3", description: "Affordable band services for local events and processions in Kinwat." }
+            ]
+        }
+    };
+
+    const cities = ["nagpur", "pandharkawada", "yavatmal", "adilabad", "nanded", "kinwat"];
+    const cityDisplayNames = {
+        nagpur: "Nagpur", pandharkawada: "Pandharkawada", yavatmal: "Yavatmal",
+        adilabad: "Adilabad", nanded: "Nanded", kinwat: "Kinwat"
+    };
+
+    let currentCategory = "decorator";
+    let selectedCity = null;
+    let activeVendorCard = null;
+
+    function renderCities() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const filteredCities = cities.filter(city => cityDisplayNames[city].toLowerCase().includes(searchTerm));
+        
+        const grid = document.getElementById('citiesGrid');
+        if (filteredCities.length === 0) {
+            grid.innerHTML = '<div class="no-results">No cities found</div>';
+            return;
+        }
+        
+        grid.innerHTML = filteredCities.map(city => `
+            <div class="city-card" onclick="selectCity('${city}')">
+                <div class="city-name">🏟️ ${cityDisplayNames[city]}</div>
+                <div class="city-count">${vendorsData[currentCategory]?.[city]?.length || 0} vendors available</div>
+            </div>
+        `).join('');
+    }
+
+    function selectCity(city) {
+        selectedCity = city;
+        const vendors = vendorsData[currentCategory]?.[city] || [];
+        
+        document.getElementById('citiesSection').style.display = 'none';
+        document.getElementById('vendorsSection').style.display = 'block';
+        
+        const categoryNames = { decorator: "Decorators", caterer: "Caterers", photographer: "Photographers", bandbaja: "Band Baja" };
+        document.getElementById('vendorsTitle').innerHTML = `${categoryNames[currentCategory]} in ${cityDisplayNames[city]}`;
+        
+        const vendorsGrid = document.getElementById('vendorsGrid');
+        if (vendors.length === 0) {
+            vendorsGrid.innerHTML = '<div class="no-results">No vendors available in this city yet. Coming soon!</div>';
+            return;
+        }
+        
+        vendorsGrid.innerHTML = vendors.map((vendor, index) => `
+            <div class="vendor-card" data-vendor-id="${vendor.id}" data-category="${currentCategory}" data-city="${city}" data-index="${index}" onclick="openVendorProfile('${currentCategory}', '${city}', ${index}, this)">
+                <div class="vendor-name">${vendor.name}</div>
+                <div class="vendor-rating">⭐ ${vendor.rating} ★ ${vendor.experience}</div>
+                <div class="vendor-location">📍 ${vendor.location}</div>
+                <div class="vendor-location">💰 ${vendor.priceRange}</div>
+                <div class="view-profile">🔍 View Full Profile →</div>
+            </div>
+        `).join('');
+    }
+
+    // NAVY BLUE ON CLICK - Remove previous active, add to current
+    function openVendorProfile(category, city, index, element) {
+        // Remove active class from previously selected vendor card
+        if (activeVendorCard) {
+            activeVendorCard.classList.remove('active');
+        }
+        // Add active class to clicked vendor card
+        element.classList.add('active');
+        activeVendorCard = element;
+        
+        const vendor = vendorsData[category][city][index];
+        
+        // Store vendor data in localStorage to pass to profile page
+        localStorage.setItem('selectedVendor', JSON.stringify({
+            id: vendor.id,
+            name: vendor.name,
+            experience: vendor.experience,
+            location: vendor.location,
+            priceRange: vendor.priceRange,
+            phone: vendor.phone,
+            rating: vendor.rating,
+            description: vendor.description,
+            category: category,
+            city: city,
+            categoryName: { decorator: "Decorator", caterer: "Caterer", photographer: "Photographer", bandbaja: "Band Baja" }[category]
+        }));
+        
+        // Open new profile page
+        window.location.href = 'vendor-profile.html';
+    }
+
+    function goBackToCities() {
+        document.getElementById('citiesSection').style.display = 'block';
+        document.getElementById('vendorsSection').style.display = 'none';
+        renderCities();
+        activeVendorCard = null;
+    }
+
+    function changeCategory(category) {
+        currentCategory = category;
+        selectedCity = null;
+        
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            if (btn.dataset.category === category) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
+        document.getElementById('citiesSection').style.display = 'block';
+        document.getElementById('vendorsSection').style.display = 'none';
+        renderCities();
+    }
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+        if (document.getElementById('citiesSection').style.display !== 'none') {
+            renderCities();
+        }
+    });
+
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => changeCategory(btn.dataset.category));
+    });
+
+    renderCities();
+
+    <a href="vendor-profile.html" class="vendor-profile-btn">
+    View Vendor Profile →
+</a>
+    
+</script>
+
+</body>
+</html>
