@@ -219,7 +219,6 @@
             transform: translateY(-3px);
         }
 
-        /* NAVY BLUE ON CLICK */
         .vendor-card.active {
             background: #001a4d;
             border-color: #001a4d;
@@ -332,13 +331,11 @@
             </div>
         </div>
 
-        <!-- Cities Section -->
         <div id="citiesSection">
             <div class="cities-title">📍 Select Your City</div>
             <div class="cities-grid" id="citiesGrid"></div>
         </div>
 
-        <!-- Vendors Section -->
         <div id="vendorsSection" style="display: none;">
             <div class="vendors-title">
                 <button class="back-btn" onclick="goBackToCities()">← Back to Cities</button>
@@ -350,33 +347,42 @@
 </div>
 
 <script>
-    // ========= COMPLETE VENDOR DATABASE =========
-    const vendorsData = {
+    // Load vendors from localStorage (admin panel se add kiye hue)
+    function loadVendorsFromStorage() {
+        const saved = localStorage.getItem('vendorsDataBackup');
+        if (saved) {
+            return JSON.parse(saved);
+        }
+        return null;
+    }
+
+    // Default vendors data
+    const defaultVendorsData = {
         decorator: {
             nagpur: [
-                { id: "dec_nag_1", name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", rating: "4.8", description: "We are the leading decorators in Nagpur specializing in royal weddings, corporate events, and grand celebrations." },
-                { id: "dec_nag_2", name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.6", description: "Fusion Event Decor brings creativity and innovation to every event." }
+                { id: "dec_nag_1", name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", rating: "4.8", description: "We are the leading decorators in Nagpur specializing in royal weddings." },
+                { id: "dec_nag_2", name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.6", description: "Fusion Event Decor brings creativity and innovation." }
             ],
             pandharkawada: [
-                { id: "dec_pan_1", name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", rating: "4.5", description: "Local favorite for traditional decor in Pandharkawada." }
+                { id: "dec_pan_1", name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", rating: "4.5", description: "Local favorite for traditional decor." }
             ],
             yavatmal: [
                 { id: "dec_yav_1", name: "Yavatmal Event Makers", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", rating: "4.7", description: "Premier event decorators in Yavatmal." }
             ],
             adilabad: [
-                { id: "dec_adi_1", name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", rating: "4.6", description: "We bring royal elegance to every event in Adilabad." }
+                { id: "dec_adi_1", name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", rating: "4.6", description: "We bring royal elegance to every event." }
             ],
             nanded: [
-                { id: "dec_nan_1", name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", rating: "4.7", description: "Creating unforgettable memories with our premium decor services." }
+                { id: "dec_nan_1", name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", rating: "4.7", description: "Creating unforgettable memories." }
             ],
             kinwat: [
-                { id: "dec_kin_1", name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.3", description: "Affordable and beautiful decor services in Kinwat." }
+                { id: "dec_kin_1", name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.3", description: "Affordable and beautiful decor services." }
             ]
         },
         caterer: {
             nagpur: [
                 { id: "cat_nag_1", name: "Orange City Caterers", experience: "15 years", location: "Dharampeth, Nagpur", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Orange City Caterers is Nagpur's premier catering service." },
-                { id: "cat_nag_2", name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", rating: "4.6", description: "Bringing the authentic taste of Vidarbha to your events." }
+                { id: "cat_nag_2", name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", rating: "4.6", description: "Bringing authentic taste of Vidarbha." }
             ],
             pandharkawada: [
                 { id: "cat_pan_1", name: "Kawada Kitchen", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹150 - ₹500 per plate", phone: "9423281086", rating: "4.5", description: "Local favorite for authentic Marathi cuisine." }
@@ -385,33 +391,33 @@
                 { id: "cat_yav_1", name: "Yavatmal Garden Caterers", experience: "12 years", location: "Civil Lines, Yavatmal", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.7", description: "Yavatmal's most trusted caterers." }
             ],
             adilabad: [
-                { id: "cat_adi_1", name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Authentic Hyderabadi and Telangana cuisine specialists." }
+                { id: "cat_adi_1", name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", rating: "4.8", description: "Authentic Hyderabadi cuisine." }
             ],
             nanded: [
-                { id: "cat_nan_1", name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.6", description: "Premium catering service in Nanded." }
+                { id: "cat_nan_1", name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", rating: "4.6", description: "Premium catering service." }
             ],
             kinwat: [
-                { id: "cat_kin_1", name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", rating: "4.3", description: "Affordable and tasty catering for small events." }
+                { id: "cat_kin_1", name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", rating: "4.3", description: "Affordable and tasty catering." }
             ]
         },
         photographer: {
             nagpur: [
-                { id: "pho_nag_1", name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", rating: "4.8", description: "Shutter Stories captures your precious moments with creativity." }
+                { id: "pho_nag_1", name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", rating: "4.8", description: "Shutter Stories captures your precious moments." }
             ],
             pandharkawada: [
-                { id: "pho_pan_1", name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Capturing beautiful memories in Pandharkawada." }
+                { id: "pho_pan_1", name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Capturing beautiful memories." }
             ],
             yavatmal: [
-                { id: "pho_yav_1", name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", rating: "4.6", description: "Creative photography services in Yavatmal." }
+                { id: "pho_yav_1", name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", rating: "4.6", description: "Creative photography services." }
             ],
             adilabad: [
-                { id: "pho_adi_1", name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Professional photographers in Adilabad." }
+                { id: "pho_adi_1", name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Professional photographers." }
             ],
             nanded: [
-                { id: "pho_nan_1", name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.7", description: "Premium photography services in Nanded." }
+                { id: "pho_nan_1", name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.7", description: "Premium photography services." }
             ],
             kinwat: [
-                { id: "pho_kin_1", name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", rating: "4.2", description: "Affordable photography services in Kinwat." }
+                { id: "pho_kin_1", name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", rating: "4.2", description: "Affordable photography services." }
             ]
         },
         bandbaja: {
@@ -425,7 +431,7 @@
                 { id: "ban_yav_1", name: "Yavatmal Beats", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹60,000", phone: "9423281086", rating: "4.7", description: "Professional DJ and band services." }
             ],
             adilabad: [
-                { id: "ban_adi_1", name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Traditional dhol tasha and band services." }
+                { id: "ban_adi_1", name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", rating: "4.5", description: "Traditional dhol tasha services." }
             ],
             nanded: [
                 { id: "ban_nan_1", name: "Nanded Band Baja", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", rating: "4.6", description: "Complete entertainment solutions." }
@@ -435,6 +441,9 @@
             ]
         }
     };
+
+    // Use saved data if available, otherwise default
+    let vendorsData = loadVendorsFromStorage() || defaultVendorsData;
 
     const cities = ["nagpur", "pandharkawada", "yavatmal", "adilabad", "nanded", "kinwat"];
     const cityDisplayNames = {
