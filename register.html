@@ -1,2 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | StadiumConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #000000;
+        }
+        .auth-container {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            max-width: 450px;
+            margin: 3rem auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .logo h1 {
+            color: #001a4d;
+            font-size: 1.8rem;
+        }
+        .logo p {
+            color: #666;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+        .auth-btn {
+            width: 100%;
+            background: #001a4d;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .auth-btn:hover {
+            background: #000033;
+        }
+        .auth-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+        .auth-link a {
+            color: #001a4d;
+            text-decoration: none;
+        }
+        .message {
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+    </style>
+</head>
+<body>
 
+<div class="auth-container">
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Create your account</p>
+    </div>
+    
+    <div id="message" class="message"></div>
+    
+    <form id="registerForm">
+        <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="fullName" required placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="phone" required placeholder="Enter your phone number">
+        </div>
+        
+        <div class="form-group">
+            <label>City</label>
+            <select id="city">
+                <option value="Nagpur">Nagpur</option>
+                <option value="Pandharkawada">Pandharkawada</option>
+                <option value="Yavatmal">Yavatmal</option>
+                <option value="Adilabad">Adilabad</option>
+                <option value="Nanded">Nanded</option>
+                <option value="Kinwat">Kinwat</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Pune">Pune</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Password *</label>
+            <input type="password" id="password" required placeholder="Create a password (min 6 characters)">
+        </div>
+        
+        <div class="form-group">
+            <label>Confirm Password *</label>
+            <input type="password" id="confirmPassword" required placeholder="Confirm your password">
+        </div>
+        
+        <button type="submit" class="auth-btn">Create Account →</button>
+    </form>
+    
+    <div class="auth-link">
+        Already have an account? <a href="login.html">Login here</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const city = document.getElementById('city').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (!name || !email || !phone || !password) {
+            showMessage('Please fill all fields', 'error');
+            return;
+        }
+        
+        if (password.length < 6) {
+            showMessage('Password must be at least 6 characters', 'error');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            showMessage('Passwords do not match', 'error');
+            return;
+        }
+        
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        if (users.find(u => u.email === email)) {
+            showMessage('Email already registered. Please login.', 'error');
+            return;
+        }
+        
+        const newUser = {
+            id: Date.now(),
+            name: name,
+            email: email,
+            phone: phone,
+            city: city,
+            password: password,
+            createdAt: new Date().toISOString()
+        };
+        
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        localStorage.setItem('currentUser', JSON.stringify({
+            id: newUser.id,
+            name: newUser.name,
+            email: newUser.email,
+            phone: newUser.phone,
+            city: newUser.city
+        }));
+        
+        showMessage('Registration successful! Redirecting...', 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+    });
+    
+    function showMessage(msg, type) {
+        const msgDiv = document.getElementById('message');
+        msgDiv.className = `message ${type}`;
+        msgDiv.innerText = msg;
+        setTimeout(() => {
+            msgDiv.className = 'message';
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
 
