@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<!-- Back4App Parse SDK -->
-<script src="https://cdn.parseplatform.org/parse-js-sdk/latest/parse.min.js"></script>
-<script src="back4app-config.js"></script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | StadiumConnect</title>
@@ -14,9 +9,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    
+    <!-- BACK4APP SDK -->
+    <script src="https://cdn.parseplatform.org/parse-js-sdk/latest/parse.min.js"></script>
+    <script src="back4app-config.js"></script>
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: #f5f5f5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f5f5f5; }
         .header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
         .header h1 { color: white; font-size: 1.3rem; }
         .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
@@ -26,18 +26,34 @@
         .auth-buttons { display: flex; gap: 1rem; }
         .auth-buttons a { padding: 0.5rem 1.2rem; border-radius: 2rem; background: #001a4d; color: white; text-decoration: none; }
         .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .stat-number { font-size: 2rem; font-weight: 700; color: #001a4d; }
-        .bookings-list { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .booking-item { border-bottom: 1px solid #eee; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .status-badge { padding: 0.3rem 0.8rem; border-radius: 1rem; font-size: 0.8rem; }
+        .welcome-section { margin-bottom: 2rem; }
+        .welcome-section h2 { color: #001a4d; font-size: 1.8rem; }
+        .welcome-section p { color: #666; margin-top: 0.5rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .stat-card h3 { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .stat-number { font-size: 2.5rem; font-weight: 700; color: #001a4d; }
+        .bookings-section { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .bookings-section h2 { color: #001a4d; margin-bottom: 1rem; border-left: 4px solid #ffd966; padding-left: 1rem; }
+        .booking-item { border-bottom: 1px solid #eee; padding: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; transition: 0.2s; }
+        .booking-item:hover { background: #f8f9fa; }
+        .booking-info { flex: 1; }
+        .booking-vendor { font-weight: 600; color: #001a4d; font-size: 1.1rem; }
+        .booking-details { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+        .booking-status { padding: 0.3rem 0.8rem; border-radius: 2rem; font-size: 0.75rem; font-weight: 600; }
         .status-pending { background: #fff3cd; color: #856404; }
         .status-confirmed { background: #d4edda; color: #155724; }
         .status-cancelled { background: #f8d7da; color: #721c24; }
-        .btn-primary { background: #001a4d; color: white; padding: 0.8rem 2rem; border-radius: 2rem; text-decoration: none; display: inline-block; margin-top: 1rem; }
-        .empty-state { text-align: center; padding: 2rem; color: #999; }
-        @media (max-width: 768px) { .header { flex-direction: column; text-align: center; } }
+        .empty-state { text-align: center; padding: 3rem; color: #999; }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+        .empty-state a { color: #001a4d; text-decoration: none; font-weight: 600; }
+        .btn-primary { background: #001a4d; color: white; padding: 0.8rem 2rem; border-radius: 2rem; text-decoration: none; display: inline-block; margin-top: 1rem; transition: 0.3s; }
+        .btn-primary:hover { background: #000033; transform: scale(1.02); }
+        .action-buttons { display: flex; gap: 1rem; margin-top: 2rem; justify-content: center; flex-wrap: wrap; }
+        .action-btn { background: #f0f0f0; color: #333; padding: 0.6rem 1.2rem; border-radius: 2rem; text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .action-btn:hover { background: #001a4d; color: white; }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .booking-item { flex-direction: column; text-align: center; } .header { flex-direction: column; text-align: center; } }
     </style>
 </head>
 <body>
@@ -48,25 +64,46 @@
 </div>
 
 <div class="container">
-    <h2 style="color: #001a4d; margin-bottom: 1rem;">Welcome, <span id="userName"></span>!</h2>
-    
-    <div class="stats">
-        <div class="stat-card"><h3>Total Bookings</h3><div class="stat-number" id="totalBookings">0</div></div>
-        <div class="stat-card"><h3>Pending</h3><div class="stat-number" id="pendingBookings">0</div></div>
-        <div class="stat-card"><h3>Confirmed</h3><div class="stat-number" id="confirmedBookings">0</div></div>
+    <div class="welcome-section">
+        <h2>Welcome, <span id="userName"></span>!</h2>
+        <p>Manage your bookings and explore new vendors for your events</p>
     </div>
     
-    <div class="bookings-list">
-        <h3>📋 My Bookings</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Total Bookings</h3>
+            <div class="stat-number" id="totalBookings">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Pending</h3>
+            <div class="stat-number" id="pendingBookings">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Confirmed</h3>
+            <div class="stat-number" id="confirmedBookings">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Wishlist</h3>
+            <div class="stat-number" id="wishlistCount">0</div>
+        </div>
+    </div>
+    
+    <div class="bookings-section">
+        <h2>📋 My Bookings</h2>
         <div id="bookingsList"></div>
     </div>
     
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="directory.html" class="btn-primary">Browse Vendors →</a>
+    <div class="action-buttons">
+        <a href="directory.html" class="action-btn">🔍 Browse Vendors</a>
+        <a href="wishlist.html" class="action-btn">❤️ My Wishlist</a>
+        <a href="vendor-compare.html" class="action-btn">⚖️ Compare Vendors</a>
+        <a href="event-planner.html" class="action-btn">📋 Event Planner</a>
+        <a href="stadium-booking.html" class="action-btn">🏟️ Book Stadium</a>
     </div>
 </div>
 
 <script>
+    // ========= USER FUNCTIONS =========
     function getCurrentUser() {
         const user = localStorage.getItem('currentUser');
         return user ? JSON.parse(user) : null;
@@ -85,6 +122,8 @@
             navLinks.innerHTML = `
                 <a href="directory.html">Vendors</a>
                 <a href="dashboard.html">Dashboard</a>
+                <a href="wishlist.html">Wishlist</a>
+                <a href="vendor-compare.html">Compare</a>
                 <div class="user-info">
                     <span>👤 ${user.name}</span>
                     <button class="logout-btn" onclick="logout()">Logout</button>
@@ -93,6 +132,7 @@
         } else {
             navLinks.innerHTML = `
                 <a href="directory.html">Vendors</a>
+                <a href="vendor-compare.html">Compare</a>
                 <div class="auth-buttons">
                     <a href="login.html">Login</a>
                     <a href="register.html">Register</a>
@@ -101,45 +141,176 @@
         }
     }
     
-    function loadDashboard() {
+    // ========= BOOKING FUNCTIONS =========
+    function saveBookingsToLocal(bookings) {
+        localStorage.setItem('userBookings', JSON.stringify(bookings));
+    }
+    
+    function getLocalBookings() {
+        return JSON.parse(localStorage.getItem('userBookings') || '[]');
+    }
+    
+    // ========= CLOUD SYNC FUNCTIONS =========
+    async function syncBookingsToCloud() {
+        const user = getCurrentUser();
+        if (!user) return;
+        
+        const localBookings = getLocalBookings();
+        const userBookings = localBookings.filter(b => b.userId === user.id);
+        
+        for (const booking of userBookings) {
+            if (!booking.cloudSynced) {
+                const saved = await saveBookingToCloud(booking);
+                if (saved) {
+                    booking.cloudSynced = true;
+                }
+            }
+        }
+        saveBookingsToLocal(localBookings);
+    }
+    
+    async function loadBookingsFromCloud() {
+        const user = getCurrentUser();
+        if (!user) return [];
+        
+        try {
+            const cloudBookings = await loadBookingsFromCloudDB(user.id);
+            if (cloudBookings && cloudBookings.length > 0) {
+                // Merge with local
+                let localBookings = getLocalBookings();
+                const cloudIds = cloudBookings.map(b => b.id);
+                const filteredLocal = localBookings.filter(b => !cloudIds.includes(b.id));
+                const allBookings = [...cloudBookings, ...filteredLocal];
+                saveBookingsToLocal(allBookings);
+                return allBookings.filter(b => b.userId === user.id);
+            }
+        } catch (error) {
+            console.log('Cloud load failed, using local');
+        }
+        return getLocalBookings().filter(b => b.userId === user.id);
+    }
+    
+    // ========= DASHBOARD RENDER =========
+    function renderDashboard(bookings) {
+        const user = getCurrentUser();
+        if (!user) return;
+        
+        document.getElementById('userName').innerText = user.name;
+        
+        const total = bookings.length;
+        const pending = bookings.filter(b => b.status === 'pending').length;
+        const confirmed = bookings.filter(b => b.status === 'confirmed').length;
+        
+        document.getElementById('totalBookings').innerText = total;
+        document.getElementById('pendingBookings').innerText = pending;
+        document.getElementById('confirmedBookings').innerText = confirmed;
+        
+        // Wishlist count
+        const wishlist = JSON.parse(localStorage.getItem(`wishlist_${user.id}`) || '[]');
+        document.getElementById('wishlistCount').innerText = wishlist.length;
+        
+        const bookingsList = document.getElementById('bookingsList');
+        
+        if (bookings.length === 0) {
+            bookingsList.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">📭</div>
+                    <p>No bookings yet.</p>
+                    <p><a href="directory.html">Browse vendors</a> to make your first booking!</p>
+                </div>
+            `;
+            return;
+        }
+        
+        bookingsList.innerHTML = bookings.map(b => `
+            <div class="booking-item">
+                <div class="booking-info">
+                    <div class="booking-vendor">${b.vendorName || b.stadiumName || 'Vendor'}</div>
+                    <div class="booking-details">
+                        📅 ${b.eventDate || 'Date TBD'} | ${b.eventType || 'Event'} 
+                        ${b.guestCount ? `| 👥 ${b.guestCount} guests` : ''}
+                    </div>
+                    <div class="booking-details">
+                        🕐 Booked on: ${new Date(b.bookedAt).toLocaleDateString()}
+                    </div>
+                </div>
+                <div>
+                    <span class="booking-status status-${b.status}">${b.status.toUpperCase()}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // ========= INITIALIZE DASHBOARD =========
+    async function initDashboard() {
         const user = getCurrentUser();
         if (!user) {
             window.location.href = 'login.html';
             return;
         }
         
-        document.getElementById('userName').innerText = user.name;
+        // First load from cloud
+        const cloudBookings = await loadBookingsFromCloud();
+        renderDashboard(cloudBookings);
         
-        const allBookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
-        const userBookings = allBookings.filter(b => b.userId === user.id);
+        // Then sync local to cloud
+        await syncBookingsToCloud();
         
-        document.getElementById('totalBookings').innerText = userBookings.length;
-        document.getElementById('pendingBookings').innerText = userBookings.filter(b => b.status === 'pending').length;
-        document.getElementById('confirmedBookings').innerText = userBookings.filter(b => b.status === 'confirmed').length;
-        
-        const bookingsList = document.getElementById('bookingsList');
-        
-        if (userBookings.length === 0) {
-            bookingsList.innerHTML = '<div class="empty-state">📭 No bookings yet. <a href="directory.html" style="color:#001a4d;">Browse vendors</a> to get started!</div>';
-            return;
-        }
-        
-        bookingsList.innerHTML = userBookings.map(b => `
-            <div class="booking-item">
-                <div>
-                    <strong>${b.vendorName || b.stadiumName || 'Vendor'}</strong><br>
-                    <small>📅 ${b.eventDate || 'Date TBD'} | ${b.eventType || 'Event'}</small><br>
-                    <small>👥 Guests: ${b.guestCount || 'Not specified'}</small>
-                </div>
-                <div>
-                    <span class="status-badge status-${b.status}">${b.status.toUpperCase()}</span>
-                </div>
-            </div>
-        `).join('');
+        // Reload after sync
+        const updatedBookings = getLocalBookings().filter(b => b.userId === user.id);
+        renderDashboard(updatedBookings);
     }
     
+    // ========= WRAPPER FUNCTIONS FOR BACK4APP =========
+    async function saveBookingToCloud(booking) {
+        if (typeof Parse === 'undefined') return false;
+        try {
+            const Booking = Parse.Object.extend("Booking");
+            const newBooking = new Booking();
+            newBooking.set("userId", booking.userId);
+            newBooking.set("userName", booking.userName);
+            newBooking.set("userPhone", booking.userPhone);
+            newBooking.set("vendorId", booking.vendorId);
+            newBooking.set("vendorName", booking.vendorName);
+            newBooking.set("eventDate", booking.eventDate);
+            newBooking.set("eventType", booking.eventType);
+            newBooking.set("status", booking.status);
+            newBooking.set("bookedAt", booking.bookedAt);
+            await newBooking.save();
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+    
+    async function loadBookingsFromCloudDB(userId) {
+        if (typeof Parse === 'undefined') return [];
+        try {
+            const Booking = Parse.Object.extend("Booking");
+            const query = new Parse.Query(Booking);
+            query.equalTo("userId", userId);
+            const results = await query.find();
+            return results.map(result => ({
+                id: result.id,
+                userId: result.get("userId"),
+                userName: result.get("userName"),
+                userPhone: result.get("userPhone"),
+                vendorId: result.get("vendorId"),
+                vendorName: result.get("vendorName"),
+                eventDate: result.get("eventDate"),
+                eventType: result.get("eventType"),
+                status: result.get("status"),
+                bookedAt: result.get("bookedAt"),
+                cloudSynced: true
+            }));
+        } catch (error) {
+            return [];
+        }
+    }
+    
+    // ========= INITIALIZE =========
     updateNavBar();
-    loadDashboard();
+    initDashboard();
 </script>
 
 <script>
@@ -152,3 +323,4 @@ if ('serviceWorker' in navigator) {
 
 </body>
 </html>
+
