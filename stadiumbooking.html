@@ -1,1 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stadium Booking | StadiumConnect</title>
+    
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001a4d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f5f5f5; }
+        .header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { color: white; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; }
+        .user-info { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 1rem; cursor: pointer; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .auth-buttons a { padding: 0.5rem 1.2rem; border-radius: 2rem; background: #001a4d; color: white; text-decoration: none; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        h1 { color: #001a4d; margin-bottom: 0.5rem; }
+        .subtitle { color: #666; margin-bottom: 2rem; }
+        .filters { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; background: white; padding: 1rem; border-radius: 1rem; }
+        .filters input, .filters select { padding: 0.6rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; flex: 1; min-width: 150px; }
+        .stadiums-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+        .stadium-card { background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: 0.3s; }
+        .stadium-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .stadium-img { height: 180px; background: linear-gradient(135deg, #001a4d, #000033); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+        .stadium-info { padding: 1.2rem; }
+        .stadium-name { font-size: 1.3rem; font-weight: 700; color: #001a4d; }
+        .stadium-location { color: #666; margin: 0.5rem 0; display: flex; align-items: center; gap: 0.3rem; }
+        .amenities { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.8rem 0; }
+        .amenity { background: #f0f0f0; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; }
+        .price { font-size: 1.5rem; font-weight: 700; color: #28a745; margin: 0.5rem 0; }
+        .price small { font-size: 0.8rem; color: #666; font-weight: normal; }
+        .booking-options { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .book-btn { flex: 1; background: #001a4d; color: white; border: none; padding: 0.6rem; border-radius: 0.5rem; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .book-btn:hover { background: #000033; }
+        .calendar-btn { background: #f0f0f0; border: none; padding: 0.6rem; border-radius: 0.5rem; cursor: pointer; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; border-radius: 1rem; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; padding: 1.5rem; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #001a4d; }
+        .modal-header h3 { color: #001a4d; }
+        .close-modal { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.3rem; font-weight: 500; color: #333; }
+        .form-group input, .form-group select { width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 0.5rem; }
+        .calendar-view { margin-top: 1rem; }
+        .available-dates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.3rem; margin-top: 0.5rem; }
+        .date-cell { text-align: center; padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.3rem; cursor: pointer; font-size: 0.8rem; }
+        .date-cell.available { background: #d4edda; border-color: #28a745; }
+        .date-cell.booked { background: #f8d7da; border-color: #dc3545; cursor: not-allowed; }
+        .date-cell.selected { background: #001a4d; color: white; }
+        .submit-btn { width: 100%; background: #28a745; color: white; border: none; padding: 0.8rem; border-radius: 0.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; }
+        .empty { text-align: center; padding: 3rem; color: #999; }
+        @media (max-width: 768px) { .stadiums-grid { grid-template-columns: 1fr; } .filters { flex-direction: column; } }
+    </style>
+</head>
+<body>
 
+<div class="header">
+    <h1>🏟️ STADIUMCONNECT</h1>
+    <div class="nav-links" id="navLinks"></div>
+</div>
+
+<div class="container">
+    <h1>🏟️ Stadium Booking</h1>
+    <p class="subtitle">Book international standard stadiums for sports, concerts, weddings, and corporate events</p>
+    
+    <div class="filters">
+        <input type="text" id="searchStadium" placeholder="Search stadium by name...">
+        <select id="cityFilter">
+            <option value="all">All Cities</option>
+        </select>
+        <select id="capacityFilter">
+            <option value="all">All Capacities</option>
+            <option value="5000">Up to 5,000</option>
+            <option value="15000">5,000 - 15,000</option>
+            <option value="30000">15,000 - 30,000</option>
+            <option value="50000">30,000+</option>
+        </select>
+    </div>
+    
+    <div id="stadiumsGrid" class="stadiums-grid"></div>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalStadiumName">Book Stadium</h3>
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+        </div>
+        <form id="bookingForm">
+            <input type="hidden" id="stadiumId">
+            <div class="form-group">
+                <label>Event Name *</label>
+                <input type="text" id="eventName" required placeholder="e.g., Wedding Reception, Cricket Tournament">
+            </div>
+            <div class="form-group">
+                <label>Event Date *</label>
+                <input type="date" id="eventDate" required>
+            </div>
+            <div class="form-group">
+                <label>Time Slot</label>
+                <select id="timeSlot">
+                    <option value="6am-12pm">Morning (6am - 12pm)</option>
+                    <option value="12pm-6pm">Afternoon (12pm - 6pm)</option>
+                    <option value="6pm-12am">Evening (6pm - 12am)</option>
+                    <option value="full-day">Full Day</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Number of Hours</label>
+                <input type="number" id="hours" value="4" min="1" max="12">
+            </div>
+            <div class="form-group">
+                <label>Expected Audience</label>
+                <input type="number" id="audience" placeholder="Number of people">
+            </div>
+            <div class="form-group">
+                <label>Special Requirements</label>
+                <textarea id="requirements" rows="2" placeholder="Any special requirements..."></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Confirm Booking →</button>
+        </form>
+    </div>
+</div>
+
+<!-- Calendar Modal -->
+<div id="calendarModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="calendarStadiumName">Availability Calendar</h3>
+            <button class="close-modal" onclick="closeCalendarModal()">&times;</button>
+        </div>
+        <div id="calendarView" class="calendar-view"></div>
+    </div>
+</div>
+
+<script>
+    // Stadium Database
+    let stadiums = [];
+    
+    function loadStadiums() {
+        const saved = localStorage.getItem('stadiums');
+        if (saved) {
+            stadiums = JSON.parse(saved);
+        } else {
+            // Default stadiums
+            stadiums = [
+                { id: 1, name: "Vidarbha Cricket Stadium", city: "nagpur", capacity: 45000, price: 50000, amenities: ["Floodlights", "Parking", "Locker Rooms", "PA System", "VIP Lounge"], description: "International standard cricket stadium with world-class facilities." },
+                { id: 2, name: "Yavatmal Sports Complex", city: "yavatmal", capacity: 15000, price: 20000, amenities: ["Parking", "Canteen", "Changing Rooms", "Medical Room"], description: "Multi-purpose sports complex ideal for local tournaments." },
+                { id: 3, name: "Adilabad District Stadium", city: "adilabad", capacity: 10000, price: 15000, amenities: ["Basic Facilities", "Parking", "Canteen"], description: "Perfect for local events and sports meets." },
+                { id: 4, name: "Nanded International Stadium", city: "nanded", capacity: 25000, price: 35000, amenities: ["Floodlights", "Parking", "Locker Rooms", "Media Box"], description: "Modern stadium with excellent facilities." },
+                { id: 5, name: "Pandharkawada Ground", city: "pandharkawada", capacity: 5000, price: 8000, amenities: ["Open Ground", "Basic Seating"], description: "Ideal for small events and gatherings." },
+                { id: 6, name: "Kinwat Sports Arena", city: "kinwat", capacity: 3000, price: 5000, amenities: ["Parking", "Basic Facilities"], description: "Local sports ground for community events." }
+            ];
+        }
+        updateCityFilter();
+        renderStadiums();
+    }
+    
+    function updateCityFilter() {
+        const cities = [...new Set(stadiums.map(s => s.city))];
+        const cityNames = { nagpur:"Nagpur", yavatmal:"Yavatmal", adilabad:"Adilabad", nanded:"Nanded", pandharkawada:"Pandharkawada", kinwat:"Kinwat" };
+        const filter = document.getElementById('cityFilter');
+        filter.innerHTML = '<option value="all">All Cities</option>' + 
+            cities.map(c => `<option value="${c}">${cityNames[c] || c}</option>`).join('');
+    }
+    
+    function renderStadiums() {
+        const search = document.getElementById('searchStadium').value.toLowerCase();
+        const city = document.getElementById('cityFilter').value;
+        const capacity = document.getElementById('capacityFilter').value;
+        
+        let filtered = stadiums.filter(s => {
+            if (search && !s.name.toLowerCase().includes(search)) return false;
+            if (city !== 'all' && s.city !== city) return false;
+            if (capacity !== 'all') {
+                if (capacity === '5000' && s.capacity > 5000) return false;
+                if (capacity === '15000' && (s.capacity <= 5000 || s.capacity > 15000)) return false;
+                if (capacity === '30000' && (s.capacity <= 15000 || s.capacity > 30000)) return false;
+                if (capacity === '50000' && s.capacity <= 30000) return false;
+            }
+            return true;
+        });
+        
+        const grid = document.getElementById('stadiumsGrid');
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div class="empty">No stadiums found. Try different filters.</div>';
+            return;
+        }
+        
+        const cityNames = { nagpur:"Nagpur", yavatmal:"Yavatmal", adilabad:"Adilabad", nanded:"Nanded", pandharkawada:"Pandharkawada", kinwat:"Kinwat" };
+        
+        grid.innerHTML = filtered.map(s => `
+            <div class="stadium-card">
+                <div class="stadium-img">🏟️</div>
+                <div class="stadium-info">
+                    <div class="stadium-name">${s.name}</div>
+                    <div class="stadium-location">📍 ${cityNames[s.city] || s.city} | 👥 ${s.capacity.toLocaleString()} capacity</div>
+                    <div class="amenities">${s.amenities.map(a => `<span class="amenity">${a}</span>`).join('')}</div>
+                    <div class="price">₹${s.price.toLocaleString()} <small>/day</small></div>
+                    <div class="booking-options">
+                        <button class="book-btn" onclick="openBookingModal(${s.id}, '${s.name}')">Book Now →</button>
+                        <button class="calendar-btn" onclick="showCalendar(${s.id}, '${s.name}')">📅 Check Availability</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+    }
+    
+    function updateNav() {
+        const user = getCurrentUser();
+        const nav = document.getElementById('navLinks');
+        if (user) {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="dashboard.html">Dashboard</a><a href="stadium-booking.html">Stadiums</a><a href="event-planner.html">Planner</a><div class="user-info"><span>👤 ${user.name}</span><button class="logout-btn" onclick="logout()">Logout</button></div>`;
+        } else {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="stadium-booking.html">Stadiums</a><a href="event-planner.html">Planner</a><div class="auth-buttons"><a href="login.html">Login</a><a href="register.html">Register</a></div>`;
+        }
+    }
+    
+    function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+    
+    function openBookingModal(id, name) {
+        const user = getCurrentUser();
+        if (!user) { alert('Please login to book stadium'); window.location.href = 'login.html'; return; }
+        document.getElementById('stadiumId').value = id;
+        document.getElementById('modalStadiumName').innerText = name;
+        document.getElementById('bookingForm').reset();
+        document.getElementById('bookingModal').style.display = 'flex';
+    }
+    
+    function closeModal() { document.getElementById('bookingModal').style.display = 'none'; }
+    function closeCalendarModal() { document.getElementById('calendarModal').style.display = 'none'; }
+    
+    function showCalendar(id, name) {
+        document.getElementById('calendarStadiumName').innerText = `${name} - Availability`;
+        const bookings = JSON.parse(localStorage.getItem('stadiumBookings') || '[]');
+        const stadiumBookings = bookings.filter(b => b.stadiumId === id);
+        const bookedDates = stadiumBookings.map(b => b.eventDate);
+        
+        const today = new Date();
+        const dates = [];
+        for (let i = 0; i < 30; i++) {
+            let date = new Date(today);
+            date.setDate(today.getDate() + i);
+            dates.push(date.toISOString().split('T')[0]);
+        }
+        
+        const calendarHtml = `
+            <div class="available-dates">
+                ${dates.map(d => `
+                    <div class="date-cell ${bookedDates.includes(d) ? 'booked' : 'available'}" 
+                         onclick="${!bookedDates.includes(d) ? `selectDateForBooking('${d}')` : ''}">
+                        ${new Date(d).getDate()}<br>
+                        <small>${new Date(d).toLocaleString('default', { month: 'short' })}</small>
+                    </div>
+                `).join('')}
+            </div>
+            <p style="margin-top: 1rem; text-align: center; font-size: 0.8rem;">
+                🟢 Available &nbsp;&nbsp; 🔴 Booked
+            </p>
+        `;
+        document.getElementById('calendarView').innerHTML = calendarHtml;
+        document.getElementById('calendarModal').style.display = 'flex';
+        window.selectedStadiumForBooking = { id, name };
+    }
+    
+    function selectDateForBooking(date) {
+        closeCalendarModal();
+        openBookingModal(window.selectedStadiumForBooking.id, window.selectedStadiumForBooking.name);
+        document.getElementById('eventDate').value = date;
+    }
+    
+    document.getElementById('bookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const user = getCurrentUser();
+        if (!user) { alert('Please login'); window.location.href = 'login.html'; return; }
+        
+        const booking = {
+            id: Date.now(),
+            type: 'stadium',
+            userId: user.id,
+            userName: user.name,
+            userPhone: user.phone,
+            stadiumId: parseInt(document.getElementById('stadiumId').value),
+            stadiumName: document.getElementById('modalStadiumName').innerText,
+            eventName: document.getElementById('eventName').value,
+            eventDate: document.getElementById('eventDate').value,
+            timeSlot: document.getElementById('timeSlot').value,
+            hours: document.getElementById('hours').value,
+            audience: document.getElementById('audience').value,
+            requirements: document.getElementById('requirements').value,
+            status: 'pending',
+            bookedAt: new Date().toISOString()
+        };
+        
+        // Save to stadium bookings
+        let stadiumBookings = JSON.parse(localStorage.getItem('stadiumBookings') || '[]');
+        stadiumBookings.push(booking);
+        localStorage.setItem('stadiumBookings', JSON.stringify(stadiumBookings));
+        
+        // Also save to user bookings
+        let userBookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
+        userBookings.push(booking);
+        localStorage.setItem('userBookings', JSON.stringify(userBookings));
+        
+        alert('✅ Stadium booking request sent! We will confirm availability soon.');
+        closeModal();
+    });
+    
+    // Event Listeners
+    document.getElementById('searchStadium').addEventListener('input', renderStadiums);
+    document.getElementById('cityFilter').addEventListener('change', renderStadiums);
+    document.getElementById('capacityFilter').addEventListener('change', renderStadiums);
+    
+    // Initialize
+    loadStadiums();
+    updateNav();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+}
+</script>
+
+</body>
+</html>
