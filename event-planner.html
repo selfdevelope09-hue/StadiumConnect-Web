@@ -1,1 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Planner | StadiumConnect</title>
+    
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001a4d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f5f5f5; }
+        .header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { color: white; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; }
+        .user-info { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 1rem; cursor: pointer; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .auth-buttons a { padding: 0.5rem 1.2rem; border-radius: 2rem; background: #001a4d; color: white; text-decoration: none; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        h1 { color: #001a4d; margin-bottom: 1.5rem; }
+        .planner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        @media (max-width: 768px) { .planner-grid { grid-template-columns: 1fr; } }
+        .checklist-card, .timeline-card, .budget-card, .reminder-card { background: white; border-radius: 1rem; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .checklist-card h2, .timeline-card h2, .budget-card h2, .reminder-card h2 { color: #001a4d; margin-bottom: 1rem; border-left: 4px solid #ffd966; padding-left: 1rem; }
+        .checklist-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem; border-bottom: 1px solid #eee; cursor: pointer; }
+        .checklist-item input { width: 20px; height: 20px; cursor: pointer; }
+        .checklist-item.completed span { text-decoration: line-through; color: #888; }
+        .progress-bar { background: #e0e0e0; border-radius: 1rem; height: 10px; margin: 1rem 0; }
+        .progress-fill { background: #28a745; border-radius: 1rem; height: 100%; width: 0%; transition: width 0.3s; }
+        .timeline-item { padding: 1rem; border-left: 3px solid #001a4d; margin-bottom: 1rem; background: #f8f9fa; border-radius: 0.5rem; }
+        .timeline-days { font-weight: 600; color: #001a4d; }
+        .budget-item { display: flex; justify-content: space-between; padding: 0.8rem; border-bottom: 1px solid #eee; }
+        .budget-total { font-weight: 700; color: #28a745; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #ddd; }
+        .reminder-form { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .reminder-form input { flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 0.5rem; }
+        .reminder-form button { background: #001a4d; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 0.5rem; cursor: pointer; }
+        .reminder-item { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem; border-bottom: 1px solid #eee; }
+        .reminder-text { flex: 1; }
+        .reminder-date { color: #666; font-size: 0.8rem; margin-left: 1rem; }
+        .delete-reminder { background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 0.3rem; cursor: pointer; }
+        .btn-primary { background: #001a4d; color: white; padding: 0.6rem 1.2rem; border-radius: 0.5rem; text-decoration: none; display: inline-block; margin-top: 1rem; }
+        .empty { text-align: center; padding: 2rem; color: #999; }
+    </style>
+</head>
+<body>
 
+<div class="header">
+    <h1>🏟️ STADIUMCONNECT</h1>
+    <div class="nav-links" id="navLinks"></div>
+</div>
+
+<div class="container">
+    <h1>📋 Event Planning Checklist</h1>
+    <p style="color: #666; margin-bottom: 2rem;">Plan your event step by step, track progress, set reminders, and manage budget</p>
+    
+    <div class="planner-grid">
+        <!-- Left Column -->
+        <div>
+            <!-- Checklist -->
+            <div class="checklist-card">
+                <h2>✅ Pre-Event Checklist</h2>
+                <div id="checklist"></div>
+                <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+                <div id="progressPercent" style="text-align: center; margin-top: 0.5rem;">0% Complete</div>
+            </div>
+            
+            <!-- Budget Manager -->
+            <div class="budget-card">
+                <h2>💰 Budget Manager</h2>
+                <div id="budgetList"></div>
+                <div class="budget-total" id="budgetTotal">Total: ₹0</div>
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                    <input type="text" id="budgetItem" placeholder="Item name" style="flex:1; padding:0.5rem; border:1px solid #ddd; border-radius:0.5rem;">
+                    <input type="number" id="budgetAmount" placeholder="Amount" style="width:100px; padding:0.5rem; border:1px solid #ddd; border-radius:0.5rem;">
+                    <button onclick="addBudgetItem()" style="background:#28a745; color:white; border:none; padding:0.5rem 1rem; border-radius:0.5rem;">Add</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div>
+            <!-- Timeline -->
+            <div class="timeline-card">
+                <h2>📅 Event Timeline</h2>
+                <div id="timeline"></div>
+            </div>
+            
+            <!-- Reminders -->
+            <div class="reminder-card">
+                <h2>⏰ Reminders</h2>
+                <div class="reminder-form">
+                    <input type="text" id="reminderText" placeholder="Reminder (e.g., Book caterer)">
+                    <input type="date" id="reminderDate">
+                    <button onclick="addReminder()">+ Add</button>
+                </div>
+                <div id="reminderList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="directory.html" class="btn-primary">Browse Vendors →</a>
+    </div>
+</div>
+
+<script>
+    // Checklist Items
+    const checklistItems = [
+        "Select Event Date", "Book Stadium/Venue", "Book Caterer", "Book Decorator", 
+        "Book Photographer", "Book Band/Entertainment", "Send Invitations", 
+        "Finalize Menu", "Sound & Lighting Check", "Rehearsal", "Guest Confirmation", "Arrangements Final Check"
+    ];
+    
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+    }
+    
+    function updateNav() {
+        const user = getCurrentUser();
+        const nav = document.getElementById('navLinks');
+        if (user) {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="dashboard.html">Dashboard</a><a href="event-planner.html">Planner</a><div class="user-info"><span>👤 ${user.name}</span><button class="logout-btn" onclick="logout()">Logout</button></div>`;
+        } else {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="event-planner.html">Planner</a><div class="auth-buttons"><a href="login.html">Login</a><a href="register.html">Register</a></div>`;
+        }
+    }
+    
+    function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+    
+    // Checklist Functions
+    function loadChecklist() {
+        const user = getCurrentUser();
+        if (!user) return;
+        const saved = JSON.parse(localStorage.getItem(`checklist_${user.id}`) || '[]');
+        const container = document.getElementById('checklist');
+        container.innerHTML = checklistItems.map((item, i) => `
+            <div class="checklist-item ${saved.includes(i) ? 'completed' : ''}" onclick="toggleChecklist(${i})">
+                <input type="checkbox" ${saved.includes(i) ? 'checked' : ''} onclick="event.stopPropagation()">
+                <span>${item}</span>
+            </div>
+        `).join('');
+        updateProgress();
+    }
+    
+    function toggleChecklist(index) {
+        const user = getCurrentUser();
+        if (!user) { alert('Please login to save checklist'); window.location.href = 'login.html'; return; }
+        let saved = JSON.parse(localStorage.getItem(`checklist_${user.id}`) || '[]');
+        if (saved.includes(index)) {
+            saved = saved.filter(i => i !== index);
+        } else {
+            saved.push(index);
+        }
+        localStorage.setItem(`checklist_${user.id}`, JSON.stringify(saved));
+        loadChecklist();
+    }
+    
+    function updateProgress() {
+        const user = getCurrentUser();
+        if (!user) return;
+        const saved = JSON.parse(localStorage.getItem(`checklist_${user.id}`) || '[]');
+        const percent = (saved.length / checklistItems.length) * 100;
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('progressPercent').innerText = Math.round(percent) + '% Complete';
+    }
+    
+    // Timeline
+    function loadTimeline() {
+        const days = [60, 45, 30, 21, 14, 7, 3, 1, 0];
+        const tasks = [
+            "Finalize event concept & budget", "Book venue & send save-the-dates", 
+            "Book vendors (caterer, decorator, photographer)", "Finalize menu & send invitations",
+            "Confirm all vendors & guest list", "Sound & lighting setup", "Rehearsal & final walkthrough",
+            "Last minute checks", "EVENT DAY!"
+        ];
+        const timeline = document.getElementById('timeline');
+        timeline.innerHTML = tasks.map((task, i) => `
+            <div class="timeline-item">
+                <div class="timeline-days">${days[i]} days before</div>
+                <div>${task}</div>
+            </div>
+        `).join('');
+    }
+    
+    // Budget Functions
+    function loadBudget() {
+        const user = getCurrentUser();
+        if (!user) return;
+        const budget = JSON.parse(localStorage.getItem(`budget_${user.id}`) || '[]');
+        const container = document.getElementById('budgetList');
+        if (budget.length === 0) {
+            container.innerHTML = '<div class="empty">No budget items added</div>';
+            document.getElementById('budgetTotal').innerHTML = 'Total: ₹0';
+            return;
+        }
+        let total = 0;
+        container.innerHTML = budget.map((item, i) => {
+            total += item.amount;
+            return `
+                <div class="budget-item">
+                    <span>${item.name}</span>
+                    <span>₹${item.amount.toLocaleString()}</span>
+                    <button onclick="deleteBudgetItem(${i})" style="background:#dc3545; color:white; border:none; padding:0.2rem 0.5rem; border-radius:0.3rem; cursor:pointer;">×</button>
+                </div>
+            `;
+        }).join('');
+        document.getElementById('budgetTotal').innerHTML = `Total: ₹${total.toLocaleString()}`;
+    }
+    
+    function addBudgetItem() {
+        const user = getCurrentUser();
+        if (!user) { alert('Please login'); window.location.href = 'login.html'; return; }
+        const name = document.getElementById('budgetItem').value.trim();
+        const amount = parseInt(document.getElementById('budgetAmount').value);
+        if (!name || !amount) { alert('Enter item name and amount'); return; }
+        const budget = JSON.parse(localStorage.getItem(`budget_${user.id}`) || '[]');
+        budget.push({ name, amount });
+        localStorage.setItem(`budget_${user.id}`, JSON.stringify(budget));
+        document.getElementById('budgetItem').value = '';
+        document.getElementById('budgetAmount').value = '';
+        loadBudget();
+    }
+    
+    function deleteBudgetItem(index) {
+        const user = getCurrentUser();
+        if (!user) return;
+        const budget = JSON.parse(localStorage.getItem(`budget_${user.id}`) || '[]');
+        budget.splice(index, 1);
+        localStorage.setItem(`budget_${user.id}`, JSON.stringify(budget));
+        loadBudget();
+    }
+    
+    // Reminder Functions
+    function loadReminders() {
+        const user = getCurrentUser();
+        if (!user) return;
+        const reminders = JSON.parse(localStorage.getItem(`reminders_${user.id}`) || '[]');
+        const container = document.getElementById('reminderList');
+        if (reminders.length === 0) {
+            container.innerHTML = '<div class="empty">No reminders set</div>';
+            return;
+        }
+        reminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+        container.innerHTML = reminders.map((r, i) => `
+            <div class="reminder-item">
+                <div class="reminder-text">${r.text}</div>
+                <div class="reminder-date">📅 ${new Date(r.date).toLocaleDateString()}</div>
+                <button class="delete-reminder" onclick="deleteReminder(${i})">Delete</button>
+            </div>
+        `).join('');
+    }
+    
+    function addReminder() {
+        const user = getCurrentUser();
+        if (!user) { alert('Please login'); window.location.href = 'login.html'; return; }
+        const text = document.getElementById('reminderText').value.trim();
+        const date = document.getElementById('reminderDate').value;
+        if (!text || !date) { alert('Enter reminder and date'); return; }
+        const reminders = JSON.parse(localStorage.getItem(`reminders_${user.id}`) || '[]');
+        reminders.push({ text, date });
+        localStorage.setItem(`reminders_${user.id}`, JSON.stringify(reminders));
+        document.getElementById('reminderText').value = '';
+        document.getElementById('reminderDate').value = '';
+        loadReminders();
+        
+        // Check if browser supports notifications
+        if (Notification.permission === 'granted') {
+            new Notification('Reminder Added', { body: `${text} on ${new Date(date).toLocaleDateString()}` });
+        }
+    }
+    
+    function deleteReminder(index) {
+        const user = getCurrentUser();
+        if (!user) return;
+        const reminders = JSON.parse(localStorage.getItem(`reminders_${user.id}`) || '[]');
+        reminders.splice(index, 1);
+        localStorage.setItem(`reminders_${user.id}`, JSON.stringify(reminders));
+        loadReminders();
+    }
+    
+    // Request notification permission
+    if ('Notification' in window) {
+        Notification.requestPermission();
+    }
+    
+    // Check reminders daily
+    function checkReminders() {
+        const user = getCurrentUser();
+        if (!user) return;
+        const reminders = JSON.parse(localStorage.getItem(`reminders_${user.id}`) || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        reminders.forEach(r => {
+            if (r.date === today) {
+                if (Notification.permission === 'granted') {
+                    new Notification('Reminder', { body: r.text });
+                }
+            }
+        });
+    }
+    setInterval(checkReminders, 3600000); // Check every hour
+    checkReminders();
+    
+    // Initialize
+    updateNav();
+    loadChecklist();
+    loadTimeline();
+    loadBudget();
+    loadReminders();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+}
+</script>
+
+</body>
+</html>
