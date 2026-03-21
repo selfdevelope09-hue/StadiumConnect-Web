@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StadiumConnect | India's Premier Event Platform</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001a4d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: #fff; line-height: 1.6; }
+        nav { display: flex; justify-content: space-between; padding: 20px 40px; position: fixed; width: 100%; background: rgba(0,0,0,0.95); z-index: 1000; backdrop-filter: blur(10px); }
+        nav a { color: #fff; margin-left: 25px; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        nav a:hover { color: #007bff; }
+        section { padding: 120px 40px; max-width: 1200px; margin: auto; }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .connect { font-size: 4.5rem; font-weight: 900; letter-spacing: 5px; background: linear-gradient(135deg, #fff, #007bff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h1 { font-size: 3rem; margin-top: 20px; }
+        .tagline { color: #007bff; font-size: 1.2rem; margin: 20px 0; }
+        .about-text { max-width: 800px; margin: 20px auto; color: #aaa; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
+        .card { padding: 30px; border: 1px solid #222; background: #0a0a0a; border-radius: 1rem; transition: 0.3s; text-align: center; }
+        .card:hover { transform: translateY(-10px); border-color: #007bff; box-shadow: 0 10px 30px rgba(0,123,255,0.1); }
+        .team { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
+        .member { text-align: center; padding: 20px; background: #0a0a0a; border-radius: 1rem; min-width: 200px; }
+        .member h3 { color: #007bff; }
+        .member span { color: #888; font-size: 0.9rem; }
+        form { display: flex; flex-direction: column; gap: 15px; max-width: 500px; margin-top: 30px; }
+        input, textarea, select { padding: 12px; background: #111; border: 1px solid #333; border-radius: 0.5rem; color: #fff; }
+        button { padding: 12px; background: #007bff; border: none; border-radius: 0.5rem; color: #fff; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0056b3; }
+        .explore-btn { display: inline-block; background: #007bff; color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; margin: 20px auto; font-weight: 600; transition: 0.3s; }
+        .explore-btn:hover { background: #0056b3; transform: scale(1.05); }
+        footer { text-align: center; padding: 40px; color: #555; border-top: 1px solid #222; }
+        .admin-btn { position: fixed; bottom: 20px; right: 20px; background: #000; color: #ffd966; padding: 8px 15px; font-size: 12px; border-radius: 5px; text-decoration: none; z-index: 999; border: 1px solid #ffd966; }
+        @media (max-width: 768px) { nav { padding: 15px 20px; } nav a { margin-left: 15px; font-size: 14px; } .connect { font-size: 2.5rem; } h1 { font-size: 1.8rem; } section { padding: 80px 20px; } }
+    </style>
+</head>
+<body>
 
+<nav>
+    <div><b style="font-size:1.2rem;">🏟️ STADIUMCONNECT</b></div>
+    <div>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#team">Team</a>
+        <a href="#contact">Contact</a>
+        <a href="directory.html">Vendors</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+    </div>
+</nav>
+
+<section class="hero">
+    <div class="connect">STADIUMCONNECT</div>
+    <h1>India's Largest Event Infrastructure Platform</h1>
+    <p class="tagline">Book Stadiums • Hire Vendors • Plan Events</p>
+    <p class="about-text">Connect with premium stadiums, decorators, caterers, photographers, and event planners across India. One platform for all your event needs.</p>
+    <a href="directory.html" class="explore-btn">Explore Vendors →</a>
+</section>
+
+<section id="about">
+    <h2 style="color:#007bff;">About Us</h2>
+    <p class="about-text" style="margin-top:20px;">StadiumConnect is India's premier event infrastructure platform founded by Atharva Darshanwar and Aditya Kharwade. We connect stadiums, vendors, decorators, and event planners into one seamless network.</p>
+    <p class="about-text">Our mission is to maximize stadium utilization and provide event organizers with premium venue options at competitive prices. We're building the largest event ecosystem in India.</p>
+</section>
+
+<section id="services">
+    <h2 style="color:#007bff;">Our Services</h2>
+    <div class="grid">
+        <div class="card">🏟️ Stadium Booking</div>
+        <div class="card">🎨 Decorators</div>
+        <div class="card">🍽️ Caterers</div>
+        <div class="card">📸 Photographers</div>
+        <div class="card">🎵 Band Baja</div>
+        <div class="card">💒 Wedding Venues</div>
+    </div>
+</section>
+
+<section id="team">
+    <h2 style="color:#007bff;">Leadership Team</h2>
+    <div class="team">
+        <div class="member"><h3>Atharva Darshanwar</h3><span>Founder & CEO</span></div>
+        <div class="member"><h3>Aditya Kharwade</h3><span>Co-Founder & Marketing Director</span></div>
+        <div class="member"><h3>Yash Gore</h3><span>Field Operations Head</span></div>
+        <div class="member"><h3>Omsai Kaitikwar</h3><span>Partnerships & Growth</span></div>
+    </div>
+</section>
+
+<section style="text-align:center;">
+    <h2 style="color:#007bff;">List Your Services</h2>
+    <p class="about-text">Want to grow your business? Join StadiumConnect and get premium event bookings. No joining fee, pay only after confirmed bookings.</p>
+    <a href="https://forms.gle/t7oc3SeNvCMbdCVX7" target="_blank" class="explore-btn" style="background:#28a745;">Register as Vendor →</a>
+</section>
+
+<section id="contact">
+    <h2 style="color:#007bff;">Start Your Event</h2>
+    <form action="https://formspree.io/f/mreydnjd" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="tel" name="phone" placeholder="Phone Number" required>
+        <select name="service" required><option value="">Select Service</option><option>Stadium Booking</option><option>Decorators</option><option>Caterers</option><option>Photographers</option><option>Band Baja</option></select>
+        <textarea name="message" rows="3" placeholder="Describe your requirement"></textarea>
+        <button type="submit">Submit →</button>
+    </form>
+</section>
+
+<footer>
+    <p>© 2026 STADIUMCONNECT | A CONNECT Initiative</p>
+</footer>
+
+<a href="admin-login.html" class="admin-btn">🔒 Admin</a>
+
+<script>
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/service-worker.js'); }
+</script>
+
+</body>
+</html>
