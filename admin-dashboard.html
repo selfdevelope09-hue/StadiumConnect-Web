@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | StadiumConnect</title>
+    <script src="admin-auth.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f5f5; }
+        .admin-header { background: #000000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .admin-header h1 { color: white; font-size: 1.5rem; }
+        .admin-header a { color: white; text-decoration: none; background: #001a4d; padding: 0.5rem 1rem; border-radius: 0.5rem; }
+        .container { max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .stat-card h3 { color: #666; font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .stat-number { font-size: 2rem; font-weight: 700; color: #001a4d; }
+        .tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem; flex-wrap: wrap; }
+        .tab-btn { background: none; border: none; padding: 0.6rem 1.5rem; font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 0.5rem; }
+        .tab-btn.active { background: #001a4d; color: white; }
+        .table-container { background: white; border-radius: 1rem; padding: 1.5rem; overflow-x: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #001a4d; }
+        .status-badge { padding: 0.3rem 0.8rem; border-radius: 2rem; font-size: 0.75rem; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #d4edda; color: #155724; }
+        .action-btn { background: #001a4d; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 0.3rem; cursor: pointer; margin-right: 0.3rem; font-size: 0.75rem; }
+        .action-btn.confirm { background: #28a745; }
+        .action-btn.cancel { background: #dc3545; }
+        .empty-state { text-align: center; padding: 3rem; color: #999; }
+        @media (max-width: 768px) { th, td { padding: 0.5rem; font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+
+<div class="admin-header">
+    <h1>🏟️ STADIUMCONNECT | Admin Dashboard</h1>
+    <div>
+        <a href="admin.html">Vendor Management</a>
+        <a href="directory.html" style="margin-left:0.5rem;">View Website</a>
+        <a href="#" onclick="logoutAdmin()" style="margin-left:0.5rem; background:#dc3545;">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="stats-grid">
+        <div class="stat-card"><h3>Total Bookings</h3><div class="stat-number" id="totalBookings">0</div></div>
+        <div class="stat-card"><h3>Pending</h3><div class="stat-number" id="pendingBookings">0</div></div>
+        <div class="stat-card"><h3>Confirmed</h3><div class="stat-number" id="confirmedBookings">0</div></div>
+        <div class="stat-card"><h3>Total Users</h3><div class="stat-number" id="totalUsers">0</div></div>
+        <div class="stat-card"><h3>Total Vendors</h3><div class="stat-number" id="totalVendors">0</div></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('bookings')">📋 Bookings</button>
