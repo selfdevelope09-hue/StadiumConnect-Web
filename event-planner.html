@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Planner | StadiumConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .planner-container { display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; padding: 2rem; }
+        .checklist { background: white; border-radius: 1rem; padding: 1.5rem; }
+        .timeline { background: white; border-radius: 1rem; padding: 1.5rem; }
+        .checklist-item { display: flex; align-items: center; gap: 1rem; padding: 0.8rem; border-bottom: 1px solid #eee; }
+        .checklist-item input { width: 20px; height: 20px; }
+        .progress-bar { background: #e0e0e0; border-radius: 1rem; height: 10px; margin: 1rem 0; }
+        .progress-fill { background: #28a745; border-radius: 1rem; height: 100%; width: 0%; }
+        .timeline-item { padding: 1rem; border-left: 3px solid #001a4d; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="main-header"><div class="logo"><h1>🏟️ STADIUMCONNECT</h1></div><div class="nav-links" id="navLinks"></div></header>
+    <div class="container"><h1>📋 Event Planning Checklist</h1>
+    <div class="planner-container">
+        <div class="checklist"><h3>✅ Pre-Event Checklist</h3><div id="checklist"></div><div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div><div id="progressPercent">0% Complete</div></div>
+        <div class="timeline"><h3>📅 Event Timeline</h3><div id="timeline"></div></div>
+    </div></div>
+    <script src="script.js"></script>
+    <script>
+        const checklistItems = ["Select Event Date", "Book Stadium", "Book Caterer", "Book Decorator", "Book Photographer", "Book Band", "Send Invitations", "Finalize Menu", "Sound Check", "Rehearsal"];
+        function loadChecklist() { const saved = JSON.parse(localStorage.getItem('eventChecklist') || '[]'); const container = document.getElementById('checklist'); container.innerHTML = checklistItems.map((item,i) => `<div class="checklist-item"><input type="checkbox" onchange="updateProgress()" ${saved.includes(i)?'checked':''} data-index="${i}"><span>${item}</span></div>`).join(''); updateProgress(); }
+        function updateProgress() { const checks = document.querySelectorAll('#checklist input:checked'); const percent = (checks.length / checklistItems.length) * 100; document.getElementById('progressFill').style.width = percent + '%'; document.getElementById('progressPercent').innerText = Math.round(percent) + '% Complete'; const completed = Array.from(checks).map(c=>parseInt(c.dataset.index)); localStorage.setItem('eventChecklist', JSON.stringify(completed)); }
+        function loadTimeline() { const timeline = document.getElementById('timeline'); const days = [30,25,20,15,10,7,5,3,1,0]; timeline.innerHTML = checklistItems.map((item,i) => `<div class="timeline-item"><strong>${days[i]} days before</strong><br>${item}</div>`).join(''); }
+        loadChecklist(); loadTimeline();
+    </script>
+</body>
+</html>
