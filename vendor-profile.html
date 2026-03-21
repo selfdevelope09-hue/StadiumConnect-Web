@@ -1,1 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StadiumConnect | Vendor Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background: #FFFFFF;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        .profile-header {
+            background: #000000;
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo h1 {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+        }
+
+        .logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+        }
+
+        .back-home {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            text-decoration: none;
+        }
+
+        .back-home:hover {
+            background: #FFFFFF;
+            color: #000000;
+        }
+
+        .profile-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .vendor-profile-card {
+            background: #ffffff;
+            border: 1px solid #e8e8e8;
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .vendor-banner {
+            background: linear-gradient(135deg, #001a4d, #000033);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .vendor-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .vendor-banner h1 {
+            color: #FFFFFF;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .vendor-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            color: #FFFFFF;
+            font-size: 0.8rem;
+        }
+
+        .vendor-details {
+            padding: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 1rem;
+        }
+
+        .detail-label {
+            width: 120px;
+            font-weight: 600;
+            color: #001a4d;
+        }
+
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+
+        .description-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 1rem;
+        }
+
+        .description-section h3 {
+            color: #001a4d;
+            margin-bottom: 0.8rem;
+        }
+
+        .description-section p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .photos-section {
+            margin-top: 2rem;
+        }
+
+        .photos-section h3 {
+            color: #001a4d;
+            margin-bottom: 1rem;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .photo-card {
+            background: #f8f9fa;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .photo-card .caption {
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .no-photos {
+            background: #f8f9fa;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 1rem;
+            color: #999;
+        }
+
+        .call-section {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .call-btn {
+            background: linear-gradient(135deg, #001a4d, #000033);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #FFFFFF;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .call-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(0, 26, 77, 0.3);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        /* ========= LIGHTBOX / MODAL FOR BIG PHOTO ========= */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        .lightbox .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 10000;
+        }
+
+        .lightbox .close-lightbox:hover {
+            color: #ffd966;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 1rem;
+            }
+            .detail-row {
+                flex-direction: column;
+            }
+            .detail-label {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            .photo-card img {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-header">
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Vendor Profile</p>
+    </div>
+    <a href="directory.html" class="back-home">← Back to Directory</a>
+</div>
+
+<div class="profile-container" id="profileContainer">
+    <div class="error-message">Loading vendor profile...</div>
+</div>
+
+<!-- Lightbox Modal for Big Photo -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <button class="close-lightbox" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImage" src="" alt="Full size image">
+</div>
+
+<script>
+    // Load photos from localStorage
+    function loadVendorPhotos(vendorId) {
+        const saved = localStorage.getItem('vendorPhotos');
+        if (saved) {
+            const allPhotos = JSON.parse(saved);
+            return allPhotos[vendorId] || [];
+        }
+        return [];
+    }
+
+    // Open big photo
+    function openLightbox(imageUrl) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        lightboxImage.src = imageUrl;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close big photo
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function loadVendorProfile() {
+        const vendorData = localStorage.getItem('selectedVendor');
+        
+        if (!vendorData) {
+            document.getElementById('profileContainer').innerHTML = `
+                <div class="error-message">
+                    <h2>No vendor selected</h2>
+                    <p>Please go back and select a vendor to view their profile.</p>
+                    <a href="directory.html" style="display: inline-block; margin-top: 1rem; color: #001a4d;">← Back to Directory</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const vendor = JSON.parse(vendorData);
+        
+        // Load photos
+        const vendorPhotos = loadVendorPhotos(vendor.id);
+        
+        const categoryIcons = {
+            Decorator: "🎨",
+            Caterer: "🍽️",
+            Photographer: "📸",
+            "Band Baja": "🎵"
+        };
+        
+        // Photos HTML - with click to zoom
+        let photosHTML = '';
+        if (vendorPhotos && vendorPhotos.length > 0) {
+            photosHTML = `
+                <div class="photos-grid">
+                    ${vendorPhotos.map((photo, index) => `
+                        <div class="photo-card" onclick="openLightbox('${photo}')">
+                            <img src="${photo}" alt="Work photo ${index + 1}">
+                            <div class="caption">🔍 Click to Zoom</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } else {
+            photosHTML = `
+                <div class="no-photos">
+                    📸 No photos uploaded yet
+                    <br>
+                    <small>Go to Admin Panel → Select Vendor → Add Photos</small>
+                </div>
+            `;
+        }
+        
+        const profileHTML = `
+            <div class="vendor-profile-card">
+                <div class="vendor-banner">
+                    <div class="vendor-icon">${categoryIcons[vendor.categoryName] || "🏆"}</div>
+                    <h1>${vendor.name}</h1>
+                    <div class="vendor-badge">${vendor.categoryName} • ⭐ ${vendor.rating}</div>
+                </div>
+                
+                <div class="vendor-details">
+                    <div class="detail-row">
+                        <div class="detail-label">📅 Experience</div>
+                        <div class="detail-value">${vendor.experience}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">📍 Location</div>
+                        <div class="detail-value">${vendor.location}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">💰 Price Range</div>
+                        <div class="detail-value">${vendor.priceRange}</div>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">📞 Contact</div>
+                        <div class="detail-value">${vendor.phone}</div>
+                    </div>
+                    
+                    <div class="description-section">
+                        <h3>📖 About ${vendor.name}</h3>
+                        <p>${vendor.description || "Professional vendor with years of experience in the industry."}</p>
+                    </div>
+                    
+                    <div class="photos-section">
+                        <h3>📷 Work Portfolio</h3>
+                        ${photosHTML}
+                    </div>
+                    
+                    <div class="call-section">
+                        <button class="call-btn" onclick="makeCall('${vendor.phone}')">
+                            📞 Call Agent Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('profileContainer').innerHTML = profileHTML;
+    }
+    
+    function makeCall(phoneNumber) {
+        window.location.href = `tel:${phoneNumber}`;
+    }
+    
+    loadVendorProfile();
+</script>
+
+</body>
+</html>
