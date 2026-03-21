@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist | StadiumConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; padding: 2rem; }
+        .wishlist-card { background: white; border-radius: 1rem; padding: 1.5rem; border: 1px solid #eee; }
+        .remove-btn { background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin-top: 1rem; }
+        .empty-wishlist { text-align: center; padding: 3rem; color: #999; }
+    </style>
+</head>
+<body>
+    <header class="main-header"><div class="logo"><h1>🏟️ STADIUMCONNECT</h1></div><div class="nav-links" id="navLinks"></div></header>
+    <div class="container"><h1>❤️ My Wishlist</h1><div id="wishlistGrid"></div></div>
+    <script src="script.js"></script>
+    <script>
+        function loadWishlist() {
+            const user = getCurrentUser();
+            if (!user) { window.location.href = 'login.html'; return; }
+            const wishlist = JSON.parse(localStorage.getItem(`wishlist_${user.id}`) || '[]');
+            const grid = document.getElementById('wishlistGrid');
+            if (wishlist.length === 0) { grid.innerHTML = '<div class="empty-wishlist">📭 No saved vendors yet. Browse vendors and click ❤️ to save.</div>'; return; }
+            grid.innerHTML = wishlist.map(v => `
+                <div class="wishlist-card">
+                    <h3>${v.name}</h3>
+                    <p>⭐ ${v.rating} | ${v.category}</p>
+                    <p>📍 ${v.location}</p>
+                    <button onclick="viewVendor('${v.id}')">View Profile</button>
+                    <button class="remove-btn" onclick="removeFromWishlist('${v.id}')">Remove</button>
+                </div>
+            `).join('');
+        }
+        function viewVendor(id) { localStorage.setItem('selectedVendorId', id); window.location.href = 'vendor-profile.html'; }
+        function removeFromWishlist(id) { let w = JSON.parse(localStorage.getItem(`wishlist_${getCurrentUser().id}`) || '[]'); w = w.filter(v => v.id != id); localStorage.setItem(`wishlist_${getCurrentUser().id}`, JSON.stringify(w)); loadWishlist(); }
+        loadWishlist();
+    </script>
+</body>
+</html>
