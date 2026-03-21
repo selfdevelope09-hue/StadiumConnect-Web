@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>StadiumConnect | Vendor Directory</title>
     
-    <!-- PWA CODES -->
+    <!-- PWA MANIFEST -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#001a4d">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -31,6 +31,7 @@
             flex-wrap: wrap;
         }
 
+        /* LEFT SIDE - SOLID BLACK */
         .vendor-sidebar {
             width: 280px;
             background: #000000;
@@ -93,6 +94,7 @@
             font-size: 1.5rem;
         }
 
+        /* RIGHT SIDE */
         .vendor-main {
             flex: 1;
             margin-left: 280px;
@@ -101,6 +103,7 @@
             min-height: 100vh;
         }
 
+        /* Search Bar */
         .search-section {
             max-width: 500px;
             margin-left: auto;
@@ -130,6 +133,7 @@
             margin-right: 10px;
         }
 
+        /* City Grid */
         .cities-title {
             font-size: 1.8rem;
             font-weight: 700;
@@ -174,6 +178,7 @@
             margin-top: 0.3rem;
         }
 
+        /* Vendors Section */
         .vendors-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -274,21 +279,47 @@
         }
 
         .book-btn {
-            margin-top: 0.8rem;
-            padding: 0.6rem;
-            background: #001a4d;
-            text-align: center;
-            border-radius: 0.5rem;
+            flex: 1;
+            background: #28a745;
             color: white;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
             font-size: 0.85rem;
             font-weight: 600;
-            cursor: pointer;
+            text-align: center;
             transition: all 0.3s;
         }
 
         .book-btn:hover {
-            background: #000033;
+            background: #218838;
             transform: scale(1.02);
+        }
+
+        .wishlist-btn {
+            flex: 1;
+            background: #ffc107;
+            color: #000;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .wishlist-btn:hover {
+            background: #e0a800;
+            transform: scale(1.02);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
         }
 
         .no-results {
@@ -297,6 +328,7 @@
             color: #999;
         }
 
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -317,19 +349,12 @@
             max-width: 500px;
             width: 90%;
             padding: 2rem;
-            position: relative;
             animation: modalIn 0.3s ease;
         }
 
         @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .modal-header {
@@ -364,7 +389,9 @@
             color: #333;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -374,7 +401,7 @@
 
         .submit-booking {
             width: 100%;
-            background: #001a4d;
+            background: #28a745;
             color: white;
             border: none;
             padding: 0.8rem;
@@ -406,6 +433,7 @@
 <body>
 
 <div class="vendor-container">
+    <!-- LEFT SIDE - SOLID BLACK -->
     <div class="vendor-sidebar" id="sidebarCategories">
         <div class="sidebar-logo">
             <h2>🏟️ STADIUMCONNECT</h2>
@@ -413,6 +441,7 @@
         </div>
     </div>
 
+    <!-- RIGHT SIDE -->
     <div class="vendor-main">
         <div class="search-section">
             <div class="search-box">
@@ -436,6 +465,7 @@
     </div>
 </div>
 
+<!-- Booking Modal -->
 <div id="bookingModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -475,6 +505,16 @@
 </div>
 
 <script>
+    // ========= DATA LOADING =========
+    let categories = [];
+    let categoryDisplayNames = {};
+    let cities = [];
+    let cityDisplayNames = {};
+    let vendorsData = {};
+    let currentCategory = "";
+    let selectedCity = null;
+    let activeVendorCard = null;
+
     function loadData() {
         const savedCategories = localStorage.getItem('categories');
         const savedCategoryNames = localStorage.getItem('categoryDisplayNames');
@@ -501,11 +541,35 @@
         });
     }
 
+    // ========= USER FUNCTIONS =========
     function getCurrentUser() {
         const user = localStorage.getItem('currentUser');
         return user ? JSON.parse(user) : null;
     }
 
+    // ========= ADD TO WISHLIST FUNCTION =========
+    function addToWishlistFromCard(id, name, categoryName, rating, experience, location, priceRange) {
+        const user = getCurrentUser();
+        if (!user) {
+            alert('Please login to save vendors to wishlist');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const vendor = { id, name, categoryName, rating, experience, location, priceRange };
+        let wishlist = JSON.parse(localStorage.getItem(`wishlist_${user.id}`) || '[]');
+        
+        if (wishlist.find(v => v.id === id)) {
+            alert('❤️ Vendor already in your wishlist!');
+            return;
+        }
+        
+        wishlist.push(vendor);
+        localStorage.setItem(`wishlist_${user.id}`, JSON.stringify(wishlist));
+        alert(`✅ ${name} added to wishlist!`);
+    }
+
+    // ========= RENDER FUNCTIONS =========
     function renderCategories() {
         const sidebar = document.getElementById('sidebarCategories');
         const logoHtml = `
@@ -526,12 +590,7 @@
     }
 
     function getCategoryIcon(category) {
-        const icons = {
-            decorator: "🎨",
-            caterer: "🍽️",
-            photographer: "📸",
-            bandbaja: "🎵"
-        };
+        const icons = { decorator: "🎨", caterer: "🍽️", photographer: "📸", bandbaja: "🎵" };
         return icons[category] || "🏷️";
     }
 
@@ -575,7 +634,10 @@
                 <div class="vendor-location">📍 ${vendor.location}</div>
                 <div class="vendor-location">💰 ${vendor.priceRange}</div>
                 <div class="view-profile">🔍 View Full Profile →</div>
-                <div class="book-btn" onclick="event.stopPropagation(); openBookingModal('${vendor.id}', '${vendor.name}')">📅 Book Now</div>
+                <div class="button-group">
+                    <div class="book-btn" onclick="event.stopPropagation(); openBookingModal('${vendor.id}', '${vendor.name}')">📅 Book Now</div>
+                    <div class="wishlist-btn" onclick="event.stopPropagation(); addToWishlistFromCard('${vendor.id}', '${vendor.name}', '${categoryDisplayNames[currentCategory]}', '${vendor.rating}', '${vendor.experience}', '${vendor.location}', '${vendor.priceRange}')">❤️ Save</div>
+                </div>
             </div>
         `).join('');
     }
@@ -606,6 +668,7 @@
         window.location.href = 'vendor-profile.html';
     }
 
+    // ========= BOOKING FUNCTIONS =========
     function openBookingModal(vendorId, vendorName) {
         const user = getCurrentUser();
         if (!user) {
@@ -654,20 +717,7 @@
         renderCities();
     }
 
-    let categories = [];
-    let categoryDisplayNames = {};
-    let cities = [];
-    let cityDisplayNames = {};
-    let vendorsData = {};
-    let currentCategory = "";
-    let selectedCity = null;
-    let activeVendorCard = null;
-
-    loadData();
-    currentCategory = categories[0] || "decorator";
-    renderCategories();
-    renderCities();
-
+    // ========= EVENT LISTENERS =========
     document.getElementById('searchInput').addEventListener('input', function() {
         if (document.getElementById('citiesSection').style.display !== 'none') {
             renderCities();
@@ -710,9 +760,14 @@
             closeBookingModal();
         }
     }
+
+    // ========= INITIALIZE =========
+    loadData();
+    currentCategory = categories[0] || "decorator";
+    renderCategories();
+    renderCities();
 </script>
 
-<!-- ✅ SERVICE WORKER -->
 <script>
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js')
