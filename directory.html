@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<!-- Back4App Parse SDK -->
-<script src="https://cdn.parseplatform.org/parse-js-sdk/latest/parse.min.js"></script>
-<script src="back4app-config.js"></script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>StadiumConnect | Vendor Directory</title>
@@ -16,6 +11,10 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    
+    <!-- BACK4APP SDK -->
+    <script src="https://cdn.parseplatform.org/parse-js-sdk/latest/parse.min.js"></script>
+    <script src="back4app-config.js"></script>
     
     <style>
         * {
@@ -766,11 +765,30 @@
         }
     }
 
+    // ========= CLOUD SYNC FUNCTIONS =========
+    async function syncFromCloud() {
+        if (typeof loadVendorsFromCloud !== 'undefined') {
+            try {
+                const cloudVendors = await loadVendorsFromCloud();
+                if (Object.keys(cloudVendors).length > 0) {
+                    vendorsData = cloudVendors;
+                    localStorage.setItem('vendorsDataBackup', JSON.stringify(vendorsData));
+                    renderCategories();
+                    renderCities();
+                    console.log('✅ Synced from cloud successfully');
+                }
+            } catch (error) {
+                console.log('Cloud sync failed, using local data');
+            }
+        }
+    }
+
     // ========= INITIALIZE =========
     loadData();
     currentCategory = categories[0] || "decorator";
     renderCategories();
     renderCities();
+    syncFromCloud(); // ✅ Cloud sync call
 </script>
 
 <script>
