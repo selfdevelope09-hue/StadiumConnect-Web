@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>StadiumConnect - Royal Presence</title>
+    <title>StadiumConnect | Vendor Directory - Royal Partners</title>
     <style>
         * {
             margin: 0;
@@ -12,184 +12,241 @@
         }
 
         body {
-            background: #000000;
-            font-family: 'Poppins', 'Segoe UI', 'Playfair Display', serif;
+            background: #FFFFFF;
+            font-family: 'Poppins', 'Segoe UI', 'Inter', sans-serif;
             min-height: 100vh;
+        }
+
+        /* Main Container */
+        .vendor-container {
+            display: flex;
+            min-height: 100vh;
+            flex-wrap: wrap;
+        }
+
+        /* ========= LEFT SIDE - VENDOR CATEGORIES ========= */
+        .vendor-sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #001a4d 0%, #000033 100%);
             padding: 2rem 1.5rem;
-            position: relative;
-        }
-
-        /* Royal Pattern Overlay */
-        body::before {
-            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle at 10% 20%, rgba(0, 20, 50, 0.3) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+            height: 100vh;
+            overflow-y: auto;
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+            z-index: 10;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Royal Header */
-        .header {
+        /* Royal Logo in Sidebar */
+        .sidebar-logo {
             text-align: center;
-            margin-bottom: 4rem;
-            position: relative;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
         }
 
-        .royal-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            letter-spacing: 5px;
-        }
-
-        .header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFD966 0%, #FFB347 50%, #FF8C00 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            font-family: 'Playfair Display', serif;
+        .sidebar-logo h2 {
+            color: #ffd966;
+            font-size: 1.5rem;
             letter-spacing: 2px;
         }
 
-        .header .tagline {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            border-top: 1px solid rgba(255, 215, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-            display: inline-block;
-            padding: 0.5rem 2rem;
+        .sidebar-logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
         }
 
-        /* Cities Grid */
-        .cities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+        /* Category Buttons - WHITE TEXT */
+        .category-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
         }
 
-        /* Royal City Card */
-        .city-card {
-            background: linear-gradient(145deg, #0a0a0a 0%, #050505 100%);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 2rem;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            backdrop-filter: blur(5px);
+        .category-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd966;
+            transform: translateX(5px);
         }
 
-        /* Royal Border Effect */
-        .city-card::after {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: -1px;
-            right: -1px;
-            bottom: -1px;
-            background: linear-gradient(135deg, #FFD966, #FFB347, #FF8C00);
-            border-radius: 2rem;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .city-card:hover::after {
-            opacity: 1;
-        }
-
-        .city-card:hover {
-            transform: translateY(-10px);
+        .category-btn.active {
+            background: linear-gradient(135deg, #ffd966, #ffb347);
+            color: #000033;
             border-color: transparent;
         }
 
-        /* Royal Crown Icon */
-        .city-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+        .category-icon {
+            font-size: 1.5rem;
         }
 
-        /* NAVY BLUE CITY NAME - Main Requirement */
-        .city-name {
-            font-size: 2rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #003366 0%, #001a4d 50%, #000033 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.75rem;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 5px rgba(0, 51, 102, 0.3);
+        /* ========= RIGHT SIDE - MAIN CONTENT ========= */
+        .vendor-main {
+            flex: 1;
+            margin-left: 280px;
+            padding: 2rem;
+            background: #FFFFFF;
+            min-height: 100vh;
         }
 
-        /* Alternative solid navy blue - if gradient doesn't work */
-        .city-name-solid {
-            color: #003366;
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.75rem;
-            font-family: 'Playfair Display', serif;
+        /* Search Bar */
+        .search-section {
+            max-width: 500px;
+            margin-left: auto;
+            margin-bottom: 2rem;
         }
 
-        .city-desc {
-            font-size: 0.85rem;
-            color: #ffd966;
-            margin-bottom: 1.5rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* WHITE VIEW BUTTON - Main Requirement */
-        .view-btn {
-            background: transparent;
-            border: 2px solid #ffffff;
-            color: #ffffff;
-            padding: 0.9rem 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 3rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .search-box {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            background: #f5f5f5;
+            border-radius: 3rem;
+            padding: 0.8rem 1.5rem;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
         }
 
-        .view-btn:hover {
+        .search-box:focus-within {
+            border-color: #ffd966;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+        }
+
+        .search-icon {
+            font-size: 1.2rem;
+            color: #888;
+            margin-right: 10px;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-box input::placeholder {
+            color: #aaa;
+        }
+
+        /* City Grid */
+        .cities-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #001a4d;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #ffd966;
+            padding-left: 1rem;
+        }
+
+        .cities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .city-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 1px solid #e8e8e8;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .city-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd966;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .city-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #001a4d;
+        }
+
+        .city-count {
+            font-size: 0.8rem;
+            color: #ffb347;
+            margin-top: 0.3rem;
+        }
+
+        /* Vendors List */
+        .vendors-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #001a4d;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vendor-card {
             background: #ffffff;
-            color: #000000;
-            transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            border: 1px solid #e8e8e8;
+            border-radius: 1rem;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .view-btn:active {
-            transform: scale(0.98);
+        .vendor-card:hover {
+            border-color: #ffd966;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         }
 
-        /* Modal Popup - Royal Theme */
+        .vendor-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #001a4d;
+        }
+
+        .vendor-rating {
+            color: #ffb347;
+            font-size: 0.85rem;
+            margin: 0.5rem 0;
+        }
+
+        .vendor-location {
+            color: #666;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0.5rem 0;
+        }
+
+        .view-profile {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #f5f5f5;
+            text-align: center;
+            border-radius: 0.5rem;
+            color: #001a4d;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Modal - Vendor Profile */
         .modal {
             display: none;
             position: fixed;
@@ -197,27 +254,26 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.97);
-            backdrop-filter: blur(15px);
-            z-index: 2000;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 1rem;
         }
 
         .modal-content {
-            background: linear-gradient(145deg, #0f0f0f 0%, #080808 100%);
-            border: 1px solid #ffd966;
+            background: #ffffff;
             border-radius: 2rem;
-            max-width: 550px;
+            max-width: 900px;
             width: 100%;
             max-height: 85vh;
             overflow-y: auto;
-            animation: modalFadeIn 0.3s ease;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 215, 0, 0.1);
+            position: relative;
+            animation: modalIn 0.3s ease;
         }
 
-        @keyframes modalFadeIn {
+        @keyframes modalIn {
             from {
                 opacity: 0;
                 transform: scale(0.95);
@@ -229,19 +285,17 @@
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #003366, #001a4d);
+            background: linear-gradient(135deg, #001a4d, #000033);
             padding: 1.5rem;
             border-radius: 2rem 2rem 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #ffd966;
         }
 
         .modal-header h2 {
             color: #ffd966;
-            font-size: 1.8rem;
-            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
         }
 
         .close-modal {
@@ -250,401 +304,425 @@
             color: white;
             font-size: 2rem;
             cursor: pointer;
-            transition: transform 0.2s;
-            padding: 0 10px;
-        }
-
-        .close-modal:hover {
-            transform: rotate(90deg);
-            color: #ffd966;
         }
 
         .modal-body {
-            padding: 1.5rem;
+            padding: 2rem;
         }
 
-        .vendor-category {
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-            padding-bottom: 1rem;
-        }
-
-        .vendor-category h3 {
-            color: #ffd966;
-            font-size: 1.2rem;
+        .profile-detail {
             margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 0.8rem;
+            background: #f8f9fa;
+            border-radius: 0.8rem;
         }
 
-        .vendor-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
+        .profile-detail strong {
+            color: #001a4d;
+            display: inline-block;
+            width: 100px;
         }
 
-        .vendor-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 0.8rem 1rem;
-            border-radius: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.2s;
-        }
-
-        .vendor-item:hover {
-            background: rgba(255, 215, 0, 0.1);
-            transform: translateX(5px);
-        }
-
-        .vendor-name {
+        .call-agent-btn {
+            background: linear-gradient(135deg, #ffd966, #ffb347);
+            border: none;
+            padding: 1rem;
+            border-radius: 3rem;
+            font-size: 1rem;
             font-weight: 600;
-            color: white;
+            color: #000033;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 1.5rem;
+            transition: all 0.3s;
         }
 
-        .vendor-rating {
-            color: #ffd966;
-            font-size: 0.85rem;
+        .call-agent-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
         }
 
-        /* Scrollbar Styling */
-        .modal-content::-webkit-scrollbar {
-            width: 6px;
+        .photos-section {
+            margin-top: 1.5rem;
         }
 
-        .modal-content::-webkit-scrollbar-track {
-            background: #1a1a1a;
-            border-radius: 10px;
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 0.8rem;
         }
 
-        .modal-content::-webkit-scrollbar-thumb {
-            background: #ffd966;
-            border-radius: 10px;
+        .photo-placeholder {
+            background: #e0e0e0;
+            height: 100px;
+            border-radius: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.8rem;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            body {
+            .vendor-sidebar {
+                width: 100%;
+                position: relative;
+                height: auto;
                 padding: 1rem;
             }
-            .header h1 {
-                font-size: 2rem;
+            .vendor-main {
+                margin-left: 0;
+                padding: 1rem;
             }
-            .city-name, .city-name-solid {
-                font-size: 1.5rem;
+            .category-btn {
+                display: inline-flex;
+                width: auto;
+                margin: 0.5rem;
             }
-            .cities-grid {
-                gap: 1rem;
+            .sidebar-logo {
+                display: none;
             }
         }
 
-        /* Stats Section */
-        .stats-section {
-            margin-top: 3rem;
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        /* Loading */
+        .loading {
             text-align: center;
             padding: 2rem;
-            border-top: 1px solid rgba(255, 215, 0, 0.2);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #ffd966;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 1px;
+            color: #001a4d;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Royal Header -->
-    <div class="header">
-        <div class="royal-icon">👑</div>
-        <h1>STADIUMCONNECT</h1>
-        <div class="tagline">The Royal Presence</div>
-        <p style="margin-top: 1rem; color: rgba(255,255,255,0.5); font-size: 0.9rem;">Your Premier Stadium Booking Partner</p>
+<div class="vendor-container">
+    <!-- LEFT SIDE - VENDOR CATEGORIES -->
+    <div class="vendor-sidebar">
+        <div class="sidebar-logo">
+            <h2>🏟️ STADIUMCONNECT</h2>
+            <p>Royal Vendor Partners</p>
+        </div>
+        
+        <button class="category-btn active" data-category="decorator">
+            <span class="category-icon">🎨</span>
+            <span>Decorators</span>
+        </button>
+        <button class="category-btn" data-category="caterer">
+            <span class="category-icon">🍽️</span>
+            <span>Caterers</span>
+        </button>
+        <button class="category-btn" data-category="photographer">
+            <span class="category-icon">📸</span>
+            <span>Photographers</span>
+        </button>
+        <button class="category-btn" data-category="bandbaja">
+            <span class="category-icon">🎵</span>
+            <span>Band Baja</span>
+        </button>
     </div>
 
-    <!-- Cities Grid -->
-    <div class="cities-grid" id="citiesGrid">
-        <!-- Cities will be dynamically loaded or can be hardcoded -->
-    </div>
+    <!-- RIGHT SIDE - MAIN CONTENT -->
+    <div class="vendor-main">
+        <!-- SEARCH BAR -->
+        <div class="search-section">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search city... Nagpur, Yavatmal, Adilabad...">
+            </div>
+        </div>
 
-    <!-- Stats Section -->
-    <div class="stats-section">
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">STADIUMS</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">100+</div>
-                <div class="stat-label">VENDORS</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">EVENTS</div>
-            </div>
+        <!-- Cities Section -->
+        <div id="citiesSection">
+            <div class="cities-title">📍 Select Your City</div>
+            <div class="cities-grid" id="citiesGrid"></div>
+        </div>
+
+        <!-- Vendors Section -->
+        <div id="vendorsSection" style="display: none;">
+            <div class="vendors-title" id="vendorsTitle"></div>
+            <div class="vendors-grid" id="vendorsGrid"></div>
         </div>
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal for Vendor Profile -->
 <div id="vendorModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2 id="modalCityName">City Name</h2>
+            <h2 id="modalVendorName">Vendor Name</h2>
             <button class="close-modal" onclick="closeModal()">&times;</button>
         </div>
-        <div class="modal-body" id="modalBody">
-            <!-- Vendor details will be loaded here -->
-        </div>
+        <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
 
 <script>
-    // Complete Vendor Data for all cities
-    const citiesData = {
-        nagpur: {
-            name: "Nagpur",
-            nameSolid: "Nagpur",
-            vendors: {
-                caterers: [
-                    { name: "Orange City Caterers", rating: "4.8 ★", experience: "15+ years" },
-                    { name: "Vidarbha Delights", rating: "4.6 ★", experience: "10+ years" },
-                    { name: "Royal Bhojanalay", rating: "4.7 ★", experience: "12+ years" },
-                    { name: "Saoji Special Events", rating: "4.9 ★", experience: "20+ years" }
-                ],
-                decorators: [
-                    { name: "Fusion Decor Nagpur", rating: "4.7 ★", specialty: "Wedding & Corporate" },
-                    { name: "EventCrafters", rating: "4.5 ★", specialty: "Theme Based" },
-                    { name: "Royal Floral", rating: "4.8 ★", specialty: "Floral Decor" }
-                ],
-                sound_light: [
-                    { name: "DJ Dhruv Entertainment", rating: "4.9 ★", equipment: "JBL Professional" },
-                    { name: "Beat Factory", rating: "4.7 ★", equipment: "Bose & Martin" }
-                ],
-                photography: [
-                    { name: "Shutter Stories", rating: "4.8 ★", style: "Candid & Traditional" },
-                    { name: "Focus Events Nagpur", rating: "4.6 ★", style: "Cinematic" }
-                ]
-            }
+    // ========= COMPLETE VENDOR DATABASE =========
+    const vendorsData = {
+        // DECORATORS
+        decorator: {
+            nagpur: [
+                { name: "Royal Floral Decor", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹25,000 - ₹1,50,000", phone: "9423281086", photos: [] },
+                { name: "Fusion Event Decor", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", photos: [] },
+                { name: "Wedding Wizards", experience: "15 years", location: "Civil Lines, Nagpur", priceRange: "₹50,000 - ₹2,50,000", phone: "9423281086", photos: [] }
+            ],
+            pandharkawada: [
+                { name: "Kawada Royal Decor", experience: "6 years", location: "Main Road, Pandharkawada", priceRange: "₹15,000 - ₹60,000", phone: "9423281086", photos: [] },
+                { name: "Shree Decorators", experience: "5 years", location: "Bus Stand Area", priceRange: "₹10,000 - ₹40,000", phone: "9423281086", photos: [] }
+            ],
+            yavatmal: [
+                { name: "Yavatmal Event Makers", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹20,000 - ₹1,00,000", phone: "9423281086", photos: [] },
+                { name: "Royal Touch Decor", experience: "7 years", location: "Tilak Road, Yavatmal", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", photos: [] }
+            ],
+            adilabad: [
+                { name: "Adilabad Royal Decor", experience: "8 years", location: "Main Road, Adilabad", priceRange: "₹12,000 - ₹70,000", phone: "9423281086", photos: [] },
+                { name: "Telangana Decorators", experience: "5 years", location: "New Town, Adilabad", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", photos: [] }
+            ],
+            nanded: [
+                { name: "Nanded Royal Events", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹18,000 - ₹90,000", phone: "9423281086", photos: [] },
+                { name: "Sai Decorators", experience: "6 years", location: "Station Road, Nanded", priceRange: "₹12,000 - ₹60,000", phone: "9423281086", photos: [] }
+            ],
+            kinwat: [
+                { name: "Kinwat Decor House", experience: "4 years", location: "Main Bazar, Kinwat", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", photos: [] }
+            ]
         },
-        pandharkawada: {
-            name: "Pandharkawada",
-            nameSolid: "Pandharkawada",
-            vendors: {
-                caterers: [
-                    { name: "Kawada Kitchen", rating: "4.5 ★", experience: "8+ years" },
-                    { name: "Rural Delight Caterers", rating: "4.4 ★", experience: "6+ years" },
-                    { name: "Shree Sai Catering", rating: "4.6 ★", experience: "10+ years" }
-                ],
-                decorators: [
-                    { name: "Kawada Event Planners", rating: "4.3 ★", specialty: "Traditional" },
-                    { name: "Royal Touch Decor", rating: "4.5 ★", specialty: "Marathi Theme" }
-                ],
-                sound_light: [
-                    { name: "Sound Storm Pandharkawada", rating: "4.4 ★", equipment: "Local & Professional" },
-                    { name: "DJ Ganesh Events", rating: "4.5 ★", equipment: "Premium Sound" }
-                ],
-                photography: [
-                    { name: "Kawada Memories", rating: "4.4 ★", style: "Traditional & Candid" }
-                ]
-            }
+        // CATERERS
+        caterer: {
+            nagpur: [
+                { name: "Orange City Caterers", experience: "15 years", location: "Dharampeth, Nagpur", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", photos: [] },
+                { name: "Vidarbha Delights", experience: "12 years", location: "Sadar, Nagpur", priceRange: "₹250 - ₹1000 per plate", phone: "9423281086", photos: [] },
+                { name: "Royal Bhojanalay", experience: "20 years", location: "Civil Lines, Nagpur", priceRange: "₹300 - ₹1200 per plate", phone: "9423281086", photos: [] }
+            ],
+            pandharkawada: [
+                { name: "Kawada Kitchen", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹150 - ₹500 per plate", phone: "9423281086", photos: [] },
+                { name: "Rural Delight", experience: "6 years", location: "Bus Stand Area", priceRange: "₹120 - ₹400 per plate", phone: "9423281086", photos: [] }
+            ],
+            yavatmal: [
+                { name: "Yavatmal Garden Caterers", experience: "12 years", location: "Civil Lines, Yavatmal", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", photos: [] },
+                { name: "Cotton City Kitchen", experience: "9 years", location: "Tilak Road, Yavatmal", priceRange: "₹150 - ₹600 per plate", phone: "9423281086", photos: [] }
+            ],
+            adilabad: [
+                { name: "Hyderabadi Zaika", experience: "11 years", location: "Main Road, Adilabad", priceRange: "₹200 - ₹800 per plate", phone: "9423281086", photos: [] },
+                { name: "Telangana Kitchen", experience: "8 years", location: "New Town, Adilabad", priceRange: "₹150 - ₹600 per plate", phone: "9423281086", photos: [] }
+            ],
+            nanded: [
+                { name: "Nanded Delight Caterers", experience: "10 years", location: "Gandhi Nagar, Nanded", priceRange: "₹180 - ₹700 per plate", phone: "9423281086", photos: [] },
+                { name: "Marathwada Kitchen", experience: "7 years", location: "Station Road, Nanded", priceRange: "₹150 - ₹550 per plate", phone: "9423281086", photos: [] }
+            ],
+            kinwat: [
+                { name: "Kinwat Bhojanalay", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹100 - ₹350 per plate", phone: "9423281086", photos: [] }
+            ]
         },
-        yavatmal: {
-            name: "Yavatmal",
-            nameSolid: "Yavatmal",
-            vendors: {
-                caterers: [
-                    { name: "Yavatmal Garden Caterers", rating: "4.6 ★", experience: "12+ years" },
-                    { name: "Cotton City Kitchen", rating: "4.5 ★", experience: "9+ years" },
-                    { name: "Maharashtra Bhojanalay", rating: "4.7 ★", experience: "15+ years" }
-                ],
-                decorators: [
-                    { name: "Yavatmal Event Decor", rating: "4.6 ★", specialty: "Modern & Traditional" },
-                    { name: "Dream Decorators", rating: "4.4 ★", specialty: "Wedding Special" },
-                    { name: "Royal Floral Yavatmal", rating: "4.7 ★", specialty: "Floral & Lighting" }
-                ],
-                sound_light: [
-                    { name: "DJ Yavatmal Beats", rating: "4.5 ★", equipment: "Professional Sound" },
-                    { name: "Light & Sound Co.", rating: "4.6 ★", equipment: "Premium Setup" }
-                ],
-                photography: [
-                    { name: "Yavatmal Frames", rating: "4.6 ★", style: "Candid & Traditional" },
-                    { name: "Memories by RK", rating: "4.5 ★", style: "Cinematic" }
-                ]
-            }
+        // PHOTOGRAPHERS
+        photographer: {
+            nagpur: [
+                { name: "Shutter Stories", experience: "10 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹80,000", phone: "9423281086", photos: [] },
+                { name: "Focus Events", experience: "8 years", location: "Sadar, Nagpur", priceRange: "₹12,000 - ₹60,000", phone: "9423281086", photos: [] },
+                { name: "Candid Moments", experience: "6 years", location: "Civil Lines, Nagpur", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", photos: [] }
+            ],
+            pandharkawada: [
+                { name: "Kawada Memories", experience: "5 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", photos: [] }
+            ],
+            yavatmal: [
+                { name: "Yavatmal Frames", experience: "7 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹45,000", phone: "9423281086", photos: [] },
+                { name: "Memories by RK", experience: "6 years", location: "Tilak Road, Yavatmal", priceRange: "₹8,000 - ₹40,000", phone: "9423281086", photos: [] }
+            ],
+            adilabad: [
+                { name: "Adilabad Captures", experience: "6 years", location: "Main Road, Adilabad", priceRange: "₹7,000 - ₹35,000", phone: "9423281086", photos: [] }
+            ],
+            nanded: [
+                { name: "Nanded Photography", experience: "8 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", photos: [] }
+            ],
+            kinwat: [
+                { name: "Kinwat Studio", experience: "3 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹20,000", phone: "9423281086", photos: [] }
+            ]
         },
-        adilabad: {
-            name: "Adilabad",
-            nameSolid: "Adilabad",
-            vendors: {
-                caterers: [
-                    { name: "Adilabad Delight Caterers", rating: "4.5 ★", experience: "7+ years" },
-                    { name: "Hyderabadi Zaika", rating: "4.7 ★", experience: "11+ years" },
-                    { name: "Telangana Kitchen", rating: "4.4 ★", experience: "8+ years" }
-                ],
-                decorators: [
-                    { name: "Adilabad Event Makers", rating: "4.4 ★", specialty: "Fusion Decor" },
-                    { name: "Royal Decor Adilabad", rating: "4.6 ★", specialty: "Telangana Style" }
-                ],
-                sound_light: [
-                    { name: "DJ Rocking Adilabad", rating: "4.5 ★", equipment: "JBL & Bose" },
-                    { name: "Sound Palace", rating: "4.4 ★", equipment: "Premium Sound" }
-                ],
-                photography: [
-                    { name: "Adilabad Captures", rating: "4.5 ★", style: "Candid" },
-                    { name: "Studio Moments", rating: "4.4 ★", style: "Traditional" }
-                ]
-            }
+        // BAND BAJA
+        bandbaja: {
+            nagpur: [
+                { name: "DJ Dhruv Entertainment", experience: "12 years", location: "Dharampeth, Nagpur", priceRange: "₹15,000 - ₹1,00,000", phone: "9423281086", photos: [] },
+                { name: "Royal Beats", experience: "10 years", location: "Sadar, Nagpur", priceRange: "₹12,000 - ₹80,000", phone: "9423281086", photos: [] },
+                { name: "Nagpur Band Group", experience: "15 years", location: "Civil Lines, Nagpur", priceRange: "₹20,000 - ₹1,50,000", phone: "9423281086", photos: [] }
+            ],
+            pandharkawada: [
+                { name: "Kawada Band", experience: "8 years", location: "Main Road, Pandharkawada", priceRange: "₹8,000 - ₹40,000", phone: "9423281086", photos: [] }
+            ],
+            yavatmal: [
+                { name: "Yavatmal Beats", experience: "10 years", location: "Civil Lines, Yavatmal", priceRange: "₹10,000 - ₹60,000", phone: "9423281086", photos: [] }
+            ],
+            adilabad: [
+                { name: "Adilabad Dhol Group", experience: "7 years", location: "Main Road, Adilabad", priceRange: "₹8,000 - ₹35,000", phone: "9423281086", photos: [] }
+            ],
+            nanded: [
+                { name: "Nanded Band Baja", experience: "9 years", location: "Gandhi Nagar, Nanded", priceRange: "₹10,000 - ₹50,000", phone: "9423281086", photos: [] }
+            ],
+            kinwat: [
+                { name: "Kinwat Dhol Tasha", experience: "5 years", location: "Main Bazar, Kinwat", priceRange: "₹5,000 - ₹25,000", phone: "9423281086", photos: [] }
+            ]
         }
     };
 
-    // Function to create city cards
-    function createCityCards() {
-        const citiesGrid = document.getElementById('citiesGrid');
+    // Cities List
+    const cities = ["nagpur", "pandharkawada", "yavatmal", "adilabad", "nanded", "kinwat"];
+    const cityDisplayNames = {
+        nagpur: "Nagpur", pandharkawada: "Pandharkawada", yavatmal: "Yavatmal",
+        adilabad: "Adilabad", nanded: "Nanded", kinwat: "Kinwat"
+    };
+
+    let currentCategory = "decorator";
+    let selectedCity = null;
+
+    // Render Cities
+    function renderCities() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const filteredCities = cities.filter(city => cityDisplayNames[city].toLowerCase().includes(searchTerm));
         
-        const cities = ['nagpur', 'pandharkawada', 'yavatmal', 'adilabad'];
+        const grid = document.getElementById('citiesGrid');
+        if (filteredCities.length === 0) {
+            grid.innerHTML = '<div class="no-results">No cities found</div>';
+            return;
+        }
         
-        citiesGrid.innerHTML = cities.map(city => `
-            <div class="city-card">
-                <div class="city-icon">🏟️</div>
-                <div class="city-name">${citiesData[city].name}</div>
-                <div class="city-desc">📍 Active Presence</div>
-                <button class="view-btn" onclick="openModal('${city}')">
-                    VIEW <span style="font-size: 1.1rem;">→</span>
-                </button>
+        grid.innerHTML = filteredCities.map(city => `
+            <div class="city-card" onclick="selectCity('${city}')">
+                <div class="city-name">🏟️ ${cityDisplayNames[city]}</div>
+                <div class="city-count">${vendorsData[currentCategory]?.[city]?.length || 0} vendors available</div>
             </div>
         `).join('');
     }
 
-    // Function to open modal with vendor details
-    function openModal(cityId) {
-        const city = citiesData[cityId];
-        if (!city) return;
+    // Select City - Show Vendors
+    function selectCity(city) {
+        selectedCity = city;
+        const vendors = vendorsData[currentCategory]?.[city] || [];
         
+        document.getElementById('citiesSection').style.display = 'none';
+        document.getElementById('vendorsSection').style.display = 'block';
+        
+        const categoryNames = { decorator: "Decorators", caterer: "Caterers", photographer: "Photographers", bandbaja: "Band Baja" };
+        document.getElementById('vendorsTitle').innerHTML = `🎨 ${categoryNames[currentCategory]} in ${cityDisplayNames[city]}`;
+        
+        const vendorsGrid = document.getElementById('vendorsGrid');
+        if (vendors.length === 0) {
+            vendorsGrid.innerHTML = '<div class="no-results">No vendors available in this city yet. Coming soon!</div>';
+            return;
+        }
+        
+        vendorsGrid.innerHTML = vendors.map((vendor, index) => `
+            <div class="vendor-card" onclick="openProfile('${currentCategory}', '${city}', ${index})">
+                <div class="vendor-name">${vendor.name}</div>
+                <div class="vendor-rating">⭐ ${vendor.experience}</div>
+                <div class="vendor-location">📍 ${vendor.location}</div>
+                <div class="vendor-location">💰 ${vendor.priceRange}</div>
+                <div class="view-profile">🔍 View Full Profile →</div>
+            </div>
+        `).join('');
+    }
+
+    // Open Vendor Profile Modal
+    function openProfile(category, city, index) {
+        const vendor = vendorsData[category][city][index];
         const modal = document.getElementById('vendorModal');
-        const modalCityName = document.getElementById('modalCityName');
+        
+        document.getElementById('modalVendorName').innerHTML = vendor.name;
+        
         const modalBody = document.getElementById('modalBody');
-        
-        modalCityName.innerHTML = `${city.name} 👑`;
-        
-        // Generate vendor HTML
-        let vendorsHTML = '';
-        
-        // Caterers Section
-        if (city.vendors.caterers) {
-            vendorsHTML += `
-                <div class="vendor-category">
-                    <h3>🍽️ PREMIUM CATERERS</h3>
-                    <div class="vendor-list">
-                        ${city.vendors.caterers.map(v => `
-                            <div class="vendor-item">
-                                <div class="vendor-name">${v.name}</div>
-                                <div class="vendor-rating">⭐ ${v.rating}</div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: #666; margin-left: 1rem;">${v.experience || v.specialty || ''}</div>
-                        `).join('')}
-                    </div>
+        modalBody.innerHTML = `
+            <div class="profile-detail"><strong>👤 Name:</strong> ${vendor.name}</div>
+            <div class="profile-detail"><strong>⭐ Experience:</strong> ${vendor.experience}</div>
+            <div class="profile-detail"><strong>📍 Location:</strong> ${vendor.location}</div>
+            <div class="profile-detail"><strong>💰 Price Range:</strong> ${vendor.priceRange}</div>
+            <div class="profile-detail"><strong>📞 Contact:</strong> ${vendor.phone}</div>
+            
+            <div class="photos-section">
+                <strong>📷 Work Portfolio</strong>
+                <div class="photos-grid">
+                    <div class="photo-placeholder">📸 Photo 1<br>(Coming Soon)</div>
+                    <div class="photo-placeholder">📸 Photo 2<br>(Coming Soon)</div>
+                    <div class="photo-placeholder">📸 Photo 3<br>(Coming Soon)</div>
                 </div>
-            `;
-        }
+                <p style="font-size: 0.7rem; color: #888; margin-top: 0.5rem;">*Photos will be uploaded soon</p>
+            </div>
+            
+            <button class="call-agent-btn" onclick="makeCall('${vendor.phone}')">
+                📞 Call Agent Now
+            </button>
+        `;
         
-        // Decorators Section
-        if (city.vendors.decorators) {
-            vendorsHTML += `
-                <div class="vendor-category">
-                    <h3>🎨 ROYAL DECORATORS</h3>
-                    <div class="vendor-list">
-                        ${city.vendors.decorators.map(v => `
-                            <div class="vendor-item">
-                                <div class="vendor-name">${v.name}</div>
-                                <div class="vendor-rating">⭐ ${v.rating}</div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: #666; margin-left: 1rem;">${v.specialty || ''}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Sound & Light Section
-        if (city.vendors.sound_light) {
-            vendorsHTML += `
-                <div class="vendor-category">
-                    <h3>🎵 SOUND & LIGHTING</h3>
-                    <div class="vendor-list">
-                        ${city.vendors.sound_light.map(v => `
-                            <div class="vendor-item">
-                                <div class="vendor-name">${v.name}</div>
-                                <div class="vendor-rating">⭐ ${v.rating}</div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: #666; margin-left: 1rem;">${v.equipment || ''}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Photography Section
-        if (city.vendors.photography) {
-            vendorsHTML += `
-                <div class="vendor-category">
-                    <h3>📸 PHOTOGRAPHY</h3>
-                    <div class="vendor-list">
-                        ${city.vendors.photography.map(v => `
-                            <div class="vendor-item">
-                                <div class="vendor-name">${v.name}</div>
-                                <div class="vendor-rating">⭐ ${v.rating}</div>
-                            </div>
-                            <div style="font-size: 0.75rem; color: #666; margin-left: 1rem;">${v.style || ''}</div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        modalBody.innerHTML = vendorsHTML || '<p style="color: white;">Vendor details coming soon...</p>';
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
-    
-    // Function to close modal
+
+    // Direct Call Function
+    function makeCall(phoneNumber) {
+        window.location.href = `tel:${phoneNumber}`;
+    }
+
+    // Close Modal
     function closeModal() {
-        const modal = document.getElementById('vendorModal');
-        modal.style.display = 'none';
+        document.getElementById('vendorModal').style.display = 'none';
         document.body.style.overflow = 'auto';
     }
-    
-    // Close modal when clicking outside
+
+    // Change Category
+    function changeCategory(category) {
+        currentCategory = category;
+        selectedCity = null;
+        
+        // Update active button
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            if (btn.dataset.category === category) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        
+        // Reset view
+        document.getElementById('citiesSection').style.display = 'block';
+        document.getElementById('vendorsSection').style.display = 'none';
+        renderCities();
+    }
+
+    // Search Function
+    document.getElementById('searchInput').addEventListener('input', function() {
+        if (document.getElementById('citiesSection').style.display !== 'none') {
+            renderCities();
+        }
+    });
+
+    // Event Listeners
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => changeCategory(btn.dataset.category));
+    });
+
+    // Back button to cities
+    window.goBackToCities = function() {
+        document.getElementById('citiesSection').style.display = 'block';
+        document.getElementById('vendorsSection').style.display = 'none';
+        renderCities();
+    };
+
+    // Initialize
+    renderCities();
+
+    // Close modal on outside click
     window.onclick = function(event) {
         const modal = document.getElementById('vendorModal');
-        if (event.target === modal) {
-            closeModal();
-        }
-    }
-    
-    // Initialize page
-    createCityCards();
+        if (event.target === modal) closeModal();
+    };
 </script>
 
 </body>
