@@ -1,0 +1,59 @@
+<div class="grid">
+
+<div class="card" onclick="showVendors('pandharkawada')">
+<div class="city">Pandharkawada</div>
+<p>Active Vendors Available</p>
+<div class="status">Click to View</div>
+</div>
+
+<div class="card" onclick="showVendors('adilabad')">
+<div class="city">Adilabad</div>
+<p>Active Vendors Available</p>
+<div class="status">Click to View</div>
+</div>
+
+<div class="card" onclick="showVendors('nagpur')">
+<div class="city">Nagpur</div>
+<p>Active Vendors Available</p>
+<div class="status">Click to View</div>
+</div>
+
+<div class="card" onclick="showVendors('yavatmal')">
+<div class="city">Yavatmal</div>
+<p>Active Vendors Available</p>
+<div class="status">Click to View</div>
+</div>
+
+<div class="card" onclick="showVendors('bhandara')">
+<div class="city">Bhandara</div>
+<p>Active Vendors Available</p>
+<div class="status">Click to View</div>
+</div>
+
+</div>
+
+<!-- Vendor List -->
+
+<div id="vendorList" style="margin-top:50px;"></div>
+
+<script>
+function showVendors(city){
+
+let data = {
+    pandharkawada: ["Shree Decorators", "Sai Caterers", "Event Lights"],
+    adilabad: ["Royal Decor", "Adilabad Photography", "Sound Pro"],
+    nagpur: ["Nagpur Events", "Elite Decorators", "Wedding Shooters"],
+    yavatmal: ["Yavatmal Caterers", "DJ Beats", "Classic Decor"],
+    bhandara: ["Bhandara Events", "Pro Photographers", "Lighting Experts"]
+};
+
+let html = "<h2 style='margin-bottom:20px;'>Vendors in " + city.toUpperCase() + "</h2>";
+
+data[city].forEach(v => {
+    html += "<div style='background:#111; margin:10px; padding:15px; border-radius:10px;'>" + v + "</div>";
+});
+
+document.getElementById("vendorList").innerHTML = html;
+
+}
+</script>
