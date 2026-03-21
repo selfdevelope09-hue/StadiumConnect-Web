@@ -4,38 +4,285 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wishlist | StadiumConnect</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#001a4d">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StadiumConnect">
+    
     <style>
-        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; padding: 2rem; }
-        .wishlist-card { background: white; border-radius: 1rem; padding: 1.5rem; border: 1px solid #eee; }
-        .remove-btn { background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; margin-top: 1rem; }
-        .empty-wishlist { text-align: center; padding: 3rem; color: #999; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f5f5f5; }
+        .header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { color: white; font-size: 1.3rem; }
+        .nav-links { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; }
+        .user-info { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 2rem; }
+        .logout-btn { background: #dc3545; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 1rem; cursor: pointer; }
+        .auth-buttons { display: flex; gap: 1rem; }
+        .auth-buttons a { padding: 0.5rem 1.2rem; border-radius: 2rem; background: #001a4d; color: white; text-decoration: none; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+        h1 { color: #001a4d; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .subtitle { color: #666; margin-bottom: 2rem; }
+        .wishlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+        .wishlist-card { background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: 0.3s; position: relative; }
+        .wishlist-card:hover { transform: translateY(-5px); box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .card-banner { background: linear-gradient(135deg, #001a4d, #000033); padding: 1rem; text-align: center; position: relative; }
+        .card-banner .icon { font-size: 2.5rem; }
+        .card-banner .category { background: rgba(255,255,255,0.2); display: inline-block; padding: 0.2rem 0.8rem; border-radius: 2rem; font-size: 0.7rem; margin-top: 0.5rem; }
+        .wishlist-card .content { padding: 1.2rem; }
+        .vendor-name { font-size: 1.2rem; font-weight: 700; color: #001a4d; margin-bottom: 0.3rem; }
+        .vendor-rating { color: #ffc107; margin: 0.5rem 0; }
+        .vendor-location { color: #666; font-size: 0.85rem; margin: 0.3rem 0; display: flex; align-items: center; gap: 0.3rem; }
+        .vendor-price { color: #28a745; font-weight: 600; margin: 0.5rem 0; }
+        .vendor-experience { background: #f0f0f0; display: inline-block; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; margin-right: 0.5rem; }
+        .card-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .view-btn { flex: 1; background: #001a4d; color: white; border: none; padding: 0.5rem; border-radius: 0.5rem; cursor: pointer; text-align: center; text-decoration: none; display: inline-block; font-size: 0.85rem; }
+        .remove-btn { background: #dc3545; color: white; border: none; padding: 0.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; flex: 1; }
+        .book-btn { background: #28a745; color: white; border: none; padding: 0.5rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.85rem; flex: 1; }
+        .empty-wishlist { text-align: center; padding: 3rem; background: white; border-radius: 1rem; color: #999; }
+        .empty-wishlist .icon { font-size: 4rem; margin-bottom: 1rem; }
+        .empty-wishlist a { color: #001a4d; text-decoration: none; font-weight: 600; }
+        .stats-bar { background: white; border-radius: 1rem; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .stats-count { font-size: 1.2rem; }
+        .stats-count span { font-weight: 700; color: #001a4d; font-size: 1.5rem; }
+        .clear-all { background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; font-size: 0.8rem; }
+        @media (max-width: 768px) { .wishlist-grid { grid-template-columns: 1fr; } .stats-bar { flex-direction: column; text-align: center; } }
     </style>
 </head>
 <body>
-    <header class="main-header"><div class="logo"><h1>🏟️ STADIUMCONNECT</h1></div><div class="nav-links" id="navLinks"></div></header>
-    <div class="container"><h1>❤️ My Wishlist</h1><div id="wishlistGrid"></div></div>
-    <script src="script.js"></script>
-    <script>
-        function loadWishlist() {
-            const user = getCurrentUser();
-            if (!user) { window.location.href = 'login.html'; return; }
-            const wishlist = JSON.parse(localStorage.getItem(`wishlist_${user.id}`) || '[]');
-            const grid = document.getElementById('wishlistGrid');
-            if (wishlist.length === 0) { grid.innerHTML = '<div class="empty-wishlist">📭 No saved vendors yet. Browse vendors and click ❤️ to save.</div>'; return; }
-            grid.innerHTML = wishlist.map(v => `
-                <div class="wishlist-card">
-                    <h3>${v.name}</h3>
-                    <p>⭐ ${v.rating} | ${v.category}</p>
-                    <p>📍 ${v.location}</p>
-                    <button onclick="viewVendor('${v.id}')">View Profile</button>
-                    <button class="remove-btn" onclick="removeFromWishlist('${v.id}')">Remove</button>
-                </div>
-            `).join('');
+
+<div class="header">
+    <h1>🏟️ STADIUMCONNECT</h1>
+    <div class="nav-links" id="navLinks"></div>
+</div>
+
+<div class="container">
+    <h1>❤️ My Wishlist</h1>
+    <p class="subtitle">Your favorite vendors saved for future events</p>
+    
+    <div id="wishlistContent"></div>
+</div>
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:white; border-radius:1rem; max-width:450px; width:90%; padding:1.5rem;">
+        <h3 style="color:#001a4d; margin-bottom:1rem;">📅 Book Vendor</h3>
+        <input type="date" id="bookingDate" style="width:100%; padding:0.6rem; border:1px solid #ddd; border-radius:0.5rem; margin-bottom:1rem;">
+        <input type="text" id="eventType" placeholder="Event Type (e.g., Wedding, Corporate)" style="width:100%; padding:0.6rem; border:1px solid #ddd; border-radius:0.5rem; margin-bottom:1rem;">
+        <button onclick="confirmBooking()" style="width:100%; background:#28a745; color:white; border:none; padding:0.6rem; border-radius:0.5rem; cursor:pointer;">Confirm Booking</button>
+        <button onclick="closeBookingModal()" style="width:100%; margin-top:0.5rem; padding:0.6rem; border:none; background:#f0f0f0; cursor:pointer;">Cancel</button>
+    </div>
+</div>
+
+<script>
+    let currentWishlist = [];
+    let selectedVendorForBooking = null;
+    
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+    }
+    
+    function updateNav() {
+        const user = getCurrentUser();
+        const nav = document.getElementById('navLinks');
+        if (user) {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="dashboard.html">Dashboard</a><a href="wishlist.html">Wishlist</a><a href="vendor-compare.html">Compare</a><a href="event-planner.html">Planner</a><div class="user-info"><span>👤 ${user.name}</span><button class="logout-btn" onclick="logout()">Logout</button></div>`;
+        } else {
+            nav.innerHTML = `<a href="directory.html">Vendors</a><a href="wishlist.html">Wishlist</a><a href="vendor-compare.html">Compare</a><div class="auth-buttons"><a href="login.html">Login</a><a href="register.html">Register</a></div>`;
         }
-        function viewVendor(id) { localStorage.setItem('selectedVendorId', id); window.location.href = 'vendor-profile.html'; }
-        function removeFromWishlist(id) { let w = JSON.parse(localStorage.getItem(`wishlist_${getCurrentUser().id}`) || '[]'); w = w.filter(v => v.id != id); localStorage.setItem(`wishlist_${getCurrentUser().id}`, JSON.stringify(w)); loadWishlist(); }
-        loadWishlist();
-    </script>
+    }
+    
+    function logout() { localStorage.removeItem('currentUser'); window.location.href = 'index.html'; }
+    
+    function loadWishlist() {
+        const user = getCurrentUser();
+        if (!user) {
+            document.getElementById('wishlistContent').innerHTML = `
+                <div class="empty-wishlist">
+                    <div class="icon">❤️</div>
+                    <h3>Login to view your wishlist</h3>
+                    <p>Save your favorite vendors and plan your dream event</p>
+                    <a href="login.html" style="display:inline-block; margin-top:1rem; background:#001a4d; color:white; padding:0.5rem 1.5rem; border-radius:2rem; text-decoration:none;">Login Now</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const saved = localStorage.getItem(`wishlist_${user.id}`);
+        currentWishlist = saved ? JSON.parse(saved) : [];
+        renderWishlist();
+    }
+    
+    function renderWishlist() {
+        const container = document.getElementById('wishlistContent');
+        
+        if (currentWishlist.length === 0) {
+            container.innerHTML = `
+                <div class="empty-wishlist">
+                    <div class="icon">💔</div>
+                    <h3>Your wishlist is empty</h3>
+                    <p>Save vendors you love by clicking the ❤️ icon on vendor cards</p>
+                    <a href="directory.html" style="display:inline-block; margin-top:1rem; background:#001a4d; color:white; padding:0.5rem 1.5rem; border-radius:2rem; text-decoration:none;">Browse Vendors →</a>
+                </div>
+            `;
+            return;
+        }
+        
+        const categoryIcons = {
+            Decorator: "🎨", Caterer: "🍽️", Photographer: "📸", "Band Baja": "🎵"
+        };
+        
+        container.innerHTML = `
+            <div class="stats-bar">
+                <div class="stats-count">❤️ <span>${currentWishlist.length}</span> vendors saved</div>
+                <button class="clear-all" onclick="clearAllWishlist()">Clear All</button>
+            </div>
+            <div class="wishlist-grid">
+                ${currentWishlist.map(v => `
+                    <div class="wishlist-card">
+                        <div class="card-banner">
+                            <div class="icon">${categoryIcons[v.categoryName] || '🏆'}</div>
+                            <div class="category">${v.categoryName}</div>
+                        </div>
+                        <div class="content">
+                            <div class="vendor-name">${v.name}</div>
+                            <div class="vendor-rating">⭐ ${v.rating} ★ ${v.experience}</div>
+                            <div class="vendor-location">📍 ${v.location}</div>
+                            <div class="vendor-price">💰 ${v.priceRange}</div>
+                            <div class="vendor-experience">📅 ${v.experience} experience</div>
+                            <div class="card-actions">
+                                <button class="view-btn" onclick="viewVendor('${v.id}')">View Profile</button>
+                                <button class="book-btn" onclick="openBooking('${v.id}', '${v.name}')">Book Now</button>
+                                <button class="remove-btn" onclick="removeFromWishlist('${v.id}')">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function viewVendor(vendorId) {
+        // Find vendor from wishlist
+        const vendor = currentWishlist.find(v => v.id === vendorId);
+        if (vendor) {
+            localStorage.setItem('selectedVendor', JSON.stringify(vendor));
+            window.location.href = 'vendor-profile.html';
+        }
+    }
+    
+    function openBooking(vendorId, vendorName) {
+        const user = getCurrentUser();
+        if (!user) {
+            alert('Please login to book vendors');
+            window.location.href = 'login.html';
+            return;
+        }
+        selectedVendorForBooking = { id: vendorId, name: vendorName };
+        document.getElementById('bookingModal').style.display = 'flex';
+    }
+    
+    function closeBookingModal() {
+        document.getElementById('bookingModal').style.display = 'none';
+        selectedVendorForBooking = null;
+    }
+    
+    function confirmBooking() {
+        const date = document.getElementById('bookingDate').value;
+        const eventType = document.getElementById('eventType').value;
+        
+        if (!date) {
+            alert('Please select event date');
+            return;
+        }
+        
+        const user = getCurrentUser();
+        if (!user || !selectedVendorForBooking) return;
+        
+        const booking = {
+            id: Date.now(),
+            type: 'vendor',
+            userId: user.id,
+            userName: user.name,
+            userPhone: user.phone,
+            vendorId: selectedVendorForBooking.id,
+            vendorName: selectedVendorForBooking.name,
+            eventDate: date,
+            eventType: eventType || 'Not specified',
+            status: 'pending',
+            bookedAt: new Date().toISOString()
+        };
+        
+        let bookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
+        bookings.push(booking);
+        localStorage.setItem('userBookings', JSON.stringify(bookings));
+        
+        alert(`✅ Booking request sent to ${selectedVendorForBooking.name}! Vendor will contact you soon.`);
+        closeBookingModal();
+        document.getElementById('bookingDate').value = '';
+        document.getElementById('eventType').value = '';
+    }
+    
+    function removeFromWishlist(vendorId) {
+        const user = getCurrentUser();
+        if (!user) return;
+        
+        currentWishlist = currentWishlist.filter(v => v.id !== vendorId);
+        localStorage.setItem(`wishlist_${user.id}`, JSON.stringify(currentWishlist));
+        renderWishlist();
+        alert('Removed from wishlist');
+    }
+    
+    function clearAllWishlist() {
+        if (confirm('Are you sure you want to clear your entire wishlist?')) {
+            const user = getCurrentUser();
+            if (user) {
+                localStorage.setItem(`wishlist_${user.id}`, JSON.stringify([]));
+                currentWishlist = [];
+                renderWishlist();
+                alert('Wishlist cleared');
+            }
+        }
+    }
+    
+    // Function to add to wishlist (called from directory.html)
+    window.addToWishlist = function(vendor) {
+        const user = getCurrentUser();
+        if (!user) {
+            alert('Please login to save vendors to wishlist');
+            window.location.href = 'login.html';
+            return false;
+        }
+        
+        let wishlist = JSON.parse(localStorage.getItem(`wishlist_${user.id}`) || '[]');
+        if (wishlist.find(v => v.id === vendor.id)) {
+            alert('Vendor already in wishlist');
+            return false;
+        }
+        
+        wishlist.push(vendor);
+        localStorage.setItem(`wishlist_${user.id}`, JSON.stringify(wishlist));
+        alert(`✅ ${vendor.name} added to wishlist!`);
+        return true;
+    };
+    
+    // Initialize
+    updateNav();
+    loadWishlist();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service Worker registered'))
+        .catch(err => console.log('Service Worker failed', err));
+}
+</script>
+
 </body>
 </html>
+
