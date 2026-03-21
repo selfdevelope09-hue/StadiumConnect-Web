@@ -7,225 +7,49 @@
     <script src="admin-auth.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f5f5f5; font-family: 'Poppins', 'Segoe UI', sans-serif; }
-        .admin-header { background: #000000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .admin-header h1 { color: white; font-size: 1.5rem; }
-        .admin-header a { color: white; text-decoration: none; background: #001a4d; padding: 0.5rem 1rem; border-radius: 0.5rem; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f5f5; }
+        .admin-header { background: #000; padding: 1rem 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .admin-header h1 { color: white; }
+        .admin-header a { color: white; background: #001a4d; padding: 0.5rem 1rem; border-radius: 0.5rem; text-decoration: none; }
         .container { max-width: 1400px; margin: 2rem auto; padding: 0 1.5rem; }
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-        .card { background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .card h3 { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
-        .card .number { font-size: 2rem; font-weight: 700; color: #001a4d; }
-        .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem; flex-wrap: wrap; }
-        .tab-btn { background: none; border: none; padding: 0.8rem 2rem; font-size: 1rem; font-weight: 600; cursor: pointer; border-radius: 0.5rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: white; border-radius: 1rem; padding: 1.5rem; }
+        .tabs { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; border-bottom: 2px solid #ddd; padding-bottom: 0.5rem; }
+        .tab-btn { background: none; border: none; padding: 0.8rem 1.5rem; cursor: pointer; border-radius: 0.5rem; }
         .tab-btn.active { background: #001a4d; color: white; }
-        .selector-section, .add-vendor-section, .settings-section { background: white; border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .selector-section h2, .add-vendor-section h2, .settings-section h2 { color: #001a4d; margin-bottom: 1rem; }
-        .filters { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-        .filters select, .filters input { padding: 0.8rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; }
-        .edit-form, .add-form { background: white; border-radius: 1rem; padding: 1.5rem; margin-top: 1.5rem; display: none; }
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .section { background: white; border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; display: none; }
+        .section.active { display: block; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.8rem; text-align: left; border-bottom: 1px solid #eee; }
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 0.5rem; }
-        .city-list, .category-list { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1rem 0; }
-        .city-tag, .category-tag { background: #f0f0f0; padding: 0.5rem 1rem; border-radius: 2rem; display: flex; align-items: center; gap: 0.5rem; }
-        .city-tag button, .category-tag button { background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; }
-        .add-city, .add-category { display: flex; gap: 0.5rem; margin-top: 1rem; }
-        .add-city input, .add-category input { padding: 0.5rem; border: 1px solid #ddd; border-radius: 0.5rem; }
-        .add-city button, .add-category button { background: #001a4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
-        .photos-grid { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
-        .photo-item { position: relative; width: 100px; height: 100px; border-radius: 0.5rem; overflow: hidden; border: 1px solid #ddd; }
-        .photo-item img { width: 100%; height: 100%; object-fit: cover; }
-        .photo-item button { position: absolute; top: 5px; right: 5px; background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; }
-        .upload-btn { background: #001a4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
-        .save-btn, .add-btn { background: #28a745; color: white; border: none; padding: 0.8rem 2rem; border-radius: 0.5rem; cursor: pointer; margin-top: 1rem; }
-        .message { padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; display: none; }
-        .message.success { background: #d4edda; color: #155724; display: block; }
-        .vendor-list { margin-top: 1rem; max-height: 300px; overflow-y: auto; }
-        .vendor-item { padding: 0.8rem; border-bottom: 1px solid #eee; cursor: pointer; }
-        .vendor-item:hover { background: #f0f0f0; }
-        .vendor-item.selected { background: #001a4d; color: white; }
-        @media (max-width: 768px) { .container { padding: 0 1rem; } .filters select, .filters input { width: 100%; } }
+        button { background: #001a4d; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
+        .btn-danger { background: #dc3545; }
+        .btn-success { background: #28a745; }
     </style>
 </head>
 <body>
-
-<div class="admin-header">
-    <h1>🏟️ STADIUMCONNECT | Admin Panel</h1>
-    <div>
-        <a href="admin-dashboard.html">📊 Dashboard</a>
-        <a href="directory.html" style="margin-left: 0.5rem;">View Website</a>
-        <a href="#" onclick="logoutAdmin()" style="margin-left: 0.5rem; background:#dc3545;">Logout</a>
-    </div>
-</div>
-
+<div class="admin-header"><h1>🏟️ STADIUMCONNECT | Admin Panel</h1><div><a href="admin-dashboard.html">📊 Dashboard</a><a href="#" onclick="logoutAdmin()" style="margin-left:0.5rem;">Logout</a></div></div>
 <div class="container">
-    <div class="dashboard">
-        <div class="card"><h3>Total Vendors</h3><div class="number" id="totalVendors">0</div></div>
-        <div class="card"><h3>Total Cities</h3><div class="number" id="totalCities">0</div></div>
-        <div class="card"><h3>Categories</h3><div class="number" id="totalCategories">0</div></div>
-    </div>
-
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('edit')">✏️ Edit Vendor</button>
-        <button class="tab-btn" onclick="switchTab('add')">➕ Add New Vendor</button>
-        <button class="tab-btn" onclick="switchTab('settings')">⚙️ Cities & Categories</button>
-    </div>
-
-    <div id="editSection" class="selector-section">
-        <h2>📋 Select Vendor to Edit</h2>
-        <div class="filters">
-            <select id="categoryFilter"></select>
-            <select id="cityFilter"></select>
-            <input type="text" id="searchVendor" placeholder="Search vendor name...">
-        </div>
-        <div id="vendorList" class="vendor-list"></div>
-    </div>
-
-    <div id="editForm" class="edit-form">
-        <h3>✏️ Edit Vendor Details</h3>
-        <div class="form-row">
-            <div class="form-group"><label>Vendor ID</label><input type="text" id="vendorId" readonly></div>
-            <div class="form-group"><label>Vendor Name</label><input type="text" id="vendorName"></div>
-        </div>
-        <div class="form-row">
-            <div class="form-group"><label>Experience</label><input type="text" id="vendorExperience"></div>
-            <div class="form-group"><label>Location</label><input type="text" id="vendorLocation"></div>
-        </div>
-        <div class="form-row">
-            <div class="form-group"><label>Price Range</label><input type="text" id="vendorPrice"></div>
-            <div class="form-group"><label>Phone Number</label><input type="text" id="vendorPhone"></div>
-        </div>
-        <div class="form-row">
-            <div class="form-group"><label>Rating</label><input type="text" id="vendorRating"></div>
-            <div class="form-group"><label>Category</label><input type="text" id="vendorCategory" readonly></div>
-        </div>
-        <div class="form-group"><label>Description</label><textarea id="vendorDescription"></textarea></div>
-        <div class="photos-upload"><label>📷 Work Photos</label><div id="photosGrid" class="photos-grid"></div><button class="upload-btn" onclick="uploadPhoto()">+ Add New Photo</button></div>
-        <button class="save-btn" onclick="saveVendorData()">💾 Save Changes</button>
-        <div id="message" class="message"></div>
-    </div>
-
-    <div id="addSection" class="add-vendor-section" style="display: none;">
-        <h2>➕ Add New Vendor</h2>
-        <div class="add-form" style="display: block;">
-            <h3>📝 Fill Vendor Details</h3>
-            <div class="form-row">
-                <div class="form-group"><label>Vendor Name *</label><input type="text" id="newVendorName"></div>
-                <div class="form-group"><label>Category *</label><select id="newVendorCategory"></select></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>City *</label><select id="newVendorCity"></select></div>
-                <div class="form-group"><label>Experience</label><input type="text" id="newVendorExperience"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Location</label><input type="text" id="newVendorLocation"></div>
-                <div class="form-group"><label>Price Range</label><input type="text" id="newVendorPrice"></div>
-            </div>
-            <div class="form-row">
-                <div class="form-group"><label>Phone</label><input type="text" id="newVendorPhone"></div>
-                <div class="form-group"><label>Rating</label><input type="text" id="newVendorRating"></div>
-            </div>
-            <div class="form-group"><label>Description</label><textarea id="newVendorDescription"></textarea></div>
-            <button class="add-btn" onclick="addNewVendor()">➕ Add Vendor</button>
-        </div>
-    </div>
-
-    <div id="settingsSection" class="settings-section" style="display: none;">
-        <h2>⚙️ Manage Cities & Categories</h2>
-        <div style="margin-bottom: 2rem;"><h3>📁 Categories</h3><div id="categoryList" class="category-list"></div><div class="add-category"><input type="text" id="newCategoryName" placeholder="New category"><button onclick="addNewCategory()">+ Add</button></div></div>
-        <div><h3>📍 Cities</h3><div id="cityList" class="city-list"></div><div class="add-city"><input type="text" id="newCityName" placeholder="New city"><button onclick="addNewCity()">+ Add</button></div></div>
-    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="tabs"><button class="tab-btn active" onclick="switchTab('vendors')">🏪 Vendors</button><button class="tab-btn" onclick="switchTab('stadiums')">🏟️ Stadiums</button><button class="tab-btn" onclick="switchTab('bookings')">📋 Bookings</button><button class="tab-btn" onclick="switchTab('analytics')">📊 Analytics</button><button class="tab-btn" onclick="switchTab('settings')">⚙️ Settings</button></div>
+    <div id="vendorsTab" class="section active"><h2>Vendor Management</h2><button onclick="showAddVendor()">+ Add Vendor</button><div id="vendorList"></div></div>
+    <div id="stadiumsTab" class="section"><h2>Stadium Management</h2><button onclick="showAddStadium()">+ Add Stadium</button><div id="stadiumList"></div></div>
+    <div id="bookingsTab" class="section"><h2>All Bookings</h2><div id="bookingsList"></div></div>
+    <div id="analyticsTab" class="section"><h2>Analytics Dashboard</h2><div id="analyticsChart"></div><div id="analyticsStats"></div></div>
+    <div id="settingsTab" class="section"><h2>Settings</h2><div><h3>Cities</h3><div id="cityList"></div><input type="text" id="newCity" placeholder="New city"><button onclick="addCity()">Add</button></div><div><h3>Categories</h3><div id="categoryList"></div><input type="text" id="newCategory" placeholder="New category"><button onclick="addCategory()">Add</button></div></div>
 </div>
-
 <script>
-    let categories = ["decorator", "caterer", "photographer", "bandbaja"];
-    let categoryDisplayNames = { decorator: "Decorators", caterer: "Caterers", photographer: "Photographers", bandbaja: "Band Baja" };
-    let cities = ["nagpur", "pandharkawada", "yavatmal", "adilabad", "nanded", "kinwat"];
-    let cityDisplayNames = { nagpur: "Nagpur", pandharkawada: "Pandharkawada", yavatmal: "Yavatmal", adilabad: "Adilabad", nanded: "Nanded", kinwat: "Kinwat" };
-    let vendorsData = {};
-    let currentVendor = null;
-
-    function loadData() {
-        const savedCategories = localStorage.getItem('categories');
-        if(savedCategories) categories = JSON.parse(savedCategories);
-        const savedCatNames = localStorage.getItem('categoryDisplayNames');
-        if(savedCatNames) categoryDisplayNames = JSON.parse(savedCatNames);
-        const savedCities = localStorage.getItem('cities');
-        if(savedCities) cities = JSON.parse(savedCities);
-        const savedCityNames = localStorage.getItem('cityDisplayNames');
-        if(savedCityNames) cityDisplayNames = JSON.parse(savedCityNames);
-        const savedVendors = localStorage.getItem('vendorsDataBackup');
-        if(savedVendors) vendorsData = JSON.parse(savedVendors);
-        else { categories.forEach(cat => { vendorsData[cat] = {}; cities.forEach(city => { vendorsData[cat][city] = []; }); }); }
-        updateFilters(); updateStats();
-    }
-
-    function saveAll() {
-        localStorage.setItem('categories', JSON.stringify(categories));
-        localStorage.setItem('categoryDisplayNames', JSON.stringify(categoryDisplayNames));
-        localStorage.setItem('cities', JSON.stringify(cities));
-        localStorage.setItem('cityDisplayNames', JSON.stringify(cityDisplayNames));
-        localStorage.setItem('vendorsDataBackup', JSON.stringify(vendorsData));
-        const allPhotos = {};
-        for(let cat in vendorsData) for(let city in vendorsData[cat]) vendorsData[cat][city].forEach(v => { allPhotos[v.id] = v.photos || []; });
-        localStorage.setItem('vendorPhotos', JSON.stringify(allPhotos));
-        updateStats();
-    }
-
-    function updateStats() {
-        let total = 0; for(let cat in vendorsData) for(let city in vendorsData[cat]) total += vendorsData[cat][city].length;
-        document.getElementById('totalVendors').innerText = total;
-        document.getElementById('totalCities').innerText = cities.length;
-        document.getElementById('totalCategories').innerText = categories.length;
-    }
-
-    function updateFilters() {
-        const catFilter = document.getElementById('categoryFilter');
-        const cityFilter = document.getElementById('cityFilter');
-        const newCat = document.getElementById('newVendorCategory');
-        const newCity = document.getElementById('newVendorCity');
-        catFilter.innerHTML = '<option value="all">All</option>' + categories.map(c => `<option value="${c}">${categoryDisplayNames[c]}</option>`).join('');
-        cityFilter.innerHTML = '<option value="all">All</option>' + cities.map(c => `<option value="${c}">${cityDisplayNames[c]}</option>`).join('');
-        newCat.innerHTML = categories.map(c => `<option value="${c}">${categoryDisplayNames[c]}</option>`).join('');
-        newCity.innerHTML = cities.map(c => `<option value="${c}">${cityDisplayNames[c]}</option>`).join('');
-        renderCityList(); renderCategoryList(); renderVendorList();
-    }
-
-    function renderCityList() {
-        document.getElementById('cityList').innerHTML = cities.map(c => `<div class="city-tag">${cityDisplayNames[c]}<button onclick="deleteCity('${c}')">×</button></div>`).join('');
-    }
-    function renderCategoryList() {
-        document.getElementById('categoryList').innerHTML = categories.map(c => `<div class="category-tag">${categoryDisplayNames[c]}<button onclick="deleteCategory('${c}')">×</button></div>`).join('');
-    }
-
-    function addNewCity() { let n=document.getElementById('newCityName').value.trim().toLowerCase(); if(!n)return; if(cities.includes(n)){alert('Exists');return;} cities.push(n); cityDisplayNames[n]=n; categories.forEach(c=>{if(!vendorsData[c])vendorsData[c]={};vendorsData[c][n]=[];}); saveAll(); updateFilters(); document.getElementById('newCityName').value=''; }
-    function deleteCity(c) { if(confirm(`Delete ${cityDisplayNames[c]}?`)){ cities=cities.filter(x=>x!==c); delete cityDisplayNames[c]; categories.forEach(cat=>{if(vendorsData[cat])delete vendorsData[cat][c];}); saveAll(); updateFilters(); } }
-    function addNewCategory() { let n=document.getElementById('newCategoryName').value.trim().toLowerCase(); if(!n)return; if(categories.includes(n)){alert('Exists');return;} categories.push(n); categoryDisplayNames[n]=n; vendorsData[n]={}; cities.forEach(c=>{vendorsData[n][c]=[];}); saveAll(); updateFilters(); document.getElementById('newCategoryName').value=''; }
-    function deleteCategory(c) { if(confirm(`Delete ${categoryDisplayNames[c]}?`)){ categories=categories.filter(x=>x!==c); delete categoryDisplayNames[c]; delete vendorsData[c]; saveAll(); updateFilters(); } }
-
-    function renderVendorList() {
-        let cat = document.getElementById('categoryFilter').value, city = document.getElementById('cityFilter').value, search = document.getElementById('searchVendor').value.toLowerCase();
-        let vendors = [];
-        for(let c in vendorsData) { if(cat!=='all' && c!==cat) continue;
-            for(let ct in vendorsData[c]) { if(city!=='all' && ct!==city) continue;
-                vendorsData[c][ct].forEach(v => { if(search==='' || v.name.toLowerCase().includes(search)) vendors.push({...v, category:c, city:ct}); });
-            }
-        }
-        let container = document.getElementById('vendorList');
-        if(vendors.length===0){ container.innerHTML='<div style="padding:1rem;color:#999;">No vendors</div>'; return; }
-        container.innerHTML = vendors.map(v => `<div class="vendor-item" onclick="selectVendor('${v.category}','${v.city}','${v.id}')"><strong>${v.name}</strong><br><small>${categoryDisplayNames[v.category]} | ${cityDisplayNames[v.city]}</small></div>`).join('');
-    }
-
-    function selectVendor(cat,city,id) { currentVendor = vendorsData[cat][city].find(v=>v.id===id); if(currentVendor){ document.getElementById('editForm').style.display='block'; document.getElementById('vendorId').value=currentVendor.id; document.getElementById('vendorName').value=currentVendor.name; document.getElementById('vendorExperience').value=currentVendor.experience; document.getElementById('vendorLocation').value=currentVendor.location; document.getElementById('vendorPrice').value=currentVendor.priceRange; document.getElementById('vendorPhone').value=currentVendor.phone; document.getElementById('vendorRating').value=currentVendor.rating; document.getElementById('vendorCategory').value=categoryDisplayNames[cat]; document.getElementById('vendorDescription').value=currentVendor.description; renderPhotos(); } }
-    function renderPhotos(){ let g=document.getElementById('photosGrid'); if(!currentVendor)return; let p=currentVendor.photos||[]; if(p.length===0){ g.innerHTML='<div>No photos</div>'; return; } g.innerHTML=p.map((ph,i)=>`<div class="photo-item"><img src="${ph}"><button onclick="deletePhoto(${i})">×</button></div>`).join(''); }
-    function uploadPhoto(){ if(!currentVendor){alert('Select vendor first');return;} let inp=document.createElement('input'); inp.type='file'; inp.accept='image/*'; inp.onchange=e=>{let f=e.target.files[0]; if(f){let r=new FileReader(); r.onload=ev=>{currentVendor.photos=currentVendor.photos||[]; currentVendor.photos.push(ev.target.result); renderPhotos(); saveAll(); alert('Photo added');}; r.readAsDataURL(f);}}; inp.click(); }
-    function deletePhoto(i){ if(currentVendor&&currentVendor.photos){ currentVendor.photos.splice(i,1); renderPhotos(); saveAll(); } }
-    function saveVendorData(){ if(!currentVendor)return; currentVendor.name=document.getElementById('vendorName').value; currentVendor.experience=document.getElementById('vendorExperience').value; currentVendor.location=document.getElementById('vendorLocation').value; currentVendor.priceRange=document.getElementById('vendorPrice').value; currentVendor.phone=document.getElementById('vendorPhone').value; currentVendor.rating=document.getElementById('vendorRating').value; currentVendor.description=document.getElementById('vendorDescription').value; saveAll(); alert('Saved!'); renderVendorList(); }
-    function addNewVendor(){ let cat=document.getElementById('newVendorCategory').value, city=document.getElementById('newVendorCity').value, name=document.getElementById('newVendorName').value.trim(); if(!name){alert('Enter name');return;} let id=cat.substring(0,3)+'_'+city.substring(0,3)+'_'+Date.now(); let newV={id:id,name:name,experience:document.getElementById('newVendorExperience').value||'New',location:document.getElementById('newVendorLocation').value||cityDisplayNames[city],priceRange:document.getElementById('newVendorPrice').value||'Contact',phone:document.getElementById('newVendorPhone').value||'9423281086',rating:document.getElementById('newVendorRating').value||'4.0',description:document.getElementById('newVendorDescription').value||'Professional vendor',photos:[]}; if(!vendorsData[cat])vendorsData[cat]={}; if(!vendorsData[cat][city])vendorsData[cat][city]=[]; vendorsData[cat][city].push(newV); saveAll(); alert('Vendor added!'); document.getElementById('newVendorName').value=''; document.getElementById('newVendorExperience').value=''; document.getElementById('newVendorLocation').value=''; document.getElementById('newVendorPrice').value=''; document.getElementById('newVendorPhone').value=''; document.getElementById('newVendorRating').value=''; document.getElementById('newVendorDescription').value=''; renderVendorList(); }
-    function switchTab(tab){ document.getElementById('editSection').style.display='none'; document.getElementById('addSection').style.display='none'; document.getElementById('settingsSection').style.display='none'; document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.classList.remove('active');}); if(tab==='edit'){ document.getElementById('editSection').style.display='block'; document.querySelectorAll('.tab-btn')[0].classList.add('active'); } else if(tab==='add'){ document.getElementById('addSection').style.display='block'; document.querySelectorAll('.tab-btn')[1].classList.add('active'); } else{ document.getElementById('settingsSection').style.display='block'; document.querySelectorAll('.tab-btn')[2].classList.add('active'); renderCityList(); renderCategoryList(); } document.getElementById('editForm').style.display='none'; }
-    document.getElementById('categoryFilter').addEventListener('change',renderVendorList); document.getElementById('cityFilter').addEventListener('change',renderVendorList); document.getElementById('searchVendor').addEventListener('input',renderVendorList);
+    let vendorsData = {}, stadiums = [];
+    function loadData() { let s=localStorage.getItem('vendorsDataBackup'); if(s) vendorsData=JSON.parse(s); let st=localStorage.getItem('stadiums'); if(st) stadiums=JSON.parse(st); else stadiums=[{id:1,name:"Vidarbha Stadium",city:"Nagpur",capacity:45000,price:50000}]; updateStats(); renderVendors(); renderStadiums(); renderBookings(); renderAnalytics(); renderCities(); renderCategories(); }
+    function updateStats() { let totalVendors=0; for(let c in vendorsData) for(let ct in vendorsData[c]) totalVendors+=vendorsData[c][ct].length; document.getElementById('statsGrid').innerHTML=`<div class="stat-card"><h3>Vendors</h3><div>${totalVendors}</div></div><div class="stat-card"><h3>Stadiums</h3><div>${stadiums.length}</div></div><div class="stat-card"><h3>Bookings</h3><div>${JSON.parse(localStorage.getItem('userBookings')||'[]').length}</div></div>`; }
+    function renderVendors() { let html='<table><tr><th>Name</th><th>Category</th><th>City</th><th>Price</th><th>Actions</th></tr>'; for(let c in vendorsData) for(let ct in vendorsData[c]) vendorsData[c][ct].forEach(v=>{html+=`<tr><td>${v.name}</td><td>${c}</td><td>${ct}</td><td>${v.priceRange}</td><td><button onclick="editVendor('${v.id}')">Edit</button><button class="btn-danger" onclick="deleteVendor('${v.id}')">Delete</button></td></tr>`;}); html+='</table>'; document.getElementById('vendorList').innerHTML=html; }
+    function renderStadiums() { let html='<table><tr><th>Name</th><th>City</th><th>Capacity</th><th>Price</th><th>Actions</th></tr>'; stadiums.forEach(s=>{html+=`<tr><td>${s.name}</td><td>${s.city}</td><td>${s.capacity}</td><td>₹${s.price}</td><td><button onclick="editStadium(${s.id})">Edit</button><button class="btn-danger" onclick="deleteStadium(${s.id})">Delete</button></td></tr>`;}); html+='</table>'; document.getElementById('stadiumList').innerHTML=html; }
+    function renderBookings() { let bookings=JSON.parse(localStorage.getItem('userBookings')||'[]'); let html='<table><tr><th>User</th><th>Type</th><th>Item</th><th>Date</th><th>Status</th><th>Action</th></tr>'; bookings.forEach(b=>{html+=`<tr><td>${b.userName}</td><td>${b.type||'vendor'}</td><td>${b.vendorName||b.stadiumName}</td><td>${b.eventDate||'-'}</td><td><select onchange="updateStatus(${b.id},this.value)"><option ${b.status=='pending'?'selected':''}>pending</option><option ${b.status=='confirmed'?'selected':''}>confirmed</option><option ${b.status=='cancelled'?'selected':''}>cancelled</option></select></td><td><button onclick="deleteBooking(${b.id})">Delete</button></td></tr>`;}); html+='</table>'; document.getElementById('bookingsList').innerHTML=html; }
+    function renderAnalytics() { let bookings=JSON.parse(localStorage.getItem('userBookings')||'[]'); let monthly={}; bookings.forEach(b=>{let m=new Date(b.bookedAt).toLocaleString('default',{month:'short'}); monthly[m]=(monthly[m]||0)+1;}); let chartHtml='<h3>Monthly Bookings</h3><div style="display:flex;gap:0.5rem;align-items:flex-end;height:200px;">'; for(let m in monthly) chartHtml+=`<div style="flex:1;text-align:center"><div style="background:#001a4d;height:${monthly[m]*20}px;width:100%"></div><div>${m}</div><div>${monthly[m]}</div></div>`; chartHtml+='</div>'; document.getElementById('analyticsChart').innerHTML=chartHtml; let totalRevenue=bookings.filter(b=>b.status=='confirmed').length*5000; document.getElementById('analyticsStats').innerHTML=`<div class="stat-card"><h3>Total Revenue</h3><div>₹${totalRevenue.toLocaleString()}</div></div><div class="stat-card"><h3>Completion Rate</h3><div>${Math.round(bookings.filter(b=>b.status=='confirmed').length/bookings.length*100||0)}%</div></div>`; }
+    function switchTab(tab) { document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); document.getElementById(`${tab}Tab`).classList.add('active'); document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.classList.toggle('active',b.innerText.toLowerCase().includes(tab));}); }
+    function addCity(){let c=document.getElementById('newCity').value; if(c){let cities=JSON.parse(localStorage.getItem('cities')||'[]'); cities.push(c.toLowerCase()); localStorage.setItem('cities',JSON.stringify(cities)); renderCities();}};
+    function renderCities(){let c=JSON.parse(localStorage.getItem('cities')||'[]'); document.getElementById('cityList').innerHTML=c.map(ct=>`<div>${ct}<button onclick="deleteCity('${ct}')">×</button></div>`).join('');}
     loadData();
 </script>
 </body>
