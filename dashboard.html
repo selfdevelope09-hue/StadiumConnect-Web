@@ -1,2 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | StadiumConnect</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+        }
+        .main-header {
+            background: #000000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .logo h1 {
+            color: #FFFFFF;
+            font-size: 1.5rem;
+        }
+        .logo p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.7rem;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+        }
+        .user-name {
+            color: white;
+        }
+        .logout-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            cursor: pointer;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .auth-buttons a {
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            background: #001a4d;
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .stat-card h3 {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #001a4d;
+        }
+        .bookings-list {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+        .bookings-list h2 {
+            color: #001a4d;
+            margin-bottom: 1rem;
+        }
+        .booking-item {
+            border-bottom: 1px solid #eee;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .booking-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+        }
+        .status-confirmed {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .btn-primary {
+            background: #001a4d;
+            color: white;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 2rem;
+            display: inline-block;
+        }
+        @media (max-width: 768px) {
+            .main-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
 
+<header class="main-header">
+    <div class="logo">
+        <h1>🏟️ STADIUMCONNECT</h1>
+        <p>Your Event Partner</p>
+    </div>
+    <div class="nav-links" id="navLinks">
+        <!-- JS will populate this -->
+    </div>
+</header>
+
+<div class="container">
+    <div style="margin-bottom: 2rem;">
+        <h1 style="color: #001a4d;">Welcome, <span id="userName"></span>!</h1>
+        <p style="color: #666;">Manage your bookings and explore vendors</p>
+    </div>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Total Bookings</h3>
+            <div class="stat-number" id="totalBookings">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Active Bookings</h3>
+            <div class="stat-number" id="activeBookings">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Saved Vendors</h3>
+            <div class="stat-number" id="savedVendors">0</div>
+        </div>
+    </div>
+    
+    <div class="bookings-list">
+        <h2>📋 Recent Bookings</h2>
+        <div id="bookingsList">
+            <p style="color: #999; text-align: center; padding: 2rem;">No bookings yet. <a href="directory.html">Browse vendors</a> to get started.</p>
+        </div>
+    </div>
+    
+    <div style="margin-top: 2rem; text-align: center;">
+        <a href="directory.html" class="btn-primary">Browse Vendors →</a>
+    </div>
+</div>
+
+<script>
+    // Get current user
+    function getCurrentUser() {
+        const user = localStorage.getItem('currentUser');
+        return user ? JSON.parse(user) : null;
+    }
+    
+    function logout() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    }
+    
+    function updateNavBar() {
+        const user = getCurrentUser();
+        const navLinks = document.getElementById('navLinks');
+        
+        if (user) {
+            navLinks.innerHTML = `
+                <a href="directory.html">Vendors</a>
+                <a href="dashboard.html">Dashboard</a>
+                <div class="user-info">
+                    <span class="user-name">👤 ${user.name}</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            `;
+        } else {
+            navLinks.innerHTML = `
+                <a href="directory.html">Vendors</a>
+                <div class="auth-buttons">
+                    <a href="login.html">Login</a>
+                    <a href="register.html">Register</a>
+                </div>
+            `;
+        }
+    }
+    
+    // Check login
+    const user = getCurrentUser();
+    if (!user) {
+        window.location.href = 'login.html';
+    }
+    
+    document.getElementById('userName').innerText = user.name;
+    
+    // Load bookings
+    const bookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
+    const userBookings = bookings.filter(b => b.userId === user.id);
+    
+    document.getElementById('totalBookings').innerText = userBookings.length;
+    document.getElementById('activeBookings').innerText = userBookings.filter(b => b.status === 'confirmed').length;
+    
+    const savedVendors = JSON.parse(localStorage.getItem(`savedVendors_${user.id}`) || '[]');
+    document.getElementById('savedVendors').innerText = savedVendors.length;
+    
+    const bookingsList = document.getElementById('bookingsList');
+    if (userBookings.length > 0) {
+        bookingsList.innerHTML = userBookings.map(b => `
+            <div class="booking-item">
+                <div>
+                    <strong>${b.vendorName || 'Vendor'}</strong><br>
+                    <small>${b.eventDate || 'Date TBD'} | ${b.location || ''}</small>
+                </div>
+                <div>
+                    <span class="booking-status status-${b.status}">${b.status}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    updateNavBar();
+</script>
+
+</body>
+</html>
 
